@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">TourdaY</string>
+    <string name="sring1">With You Wherever You</string>
+    <string name="sring2"> Go</string>
+
+    <string name="hint_username">Username</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="err_msg_name">Enter your username</string>
+    <string name="err_msg_email">Enter valid email address</string>
+    <string name="err_msg_password">Enter the password</string>
+    <string name="facebook_Signin">Sign In with Facebook</string>
+    <string name="facebook_Signup">Sign Up with Facebook</string>
+    <string name="google_Signin">Sign In with Google</string>
+    <string name="google_Signup">Sign Up with Google</string>
+    <string name="search">Search</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+
+
+</resources>
