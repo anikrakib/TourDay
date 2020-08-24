@@ -18,8 +18,9 @@
     <string name="search">Search</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bio">android:text="An Android developer ❤️️ is responsible for developing applications for devices powered by the Android operating system. ... Writing a good job description or advertisement for an Android developer requires an emphasis  to be placed on the specific technologies necessary for the project. 😍"
+</string>
+
 
 
 </resources>

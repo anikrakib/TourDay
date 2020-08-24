@@ -1,4 +1,4 @@
-package com.anikrakib.tourday;
+package com.anikrakib.tourday.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.anikrakib.tourday.R;
 
 public class SignInActivity extends AppCompatActivity {
 

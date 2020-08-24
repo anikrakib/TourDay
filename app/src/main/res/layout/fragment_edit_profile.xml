@@ -1,14 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfile">
+    android:orientation="vertical"
+    tools:context=".Fragment.EditProfile">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--  UserName   -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="61dp">
 
-</FrameLayout>
+        <anikrakib_fonts_material.Regulat_TextView
+            android:id="@+id/id_UsernmaeTitle_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textColor="@color/color_secondary_text"
+            android:textSize="12sp" />
+
+
+        <anikrakib_fonts_material.Regulat_TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/id_UsernmaeTitle_TextView"
+            android:layout_marginTop="16dp"
+            android:text="Mohammed Alsudane"
+            android:textColor="@color/color_primary_text"
+            android:textSize="16sp" />
+
+        <anikrakib_fonts_material.Regulat_TextView
+            android:id="@+id/id_usetname_EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:text="Edit"
+            android:textColor="@color/color_fourd_text"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+    <!--  Email   -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_marginTop="18dp">
+
+        <anikrakib_fonts_material.Regulat_TextView
+            android:id="@+id/id_EmailTitle_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textColor="@color/color_secondary_text"
+            android:textSize="12sp" />
+
+
+        <anikrakib_fonts_material.Regulat_TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/id_EmailTitle_TextView"
+            android:layout_marginTop="16dp"
+            android:text="materialuiux@gmail.com"
+            android:textColor="@color/color_primary_text"
+            android:textSize="16sp" />
+
+        <anikrakib_fonts_material.Regulat_TextView
+            android:id="@+id/id_editEmail_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:text="Edit"
+            android:textColor="@color/color_fourd_text"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+    <!--  Location   -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_marginTop="18dp">
+
+        <anikrakib_fonts_material.Regulat_TextView
+            android:id="@+id/id_LocationTitle_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textColor="@color/color_secondary_text"
+            android:textSize="12sp" />
+
+
+        <anikrakib_fonts_material.Regulat_TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/id_LocationTitle_TextView"
+            android:layout_marginTop="16dp"
+            android:text="Athens, Greece"
+            android:textColor="@color/color_primary_text"
+            android:textSize="16sp" />
+
+        <anikrakib_fonts_material.Regulat_TextView
+            android:id="@+id/id_editLocation_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:text="Edit"
+            android:textColor="@color/color_fourd_text"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+</LinearLayout>

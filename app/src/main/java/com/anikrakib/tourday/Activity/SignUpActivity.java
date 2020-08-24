@@ -1,4 +1,4 @@
-package com.anikrakib.tourday;
+package com.anikrakib.tourday.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.R;
 import com.google.android.material.textfield.TextInputLayout;
 
 import pl.droidsonroids.gif.GifDrawable;

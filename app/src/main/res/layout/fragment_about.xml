@@ -1,14 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".About">
+    tools:context=".Fragment.About">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
 
-</FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <anikrakib_fonts_material.Regulat_TextView
+                android:id="@+id/id_titleDescription_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bio"
+                android:textColor="@color/color_secondary_text"
+                android:textSize="24sp" />
+
+            <anikrakib_fonts_material.Regulat_TextView
+                android:id="@+id/id_bodyDescription_TextView"
+                android:layout_below="@+id/id_titleDescription_TextView"
+                android:layout_width="match_parent"
+                android:textColor="@color/color_third_text"
+                android:gravity="left"
+                android:text="@string/bio"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@color/white"
+                android:layout_marginTop="12dp"
+                android:minHeight="50dp"
+                android:textSize="16sp"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_height="match_parent">-->
+
+<!--            <anikrakib_fonts_material.Regulat_TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Mange your Skills"-->
+<!--                android:textColor="@color/color_secondary_text"-->
+<!--                android:textSize="12sp" />-->
+
+<!--            <anikrakib_fonts_material.Regulat_TextView-->
+<!--                android:id="@+id/recyclerView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:clipToPadding="false"-->
+<!--                android:layout_marginLeft="4dp"-->
+<!--                android:layout_marginRight="4dp"-->
+<!--                android:layout_height="match_parent" />-->
+
+<!--        </LinearLayout>-->
+
+    </LinearLayout>
+
+</ScrollView>

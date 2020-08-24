@@ -15,6 +15,12 @@
     <color name="txtWhite">#FFFFFF</color>
     <color name="whiteColor">#FFFFFF</color>
 
+    <color name="color_primary_text">#1a162c</color>
+    <color name="color_secondary_text">#bac0d3</color>
+    <color name="color_third_text">#393648</color>
+    <color name="white">#FFF</color>
+    <color name="color_fourd_text">#ffa689</color>
+
 
     <color name="txt" tool:override="true">#992f31</color>
 

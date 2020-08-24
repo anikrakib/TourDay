@@ -1,4 +1,4 @@
-package com.anikrakib.tourday;
+package com.anikrakib.tourday.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.anikrakib.tourday.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class ExploreActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
