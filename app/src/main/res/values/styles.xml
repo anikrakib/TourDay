@@ -11,5 +11,8 @@
     <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
     </style>
+    <style name="cutomTextstyle">
+        <item name="colorControlActivated">#ff9e7f</item>
+    </style>
 
 </resources>

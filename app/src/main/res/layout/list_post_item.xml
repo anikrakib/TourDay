@@ -7,7 +7,7 @@
     android:background="@drawable/bg_recat">
 
     <!-- Title Text -->
-    <anikrakib_fonts_material.Regulat_TextView
+    <TextView
         android:id="@+id/id_Title_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:textStyle="bold" />
 
     <!-- body Text -->
-    <anikrakib_fonts_material.Regulat_TextView
+    <TextView
         android:id="@+id/id_body_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:maxLines="2" />
 
     <!-- Date Text -->
-    <anikrakib_fonts_material.Regulat_TextView
+    <TextView
         android:id="@+id/id_Date_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 android:src="@drawable/ic_chat" />
 
             <!-- comment count Text -->
-            <anikrakib_fonts_material.Regulat_TextView
+            <TextView
                 android:id="@+id/id_commentCount_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                 android:src="@drawable/ic_unlike" />
 
             <!-- Like Count Text -->
-            <anikrakib_fonts_material.Regulat_TextView
+            <TextView
                 android:id="@+id/id_likeCount_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

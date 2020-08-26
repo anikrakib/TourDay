@@ -62,7 +62,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         navigationView.setCheckedItem(R.id.nav_home);
 
         Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.profile).setVisible(false);
+        menu.findItem(R.id.profile).setVisible(true);
 
 
     }
@@ -85,14 +85,17 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_home:
                 startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
                 break;
+            case R.id.profile:
+                startActivity(new Intent(ExploreActivity.this, MyProfile.class));
+                break;
             case R.id.login:
                 startActivity(new Intent(ExploreActivity.this, SignInActivity.class));
                 break;
             case R.id.setting:
                 showPopup();
                 break;
-
-
+            default:
+                throw new IllegalStateException("Unexpected value: " + menuItem.getItemId());
         }
         return true;
     }
