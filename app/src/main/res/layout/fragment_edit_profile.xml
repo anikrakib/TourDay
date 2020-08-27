@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,7 +7,7 @@
     tools:context=".Fragment.EditProfile">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
@@ -17,42 +17,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/id_titleDescription_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bio"
+                android:layout_marginLeft="10dp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="12sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bio"
-                android:textColor="@color/color_secondary_text"
-                android:textSize="14sp" />
-
-            <EditText
-                android:visibility="gone"
+            <com.codesgood.views.JustifiedTextView
+                android:id="@+id/aboutBioJustifiedTextView"
+                android:layout_below="@+id/id_titleDescription_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="4dp"
-                android:background="#14FFFFFF"
-                android:gravity="left"
-                android:minHeight="50dp"
+                android:textColor="@color/color_secondary_text"
+                android:gravity="start"
                 android:text="@string/bio"
-                android:textColor="@color/color_third_text"
-                android:textSize="18sp"
-                android:theme="@style/cutomTextstyle"
-                tools:ignore="RtlHardcoded" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:minHeight="50dp"
+                android:textSize="16sp"
+                />
 
         </LinearLayout>
 
@@ -60,7 +54,9 @@
         <LinearLayout
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="62dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
             android:orientation="vertical"
             >
 
@@ -69,7 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Username"
-                android:textColor="@color/color_secondary_text"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:textSize="12sp"
                 />
 
@@ -77,29 +74,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/id_Username_TextView"
-                android:layout_marginTop="16dp"
-                android:text="Mohammed Alsudane"
-                android:textColor="@color/color_primary_text"
+                android:id="@+id/editUsernameTextView"
+                android:layout_marginTop="8dp"
+                android:text="anikrakib"
+                android:textColor="@color/color_secondary_text"
                 android:textSize="16sp" />
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/id_Usernamee_EditText"
-                android:layout_marginTop="16dp"
-                android:text="anikrakib"
-                android:textColor="@color/color_primary_text"
-                android:visibility="gone"
-                android:textSize="16sp" />
+
+
         </LinearLayout>
 
 
         <!--  Email   -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="61dp"
-            android:layout_marginTop="18dp"
+            android:layout_height="62dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
             android:orientation="vertical"
             >
 
@@ -108,36 +99,55 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"
-                android:textColor="@color/color_secondary_text"
-                android:textSize="12sp" />
-
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/id_Email_TextView"
-                android:layout_marginTop="16dp"
+                android:id="@+id/editEmailTextView"
+                android:layout_marginTop="8dp"
                 android:text="anikrakib1998@gmail.com"
-                android:textColor="@color/color_primary_text"
+                android:textColor="@color/color_secondary_text"
                 android:textSize="16sp" />
 
-            <EditText
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/editEmailLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/id_Email_EditText"
-                android:layout_marginTop="16dp"
-                android:text="anikrakib1998@gmail.com"
-                android:textColor="@color/color_primary_text"
+                android:orientation="horizontal"
                 android:visibility="gone"
-                android:textSize="16sp" />
+                >
+
+                <EditText
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="anikrakib1998@gmail.com"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="16sp" />
+
+                <ImageButton
+                    android:src="@drawable/ic_baseline_check_24"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:tint="@color/color_secondary_text"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
 
 
         <!--  Location   -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="61dp"
-            android:layout_marginTop="18dp"
+            android:layout_height="62dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
             android:orientation="vertical"
             >
 
@@ -146,29 +156,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location"
-                android:textColor="@color/color_secondary_text"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/id_Location_TextView"
-                android:layout_marginTop="16dp"
+                android:id="@+id/editLocationTextView"
+                android:layout_marginTop="8dp"
                 android:text="Cumilla, Bangladesh"
-                android:textColor="@color/color_primary_text"
+                android:textColor="@color/color_secondary_text"
                 android:textSize="16sp" />
 
-            <EditText
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/editLocationLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/id_Location_EditText"
-                android:layout_marginTop="16dp"
-                android:text="Cumilla, Bangladesh"
-                android:textColor="@color/color_primary_text"
+                android:orientation="horizontal"
                 android:visibility="gone"
-                android:textSize="16sp" />
+                >
+
+                <EditText
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Cumilla, Bangladesh"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="16sp" />
+
+                <ImageButton
+                    android:src="@drawable/ic_baseline_check_24"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:tint="@color/color_secondary_text"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
