@@ -1,6 +1,7 @@
 package com.anikrakib.tourday.Adapter;
 
 
+import android.graphics.Color;
 import android.provider.Settings;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import com.anikrakib.tourday.Fragment.About;
 import com.anikrakib.tourday.Fragment.EditProfile;
 import com.anikrakib.tourday.Fragment.Post;
 import com.anikrakib.tourday.Fragment.viewEditFragment;
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 /*
  *

@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.anikrakib.tourday.R;
@@ -86,7 +85,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
                 break;
             case R.id.profile:
-                startActivity(new Intent(ExploreActivity.this, MyProfile.class));
+                startActivity(new Intent(ExploreActivity.this, MyProfileActivity.class));
                 break;
             case R.id.login:
                 startActivity(new Intent(ExploreActivity.this, SignInActivity.class));
@@ -102,11 +101,8 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
     public void showPopup() {
         ImageView close;
-        Button btnFollow;
         myDialog.setContentView(R.layout.custom_setting_pop_up);
         close = myDialog.findViewById(R.id.txtclose);
-        //txtclose.setText("M");
-        //btnFollow = (Button) myDialog.findViewById(R.id.btnfollow);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
