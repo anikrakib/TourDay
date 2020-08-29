@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="5dp">
 
 
                     <RelativeLayout
@@ -92,7 +92,7 @@
                         android:layout_below="@+id/id_ProfileImage_RelativeLayout"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="5dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="5dp"
                         android:fontFamily="@font/sf_bold"
                         android:text="AN IK"
                         android:textColor="@color/color_primary_text"
@@ -113,24 +113,45 @@
                         android:layout_marginRight="20dp"
                         android:tint="@color/color_secondary_text"
                         android:src="@drawable/facebook" />
+                    <TextView
+                        android:id="@+id/facebookLinkTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        />
                     <ImageView
                         android:id="@+id/instagramLinkImageView"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@drawable/instagram"
                         android:tint="@color/color_secondary_text"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="20dp" />
+                    <TextView
+                        android:id="@+id/instagramLinkTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
                         />
                     <ImageView
                         android:id="@+id/messengerLinkImageView"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@drawable/messenger"
-                        android:tint="@color/color_secondary_text"
+                        android:tint="@color/color_secondary_text"/>
+                    <TextView
+                        android:id="@+id/messengerLinkTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
                         />
 
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
             </LinearLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -158,7 +179,22 @@
         android:layout_marginRight="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+
+
+
     </androidx.viewpager.widget.ViewPager>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_baseline_create_24"
+        android:tint="@color/white"
+        />
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

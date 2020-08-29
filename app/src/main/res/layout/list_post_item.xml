@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="115dp"
+    android:layout_height="210dp"
     android:layout_marginTop="8dp"
     android:background="@drawable/bg_recat">
 
@@ -13,18 +13,31 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="6dp"
+        android:text="Title"
         android:maxLines="1"
         android:textSize="18dp"
         android:textStyle="bold" />
+    <!-- post Image -->
+
+    <ImageView
+        android:id="@+id/postImage"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/id_Title_TextView"
+        android:src="@drawable/pos1" />
 
     <!-- body Text -->
     <TextView
-        android:id="@+id/id_body_TextView"
+        android:id="@+id/postDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/id_Title_TextView"
+        android:layout_below="@+id/postImage"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp"
+        android:text="@string/bio"
         android:textSize="16dp"
         android:layout_marginRight="21dp"
         android:maxLines="2" />
@@ -35,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:text="29/07/2020"
         android:layout_marginLeft="14dp"
         android:layout_marginBottom="2dp" />
 
