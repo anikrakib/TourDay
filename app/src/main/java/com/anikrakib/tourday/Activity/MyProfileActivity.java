@@ -4,15 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
-
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -20,8 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.anikrakib.tourday.Adapter.ViewPagerAdapter;
 import com.anikrakib.tourday.R;
 import com.google.android.material.tabs.TabLayout;
@@ -135,7 +128,7 @@ public class MyProfileActivity extends AppCompatActivity {
                         if(id == R.id.facebookLinkImageView){
                             facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
                         }else if(id == R.id.instagramLinkImageView){
-                            instagramLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.instagram_color));
+                            instagramLinkImageView.setImageResource(R.drawable.instagram);
                         }
                         else if(id == R.id.messengerLinkImageView){
                             messengerLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));

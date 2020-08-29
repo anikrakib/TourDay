@@ -93,6 +93,9 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             case R.id.setting:
                 showPopup();
                 break;
+            case R.id.bdmap:
+                startActivity(new Intent(ExploreActivity.this, BDMapViewActivity.class));
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + menuItem.getItemId());
         }
