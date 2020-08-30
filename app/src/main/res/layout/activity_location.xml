@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editLocationBody"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:contentDescription="For more ui/ux visit www.materialuiux.com"
+    android:orientation="vertical"
+    tools:context=".Activity.LocationActivity"
+    tools:ignore="HardcodedText">
+
+    <!--  include  Toolbar -->
+    <include
+        android:id="@+id/id_toolbar_profile"
+        layout="@layout/toolbar_location_layout"
+        app:layout_collapseMode="pin" />
+
+    <!--  Tittle -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lets update your current address"
+        android:textColor="@color/color_primary_text"
+        android:textAlignment="center"
+        android:textSize="38sp"
+        android:textStyle="bold"
+        />
+
+    <!--  Edit Location  -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_edit_location_24"
+            android:layout_marginTop="14dp"
+            />
+
+        <EditText
+            android:id="@+id/newlocationEditText"
+            android:layout_width="281dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:background="@null"
+            android:hint="Enter a new address"
+            android:textColor="@color/color_secondary_text"
+            android:textSize="14sp"
+            android:theme="@style/cutomTextstyle"
+            tools:ignore="ContentDescription" />
+        <ImageButton
+            android:id="@+id/clickOkImageButton"
+            android:src="@drawable/ic_baseline_check_24"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:tint="@color/color_secondary_text"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="275dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:background="@color/dividerColor" />
+
+    <!--  Current Location -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current location"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="12sp" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_location_on_24"
+                android:layout_marginTop="14dp"
+                />
+
+            <TextView
+                android:id="@+id/currentLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text=""
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/color_primary_text"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--  Recent Location -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent location"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="12sp" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_location_on_24"
+                android:layout_marginTop="14dp"
+                />
+
+            <TextView
+                android:id="@+id/recentLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text=""
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/color_primary_text"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

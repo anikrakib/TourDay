@@ -56,6 +56,8 @@ dependencies {
     implementation 'com.marozzi.roundbutton:round-button:1.0.7'
     // CardView
     implementation "androidx.cardview:cardview:1.0.0"
+    // location dependencies
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
 
 

@@ -3,6 +3,8 @@
     package="com.anikrakib.tourday">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.BDMapViewActivity"></activity>
+        <activity android:name=".Activity.LocationActivity"></activity>
+        <activity android:name=".Activity.BDMapViewActivity" />
         <activity android:name=".Activity.DescriptionActivity" />
         <activity android:name=".Activity.MyProfileActivity" />
         <activity android:name=".Activity.ExploreActivity" />
