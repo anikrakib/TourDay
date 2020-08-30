@@ -112,6 +112,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 myDialog.dismiss();
             }
         });
+        myDialog.setCancelable(false);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
     }

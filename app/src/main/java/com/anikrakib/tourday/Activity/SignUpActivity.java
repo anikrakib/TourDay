@@ -1,9 +1,11 @@
 package com.anikrakib.tourday.Activity;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 import com.anikrakib.tourday.R;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Objects;
+
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -34,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
     Toolbar toolbarBack;
     TextView signIn;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
         setSupportActionBar(toolbarBack);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
