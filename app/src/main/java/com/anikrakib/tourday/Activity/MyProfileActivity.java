@@ -1,24 +1,34 @@
 package com.anikrakib.tourday.Activity;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import android.app.Dialog;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.anikrakib.tourday.Adapter.ViewPagerAdapter;
 import com.anikrakib.tourday.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.marozzi.roundbutton.RoundButton;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
+
 
 public class MyProfileActivity extends AppCompatActivity {
 
@@ -27,8 +37,14 @@ public class MyProfileActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
-    ImageView facebookLinkImageView,instagramLinkImageView,messengerLinkImageView;
+    TextView popupTitle,popupDescription;
+    ImageView facebookLinkImageView,instagramLinkImageView,messengerLinkImageView,popupAddBtn;
     Dialog myDialog;
+    CircularImageView popupUserImage;
+    FloatingActionButton floatingActionButtonCreatePost;
+    Button uploadButton;
+    EditText socialMediaLinkEditText;
+
 
 
     @Override
@@ -40,6 +56,7 @@ public class MyProfileActivity extends AppCompatActivity {
         facebookLinkImageView = findViewById(R.id.facebookLinkImageView);
         instagramLinkImageView = findViewById(R.id.instagramLinkImageView);
         messengerLinkImageView = findViewById(R.id.messengerLinkImageView);
+        floatingActionButtonCreatePost = findViewById(R.id.fabButtonCreatePost);
 
 
         myDialog = new Dialog(this);
@@ -54,23 +71,27 @@ public class MyProfileActivity extends AppCompatActivity {
         facebookLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopup(v.getId());
+                showSocialMediaPopup(v.getId());
             }
         });
         instagramLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopup(v.getId());
+                showSocialMediaPopup(v.getId());
             }
         });
         messengerLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopup(v.getId());
+                showSocialMediaPopup(v.getId());
             }
         });
-
-
+        floatingActionButtonCreatePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createPostPopUp();
+            }
+        });
 
         profileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +99,6 @@ public class MyProfileActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
 
         /////*     initialize view   */////
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -92,23 +112,23 @@ public class MyProfileActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabRippleColor(null);
 
+        /////*     Check SocialMediaLink is null or not   */////
+
+
     }
 
     @Override
     public void onBackPressed() {
         MyProfileActivity.this.finish();
     }
-    public void showPopup(final int id) {
+
+    public void showSocialMediaPopup(final int id) {
         ImageView close;
-        Button uploadButton;
-        final EditText socialMediaLinkEditText;
 
         myDialog.setContentView(R.layout.custom_social_media_link_pop_up);
         socialMediaLinkEditText = myDialog.findViewById(R.id.socialMediaLinkEditText);
         close = myDialog.findViewById(R.id.txtclose);
         uploadButton = myDialog.findViewById(R.id.uploadButton);
-
-        ColorFilter test = facebookLinkImageView.getColorFilter();
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,14 +136,34 @@ public class MyProfileActivity extends AppCompatActivity {
                 myDialog.dismiss();
             }
         });
+
+
+        socialMediaLinkEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final RoundButton bt = (RoundButton) v;
-                bt.startAnimation();
-                bt.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                //final RoundButton bt = (RoundButton) v;
+               // bt.startAnimation();
+               // bt.postDelayed(new Runnable() {
+                   // @Override
+                   // public void run() {
                         myDialog.dismiss();
                         if(id == R.id.facebookLinkImageView){
                             facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
@@ -133,10 +173,11 @@ public class MyProfileActivity extends AppCompatActivity {
                         else if(id == R.id.messengerLinkImageView){
                             messengerLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
                         }
-                    }
-                }, 3000);
+                   // }
+               // }, 3000);
             }
         });
+
         if(id == R.id.facebookLinkImageView){
             socialMediaLinkEditText.setHint("Enter Your Facebook URl");
         }else if(id == R.id.instagramLinkImageView){
@@ -146,8 +187,43 @@ public class MyProfileActivity extends AppCompatActivity {
             socialMediaLinkEditText.setHint("Enter Your Messenger URl");
         }
 
-
+        myDialog.setCancelable(false);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
     }
+
+    public void createPostPopUp() {
+        ImageButton postCloseButton;
+
+        myDialog.setContentView(R.layout.create_post);
+        postCloseButton= myDialog.findViewById(R.id.postCloseButton);
+
+        postCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.hide();
+            }
+        });
+
+
+        myDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,Toolbar.LayoutParams.WRAP_CONTENT);
+        myDialog.getWindow().getAttributes().gravity = Gravity.TOP;
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.setCancelable(false);
+        myDialog.show();
+    }
+
+    private void checkInputs() {
+        if (!TextUtils.isEmpty(socialMediaLinkEditText.getText())) {
+            uploadButton.setEnabled(true);
+            uploadButton.setBackgroundResource(R.drawable.button_background);
+        } else {
+            uploadButton.setEnabled(false);
+            uploadButton.setBackgroundResource(R.drawable.disable_button_background);
+        }
+    }
+
 }
+
+//Remaining Work in this part
+// add draft post

@@ -60,7 +60,7 @@
                             android:layout_height="170dp"
                             android:layout_centerHorizontal="true"
                             android:src="@drawable/anik"
-                            app:civ_border_color="#EEEEEE"
+                            app:civ_border_color="#050505"
                             app:civ_border_width="4dp"
                             app:civ_shadow="true"
                             app:civ_shadow_color="#f4f5f9"
@@ -111,8 +111,8 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="20dp"
-                        android:tint="@color/color_secondary_text"
-                        android:src="@drawable/facebook" />
+                        android:src="@drawable/facebook"
+                        app:tint="@color/color_secondary_text" />
                     <TextView
                         android:id="@+id/facebookLinkTextView"
                         android:layout_width="wrap_content"
@@ -124,8 +124,8 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@drawable/instagram"
-                        android:tint="@color/color_secondary_text"
-                        android:layout_marginRight="20dp" />
+                        android:layout_marginRight="20dp"
+                        app:tint="@color/color_secondary_text" />
                     <TextView
                         android:id="@+id/instagramLinkTextView"
                         android:layout_width="wrap_content"
@@ -137,14 +137,13 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@drawable/messenger"
-                        android:tint="@color/color_secondary_text"/>
+                        app:tint="@color/color_secondary_text" />
                     <TextView
                         android:id="@+id/messengerLinkTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
                         />
-
 
                 </LinearLayout>
 
@@ -169,7 +168,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
@@ -177,15 +175,10 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="0dp"
         android:layout_marginRight="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
-
-
-    </androidx.viewpager.widget.ViewPager>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabButtonCreatePost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

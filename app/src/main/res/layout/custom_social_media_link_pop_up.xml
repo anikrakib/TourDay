@@ -16,13 +16,6 @@
         android:gravity="center"
         android:background="@drawable/ic_cancel_black_24dp"/>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@android:color/transparent"
-        />
 
 
     <androidx.cardview.widget.CardView
@@ -51,30 +44,44 @@
     </androidx.cardview.widget.CardView>
 
 
-    <com.marozzi.roundbutton.RoundButton
+<!--    <com.marozzi.roundbutton.RoundButton-->
+<!--        android:id="@+id/uploadButton"-->
+<!--        android:layout_width="88dp"-->
+<!--        android:layout_height="35dp"-->
+<!--        android:gravity="center"-->
+<!--        android:enabled="false"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:padding="0dp"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:text="Upload"-->
+<!--        app:rb_animation_alpha="false"-->
+<!--        app:rb_animation_corner_radius="6dp"-->
+<!--        app:rb_animation_duration="500"-->
+<!--        app:rb_animation_progress_color="@color/colorAccent"-->
+<!--        app:rb_animation_progress_padding="8dp"-->
+<!--        app:rb_animation_progress_width="2dp"-->
+<!--        app:rb_background_color="@android:color/transparent"-->
+<!--        app:rb_background_color_pressed="@color/colorPrimary"-->
+<!--        app:rb_corner_color="@color/colorPrimary"-->
+<!--        app:rb_corner_color_pressed="@color/colorPrimary"-->
+<!--        app:rb_corner_radius="6dp"-->
+<!--        app:rb_corner_width="1dp"-->
+<!--        app:rb_text_color="@color/colorPrimary"-->
+<!--        app:rb_text_color_pressed="@android:color/white" />-->
+
+    <Button
         android:id="@+id/uploadButton"
-        android:layout_width="88dp"
+        android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:gravity="center"
+        android:enabled="false"
         android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:padding="0dp"
-        android:textAllCaps="false"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/disable_button_background"
         android:text="Upload"
-        app:rb_animation_alpha="false"
-        app:rb_animation_corner_radius="6dp"
-        app:rb_animation_duration="500"
-        app:rb_animation_progress_color="@color/colorAccent"
-        app:rb_animation_progress_padding="8dp"
-        app:rb_animation_progress_width="2dp"
-        app:rb_background_color="@android:color/transparent"
-        app:rb_background_color_pressed="@color/colorPrimary"
-        app:rb_corner_color="@color/colorPrimary"
-        app:rb_corner_color_pressed="@color/colorPrimary"
-        app:rb_corner_radius="6dp"
-        app:rb_corner_width="1dp"
-        app:rb_text_color="@color/colorPrimary"
-        app:rb_text_color_pressed="@android:color/white" />
+        android:textAllCaps="false"
+        android:textColor="@color/txtWhite"
+        android:textStyle="bold" />
 
 
 

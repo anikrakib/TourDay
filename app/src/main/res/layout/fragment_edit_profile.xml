@@ -122,14 +122,16 @@
                 >
 
                 <EditText
+                    android:id="@+id/editEmailEditText"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="anikrakib1998@gmail.com"
+                    android:text=""
                     android:textColor="@color/color_primary_text"
                     android:textSize="16sp" />
 
                 <ImageButton
+                    android:id="@+id/clickOkImageButton"
                     android:src="@drawable/ic_baseline_check_24"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -171,33 +173,8 @@
                 android:textColor="@color/color_secondary_text"
                 android:textSize="16sp" />
 
-            <LinearLayout
-                android:id="@+id/editLocationLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                >
-
-                <EditText
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Cumilla, Bangladesh"
-                    android:textColor="@color/color_primary_text"
-                    android:textSize="16sp" />
-
-                <ImageButton
-                    android:src="@drawable/ic_baseline_check_24"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:tint="@color/color_secondary_text"
-                    />
-
-            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
+
 </androidx.core.widget.NestedScrollView>
