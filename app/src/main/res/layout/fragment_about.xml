@@ -32,18 +32,17 @@
 
             <com.codesgood.views.JustifiedTextView
                 android:id="@+id/aboutBioJustifiedTextView"
-                android:layout_below="@+id/id_titleDescription_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/color_third_text"
-                android:gravity="start"
-                android:text="@string/bio"
+                android:layout_below="@+id/id_titleDescription_TextView"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:gravity="start"
                 android:minHeight="50dp"
-                android:textSize="16sp"
-                 />
+                android:text="@string/bio"
+                android:textColor="@color/color_third_text"
+                android:textSize="16sp" />
 
         </RelativeLayout>
 

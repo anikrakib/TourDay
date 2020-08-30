@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:rowCount="1"
             android:columnCount="3"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:alignmentMode="alignMargins"
             android:layout_gravity="center"
             android:columnOrderPreserved="false">
@@ -37,9 +37,10 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="72dp"
-                        android:layout_height="78dp"
-                        android:layout_margin="15dp"
+                        android:id="@+id/postImage1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
                         android:src="@drawable/ic_baseline_add_photo_alternate_24" />
                 </LinearLayout>
 
@@ -59,9 +60,10 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="72dp"
-                        android:layout_height="78dp"
-                        android:layout_margin="15dp"
+                        android:id="@+id/postImage2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
                         android:src="@drawable/ic_baseline_add_photo_alternate_24" />
                 </LinearLayout>
 
@@ -81,9 +83,10 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="72dp"
-                        android:layout_height="78dp"
-                        android:layout_margin="15dp"
+                        android:id="@+id/postImage3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
                         android:src="@drawable/ic_baseline_add_photo_alternate_24" />
                 </LinearLayout>
 
