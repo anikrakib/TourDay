@@ -24,7 +24,7 @@ import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 public class EditProfile extends Fragment {
 
-    TextView userEmailTextView,userLocationTextView;
+    TextView userEmailTextView,userLocationTextView,userNameTextView;
     EditText userEmailEditText;
     ImageButton saveEmailImageButton;
     LinearLayout userEmailLayout;
@@ -53,6 +53,7 @@ public class EditProfile extends Fragment {
         userLocationTextView = view.findViewById(R.id.editLocationTextView);
         userEmailEditText = view.findViewById(R.id.editEmailEditText);
         saveEmailImageButton = view.findViewById(R.id.clickOkImageButton);
+        userNameTextView = view.findViewById(R.id.editUsernameTextView);
 
         userEmailEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -101,10 +102,10 @@ public class EditProfile extends Fragment {
                 DynamicToast.makeWarning(getContext(), "Press Long Click To Edit Location").show();
             }
         });
-        saveEmailImageButton.setOnClickListener(new View.OnClickListener() {
+        userNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DynamicToast.makeWarning(getContext(), "OHH! No ").show();
+                DynamicToast.makeWarning(getContext(), "Username Can't be Changed").show();
             }
         });
 

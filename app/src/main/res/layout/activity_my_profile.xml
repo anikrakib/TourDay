@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:contentDescription="For more ui/ux visit www.materialuiux.com"
     android:orientation="vertical"
     tools:context=".Activity.MyProfileActivity"
     tools:ignore="HardcodedText">
@@ -22,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:contentDescription="For more ui/ux visit www.materialuiux.com"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <LinearLayout

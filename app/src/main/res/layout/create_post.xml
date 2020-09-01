@@ -9,7 +9,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/dialog_background"
+        android:background="@drawable/popup_create_post_and_event_edittext_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -55,88 +55,39 @@
             android:id="@+id/popup_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/popup_cratepost_edittext_style"
+            android:background="@drawable/popup_create_post_and_event_edittext_style"
             android:ems="10"
             android:hint="Title"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout2" />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="250dp"
-            android:layout_height="3dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@color/dividerColor"
-            app:layout_constraintBottom_toBottomOf="@+id/popup_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popup_title" />
 
 
         <EditText
             android:id="@+id/popup_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/popup_cratepost_edittext_style"
+            android:background="@drawable/popup_create_post_and_event_edittext_style"
             android:gravity="top|left"
             android:hint="Enter Description"
             android:inputType="textMultiLine"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:lines="8"
             android:maxLines="10"
             android:minLines="6"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
             android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/popup_title" />
 
-        <View
-            android:layout_width="300dp"
-            android:layout_height="3dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@color/dividerColor"
-            app:layout_constraintBottom_toTopOf="@+id/custom_config_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popup_description" />
 
-
-        <LinearLayout
-            android:id="@+id/custom_config_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:background="@android:color/transparent"
-            android:gravity="left"
-            android:onClick="chooseDate"
-            android:orientation="horizontal"
-            android:paddingHorizontal="5dp"
-            android:paddingVertical="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popup_description">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_date_range_black_24dp"
-                app:tint="@color/black" />
-
-            <TextView
-                android:id="@+id/dateText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:padding="1dp"
-                android:text="29/07/2020"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
 
 
         <include
@@ -146,17 +97,19 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/custom_config_date" />
+            app:layout_constraintTop_toBottomOf="@+id/popup_description" />
 
         <com.marozzi.roundbutton.RoundButton
             android:id="@+id/uploadButton"
             android:layout_width="88dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
             android:gravity="center"
             android:padding="0dp"
             android:text="Create Post"
             android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include"
