@@ -7,7 +7,6 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,14 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.anikrakib.tourday.Adapter.ViewPagerAdapter;
+
+import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.marozzi.roundbutton.RoundButton;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 
 public class MyProfileActivity extends AppCompatActivity {
@@ -36,7 +33,7 @@ public class MyProfileActivity extends AppCompatActivity {
     ImageButton profileBackButton;
     TabLayout tabLayout;
     ViewPager viewPager;
-    ViewPagerAdapter viewPagerAdapter;
+    ViewProfilePagerAdapter viewProfilePagerAdapter;
     TextView popupTitle,popupDescription;
     ImageView facebookLinkImageView,instagramLinkImageView,messengerLinkImageView,popupAddBtn;
     Dialog myDialog;
@@ -51,7 +48,7 @@ public class MyProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
-        coordinatorLayout = findViewById(R.id.profileLayout);
+
         profileBackButton = findViewById(R.id.profileBackButton);
         facebookLinkImageView = findViewById(R.id.facebookLinkImageView);
         instagramLinkImageView = findViewById(R.id.instagramLinkImageView);
@@ -104,10 +101,10 @@ public class MyProfileActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         /////*     initialize ViewPager   */////
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewProfilePagerAdapter = new ViewProfilePagerAdapter(getSupportFragmentManager());
 
         /////*     add adapter to ViewPager  */////
-        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setAdapter(viewProfilePagerAdapter);
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabRippleColor(null);

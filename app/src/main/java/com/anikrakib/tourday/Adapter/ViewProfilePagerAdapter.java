@@ -1,9 +1,6 @@
 package com.anikrakib.tourday.Adapter;
 
 
-import android.graphics.Color;
-import android.provider.Settings;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -11,17 +8,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.anikrakib.tourday.Fragment.About;
 import com.anikrakib.tourday.Fragment.EditProfile;
 import com.anikrakib.tourday.Fragment.Post;
-import com.anikrakib.tourday.Fragment.viewEditFragment;
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
-/*
- *
- *for more visit www.materialuiux.com
- *
- */
-public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    public ViewPagerAdapter(FragmentManager fm) {
+public class ViewProfilePagerAdapter extends FragmentPagerAdapter {
+
+    public ViewProfilePagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
