@@ -18,17 +18,28 @@
             android:background="@android:color/transparent"
             android:src="@drawable/ic_arrow_back_black_24dp" />
 
+        <!--  Title icon  -->
         <!--  Title Toolbar  -->
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Edit Bio"
-            android:textStyle="bold"
-            android:textColor="@color/color_third_text"
-            android:textSize="18dp" />
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Bio"
+                android:textStyle="bold"
+                android:textColor="@color/color_third_text"
+                android:textSize="18dp" />
+
+
+        </LinearLayout>
         <!-- Check Done   -->
         <ImageButton
             android:layout_width="wrap_content"

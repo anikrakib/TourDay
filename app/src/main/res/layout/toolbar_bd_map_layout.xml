@@ -19,16 +19,34 @@
             android:background="@android:color/transparent"
             android:src="@drawable/ic_arrow_back_black_24dp" />
 
+        <!--  Title icon  -->
         <!--  Title Toolbar  -->
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="BD Map"
-            android:textStyle="bold"
-            android:textColor="@color/color_third_text"
-            android:textSize="18dp" />
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/bangladesh" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BD Map"
+                android:textStyle="bold"
+                android:textColor="@color/color_third_text"
+                android:textSize="18dp" />
+
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 </RelativeLayout>
