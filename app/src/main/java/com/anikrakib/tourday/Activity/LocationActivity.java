@@ -8,6 +8,8 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +36,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import java.io.IOException;
 import java.util.List;
@@ -100,6 +103,17 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
 
+        currentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("label", currentLocation.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                DynamicToast.makeWarning(getApplicationContext(), "Your Current Address copy to Clipboard").show();
+
+            }
+        });
+
 
     }
 
@@ -140,25 +154,7 @@ public class LocationActivity extends AppCompatActivity {
 
         }
     }
-    private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your Location seems to be disabled, do you want to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alert = builder.create();
 
-        alert.show();
-
-    }
     public void createEnableLocationPopUp() {
         Button yesButton,noButton;
         mDialog.setContentView(R.layout.custom_pop_up_enable_location);
