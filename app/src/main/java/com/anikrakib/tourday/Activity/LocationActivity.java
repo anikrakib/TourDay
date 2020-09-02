@@ -27,6 +27,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,7 +50,8 @@ public class LocationActivity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     Dialog mDialog;
     LinearLayout editLocationBody;
-    ImageView refreshLocation,backButton;
+    ImageView backButton;
+    ImageButton refreshLocation;
 
 
     @Override

@@ -51,7 +51,7 @@
         </LinearLayout>
 
 
-        <!-- Check Done   -->
+        <!-- Refresh   -->
         <ImageButton
             android:id="@+id/refreshLocation"
             android:layout_width="wrap_content"

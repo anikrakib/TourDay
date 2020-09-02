@@ -277,13 +277,23 @@
 
             <EditText
                 android:id="@+id/createEventLocationEditText"
-                android:layout_width="286dp"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:paddingLeft="5dp"
-                android:text="13,A Road-25,Nurjahan Road,MohammadPur,Dhaka"
+                android:hint="Enter Event Location"
                 android:textColor="@color/color_primary_text"
                 android:textStyle="bold" />
+
+            <!-- Check Done   -->
+            <ImageButton
+                android:id="@+id/refreshLocationInEvent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_baseline_refresh_24"
+                android:tint="@color/black"
+                />
 
 
         </LinearLayout>
