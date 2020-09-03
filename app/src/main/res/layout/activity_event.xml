@@ -37,6 +37,8 @@
             </LinearLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+        <include layout="@layout/horizontal_calender"/>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/slidingTabsEventActivity"
             android:layout_width="match_parent"
