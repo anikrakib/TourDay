@@ -193,7 +193,8 @@ public class MyProfileActivity extends AppCompatActivity {
         ImageButton postCloseButton;
         Animation top_to_bottom;
         final ConstraintLayout createPostLayout;
-
+        final String[] postTitleSave = new String[1];
+        final String[] postDescriptionSave = new String[1];
 
         myDialog.setContentView(R.layout.create_post);
         postCloseButton= myDialog.findViewById(R.id.postCloseButton);
@@ -204,11 +205,28 @@ public class MyProfileActivity extends AppCompatActivity {
 
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
 
+        // Retrieve and set Post Title and Description from SharedPreferences when again open Post PopUp
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String postTitle = sharedPreferences.getString("postTitle","");
+        String postDescription = sharedPreferences.getString("postDescription","");
+
+        postPopUpTitle.setText(postTitle);
+        postPopUpDescription.setText(postDescription);
 
         postCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Save Post Title and Description in SharedPreferences when close Post PopUp
+
+                postTitleSave[0] = postPopUpTitle.getText().toString();
+                postDescriptionSave[0] = postPopUpDescription.getText().toString();
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("postTitle", postTitleSave[0]);
+                editor.putString("postDescription", postDescriptionSave[0]);
+                editor.apply();
+
                 myDialog.dismiss();
             }
         });
