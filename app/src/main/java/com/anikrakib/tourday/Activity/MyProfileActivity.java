@@ -1,46 +1,47 @@
 package com.anikrakib.tourday.Activity;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 
 public class MyProfileActivity extends AppCompatActivity {
 
-    CoordinatorLayout coordinatorLayout;
     ImageButton profileBackButton;
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewProfilePagerAdapter viewProfilePagerAdapter;
-    TextView popupTitle,popupDescription;
     ImageView facebookLinkImageView,instagramLinkImageView,messengerLinkImageView,popupAddBtn;
     Dialog myDialog;
-    CircularImageView popupUserImage;
     FloatingActionButton floatingActionButtonCreatePost;
     Button uploadButton;
-    EditText socialMediaLinkEditText;
+    EditText socialMediaLinkEditText,postPopUpTitle,postPopUpDescription;
+
 
 
 
@@ -61,7 +62,6 @@ public class MyProfileActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-
 
         /////*     Click Listener     */////
 
@@ -191,23 +191,37 @@ public class MyProfileActivity extends AppCompatActivity {
 
     public void createPostPopUp() {
         ImageButton postCloseButton;
+        Animation top_to_bottom;
+        final ConstraintLayout createPostLayout;
+
 
         myDialog.setContentView(R.layout.create_post);
         postCloseButton= myDialog.findViewById(R.id.postCloseButton);
+        createPostLayout = myDialog.findViewById(R.id.createPostLayout);
+        postPopUpTitle = myDialog.findViewById(R.id.popup_title);
+        postPopUpDescription = myDialog.findViewById(R.id.popup_description);
+
+
+        top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
+
+
 
         postCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog.hide();
+                myDialog.dismiss();
             }
         });
 
+
+        createPostLayout.startAnimation(top_to_bottom);
 
         myDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,Toolbar.LayoutParams.WRAP_CONTENT);
         myDialog.getWindow().getAttributes().gravity = Gravity.TOP;
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.setCancelable(false);
         myDialog.show();
+
     }
 
     private void checkInputs() {
@@ -219,6 +233,8 @@ public class MyProfileActivity extends AppCompatActivity {
             uploadButton.setBackgroundResource(R.drawable.disable_button_background);
         }
     }
+
+
 
 }
 
