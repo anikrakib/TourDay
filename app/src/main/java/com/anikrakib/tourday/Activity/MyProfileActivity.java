@@ -211,6 +211,10 @@ public class MyProfileActivity extends AppCompatActivity {
         String postTitle = sharedPreferences.getString("postTitle","");
         String postDescription = sharedPreferences.getString("postDescription","");
 
+//        //delete SharedPreference data
+//        SharedPreferences preferences = getSharedPreferences("postTitle", 0);
+//        preferences.edit().remove("postTitle").apply();
+
         postPopUpTitle.setText(postTitle);
         postPopUpDescription.setText(postDescription);
 

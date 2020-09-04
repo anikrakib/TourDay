@@ -31,13 +31,13 @@
                 />
 
             <com.codesgood.views.JustifiedTextView
+                android:background="@drawable/bg_recat"
                 android:id="@+id/aboutBioJustifiedTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/id_titleDescription_TextView"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
+                android:padding="5dp"
+                android:layout_margin="5dp"
                 android:gravity="start"
                 android:minHeight="50dp"
                 android:text="@string/bio"
