@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
@@ -13,21 +14,25 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.ViewCreatePostAndEventPagerAdapter;
 import com.anikrakib.tourday.Adapter.ViewEventPagerAdapter;
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
+import com.anikrakib.tourday.Fragment.Event;
 import com.anikrakib.tourday.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -37,25 +42,41 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
+
+import devs.mulham.horizontalcalendar.HorizontalCalendar;
+import devs.mulham.horizontalcalendar.HorizontalCalendarView;
+import devs.mulham.horizontalcalendar.model.CalendarEvent;
+import devs.mulham.horizontalcalendar.utils.CalendarEventsPredicate;
+import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class EventActivity extends AppCompatActivity {
     TabLayout tabLayoutEvent;
     ViewPager viewPagerEvent;
     ViewEventPagerAdapter viewEventPagerAdapter;
     FloatingActionButton createEvent;
-    Dialog myDialog,mDialog;
-    ImageButton profileBackButton,refreshLocation;
+    Dialog myDialog, mDialog;
+    ImageButton profileBackButton, refreshLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     EditText editTextLocation;
+    HorizontalCalendar horizontalCalendar;
+    public java.text.DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private Calendar mDate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-        createEvent =  findViewById(R.id.fabButtonCreateEvent);
+        createEvent = findViewById(R.id.fabButtonCreateEvent);
         profileBackButton = findViewById(R.id.backButtonEvent);
 
 
@@ -67,7 +88,6 @@ public class EventActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-
 
 
         createEvent.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +117,41 @@ public class EventActivity extends AppCompatActivity {
 
 
 
+        /* start 2 months ago from now */
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -1);
 
+        /* end after 2 months from now */
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MONTH, 1);
+
+        // Default Date set to Today.
+        Calendar calendar = Calendar.getInstance();
+
+        horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
+                .range(startDate, endDate)
+                .datesNumberOnScreen(5)
+                .configure()
+                .formatTopText("MMM")
+                .formatMiddleText("dd")
+                .formatBottomText("EEE")
+                .showTopText(true)
+                .showBottomText(true)
+                .textColor(Color.LTGRAY, Color.WHITE)
+                .selectedDateBackground(ContextCompat.getDrawable(EventActivity.this, R.drawable.horizontal_calender_selector_background))
+                .colorTextMiddle(Color.LTGRAY, Color.parseColor("#ffd54f"))
+                .end()
+                .defaultSelectedDate(calendar)
+                .build();
+
+
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+
+            }
+
+        });
 
 
     }
@@ -111,9 +165,9 @@ public class EventActivity extends AppCompatActivity {
         ImageButton postCloseButton;
 
         myDialog.setContentView(R.layout.create_event);
-        postCloseButton= myDialog.findViewById(R.id.createEventCloseButton);
-        editTextLocation= myDialog.findViewById(R.id.createEventLocationEditText);
-        refreshLocation= myDialog.findViewById(R.id.refreshLocationInEvent);
+        postCloseButton = myDialog.findViewById(R.id.createEventCloseButton);
+        editTextLocation = myDialog.findViewById(R.id.createEventLocationEditText);
+        refreshLocation = myDialog.findViewById(R.id.refreshLocationInEvent);
 
 
         if (ActivityCompat.checkSelfPermission(myDialog.getContext(),
@@ -139,7 +193,7 @@ public class EventActivity extends AppCompatActivity {
         });
 
 
-        myDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,Toolbar.LayoutParams.WRAP_CONTENT);
+        myDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
         myDialog.getWindow().getAttributes().gravity = Gravity.TOP;
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.setCancelable(false);
@@ -153,13 +207,13 @@ public class EventActivity extends AppCompatActivity {
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             //buildAlertMessageNoGps();
             createEnableLocationPopUp();
-        }else{
+        } else {
             getCurrentLocation();
         }
     }
 
     public void createEnableLocationPopUp() {
-        Button yesButton,noButton;
+        Button yesButton, noButton;
         mDialog.setContentView(R.layout.custom_pop_up_enable_location);
         yesButton = mDialog.findViewById(R.id.yesButton);
         noButton = mDialog.findViewById(R.id.noButton);
