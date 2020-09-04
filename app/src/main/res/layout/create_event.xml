@@ -9,6 +9,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/createEventLayout"
         android:background="@drawable/dialog_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,7 +64,7 @@
             app:layout_constraintTop_toBottomOf="@+id/layout2" />
 
         <EditText
-            android:id="@+id/popup_title"
+            android:id="@+id/popupEventTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/popup_create_post_and_event_edittext_style"
@@ -84,10 +85,10 @@
             android:text="Enter Event Description"
             android:paddingLeft="15dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popup_title" />
+            app:layout_constraintTop_toBottomOf="@+id/popupEventTitle" />
 
         <EditText
-            android:id="@+id/popup_description"
+            android:id="@+id/popupEventDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/popup_create_post_and_event_edittext_style"
@@ -120,7 +121,7 @@
             android:paddingVertical="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popup_description">
+            app:layout_constraintTop_toBottomOf="@+id/popupEventDescription">
 
             <ImageView
                 android:layout_width="wrap_content"

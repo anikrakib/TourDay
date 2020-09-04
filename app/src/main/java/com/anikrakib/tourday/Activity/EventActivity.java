@@ -3,6 +3,7 @@ package com.anikrakib.tourday.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
@@ -11,6 +12,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,9 +23,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -66,7 +71,7 @@ public class EventActivity extends AppCompatActivity {
     Dialog myDialog, mDialog;
     ImageButton profileBackButton, refreshLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
-    EditText editTextLocation;
+    EditText editTextLocation,eventPopUpTitle,eventPopUpDescription;;
     HorizontalCalendar horizontalCalendar;
     public java.text.DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private Calendar mDate = null;
@@ -145,13 +150,13 @@ public class EventActivity extends AppCompatActivity {
                 .build();
 
 
-        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
-            @Override
-            public void onDateSelected(Calendar date, int position) {
-
-            }
-
-        });
+//        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+//            @Override
+//            public void onDateSelected(Calendar date, int position) {
+//
+//            }
+//
+//        });
 
 
     }
@@ -163,11 +168,37 @@ public class EventActivity extends AppCompatActivity {
 
     public void createEventPopUp() {
         ImageButton postCloseButton;
+        Animation top_to_bottom;
+        final ConstraintLayout createEventLayout;
+        final String[] eventTitleSave = new String[1];
+        final String[] eventDescriptionSave = new String[1];
+
 
         myDialog.setContentView(R.layout.create_event);
         postCloseButton = myDialog.findViewById(R.id.createEventCloseButton);
         editTextLocation = myDialog.findViewById(R.id.createEventLocationEditText);
         refreshLocation = myDialog.findViewById(R.id.refreshLocationInEvent);
+        createEventLayout = myDialog.findViewById(R.id.createEventLayout);
+        eventPopUpTitle = myDialog.findViewById(R.id.popupEventTitle);
+        eventPopUpDescription = myDialog.findViewById(R.id.popupEventDescription);
+
+
+        top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
+
+        // Retrieve and set Event Title and Description from SharedPreferences when again open CreateEvent PopUp
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String eventTitle = sharedPreferences.getString("eventTitle","");
+        String eventDescription = sharedPreferences.getString("eventDescription","");
+
+//        //delete SharedPreference data
+//        SharedPreferences preferences = getSharedPreferences("postTitle", 0);
+//        preferences.edit().remove("postTitle").apply();
+
+        eventPopUpTitle.setText(eventTitle);
+        eventPopUpDescription.setText(eventDescription);
+
+
 
 
         if (ActivityCompat.checkSelfPermission(myDialog.getContext(),
@@ -188,10 +219,21 @@ public class EventActivity extends AppCompatActivity {
         postCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog.hide();
+                // Save Event Title and Description in SharedPreferences when close CreateEvent PopUp
+
+                eventTitleSave[0] = eventPopUpTitle.getText().toString();
+                eventDescriptionSave[0] = eventPopUpDescription.getText().toString();
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("eventTitle", eventTitleSave[0]);
+                editor.putString("eventDescription", eventDescriptionSave[0]);
+                editor.apply();
+
+                myDialog.dismiss();
             }
         });
 
+        createEventLayout.startAnimation(top_to_bottom);
 
         myDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
         myDialog.getWindow().getAttributes().gravity = Gravity.TOP;
