@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +41,7 @@ public class AdapterPost  extends RecyclerView.Adapter<AdapterPost.ViewHolder> {
         viewHolder.txtcommentcount.setText(String.valueOf(item.commentCount));
         viewHolder.txtDate.setText(item.Date);
         viewHolder.txtlikecount.setText(String.valueOf(item.likecount));
+        viewHolder.postImage.setImageResource(item.imageUrl);
 
         // check if it was liked or no
         if (item.like) {
@@ -59,6 +61,7 @@ public class AdapterPost  extends RecyclerView.Adapter<AdapterPost.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txTitle, txtBody, txtDate, txtcommentcount, txtlikecount;
         public ImageButton bLike;
+        public ImageView postImage;
 
         public ViewHolder(View v) {
             super(v);
@@ -68,6 +71,7 @@ public class AdapterPost  extends RecyclerView.Adapter<AdapterPost.ViewHolder> {
             txtcommentcount = v.findViewById(R.id.id_commentCount_TextView);
             txtlikecount = v.findViewById(R.id.id_likeCount_TextView);
             bLike = v.findViewById(R.id.id_like_ImageButton);
+            postImage = v.findViewById(R.id.postImage);
         }
     }
 }

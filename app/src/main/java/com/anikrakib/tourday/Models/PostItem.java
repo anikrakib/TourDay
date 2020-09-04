@@ -8,20 +8,21 @@ public class PostItem {
     public int likecount = 0;
     public boolean like ;
     public int commentCount = 0;
+    public int imageUrl;
 
 
     public PostItem() {
         // Default constructor required
     }
 
-    public PostItem(String Title, String Body, String Date, int likecount , int commentCount ,boolean like ) {
-        this.Title = Title;
-        this.Body = Body;
-        this.Date = Date;
-        this.like = like;
+    public PostItem(String title, String body, String date, int likecount, int commentCount, boolean like, int imageUrl) {
+        Title = title;
+        Body = body;
+        Date = date;
         this.likecount = likecount;
+        this.like = like;
         this.commentCount = commentCount;
-
+        this.imageUrl = imageUrl;
     }
 
 }

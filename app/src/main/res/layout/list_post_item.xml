@@ -27,7 +27,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:layout_below="@+id/id_Title_TextView"
-        android:src="@drawable/pos1" />
+        android:src="@drawable/post1" />
 
     <!-- body Text -->
     <TextView
