@@ -1,5 +1,5 @@
 
-# [TourdaY](https://sites.google.com/view/touristcommunity/tourday) is Under Construction.........
+# [TourdaY](https://www.tourday.team/) is Under Construction.........
 
 
 ## Tourism & Tourist Community
