@@ -107,7 +107,7 @@
 
         <include
             android:id="@+id/include"
-            layout="@layout/multiple_image_add"
+            layout="@layout/choose_image_for_post_event"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"

@@ -43,8 +43,8 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
         viewHolder.txTitle.setText(item.Title);
         viewHolder.txtBody.setText(item.Body);
         viewHolder.eventLocation.setText(item.location);
-        viewHolder.startTime.setText(item.startTime);
-        viewHolder.endTime.setText(item.endTime);
+//        viewHolder.startTime.setText(item.startTime);
+//        viewHolder.endTime.setText(item.endTime);
         viewHolder.startDate.setText(item.startDate);
         viewHolder.endDate.setText(item.endDate);
         viewHolder.eventImage.setImageResource(item.imageUrl);
@@ -75,8 +75,8 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
             startDate = v.findViewById(R.id.eventStartDate);
             endDate = v.findViewById(R.id.eventEndDate);
             bLike = v.findViewById(R.id.eventInterestedLikeImage);
-            startTime = v.findViewById(R.id.eventStartTime);
-            endTime = v.findViewById(R.id.eventEndTime);
+//            startTime = v.findViewById(R.id.eventStartTime);
+//            endTime = v.findViewById(R.id.eventEndTime);
             eventLocation = v.findViewById(R.id.eventLocation);
             eventImage = v.findViewById(R.id.eventImage);
         }
