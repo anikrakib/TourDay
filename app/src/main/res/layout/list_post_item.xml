@@ -4,19 +4,43 @@
     android:layout_width="match_parent"
     android:layout_height="210dp"
     android:layout_marginTop="8dp"
+    android:id="@+id/relativeLayoutPostItem"
     android:background="@drawable/bg_recat">
 
-    <!-- Title Text -->
-    <TextView
-        android:id="@+id/id_Title_TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_marginTop="6dp"
-        android:text="Title"
-        android:maxLines="1"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- Title Text -->
+        <TextView
+            android:id="@+id/id_Title_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="left"
+            android:maxLines="1"
+            android:text="Title"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/moreButtonPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@null"
+            android:gravity="left"
+            android:src="@drawable/ic_baseline_more_vert_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <!-- post Image -->
 
     <ImageView
@@ -26,7 +50,7 @@
         android:scaleType="centerCrop"
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_below="@+id/id_Title_TextView"
+        android:layout_below="@+id/constraintLayout"
         android:src="@drawable/post1" />
 
     <!-- body Text -->

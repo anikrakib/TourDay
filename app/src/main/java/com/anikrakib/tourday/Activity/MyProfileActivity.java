@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -257,6 +259,40 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
 
+
+    public void showDialog(){
+
+        final Dialog postDialog = new Dialog(this);
+        postDialog.setCancelable(true);
+
+        //postDialog.setContentView(R.layout.post_details);
+
+        ImageView close,postDetailImage,postDetailLike;
+        TextView postDetailDescriptionTextView,postDetailDateView,postdetaitLikeCount;
+
+        postDialog.setContentView(R.layout.custom_social_media_link_pop_up);
+        close = postDialog.findViewById(R.id.postDetailsClose);
+        postDetailImage = postDialog.findViewById(R.id.postDetailImage);
+        postDetailLike = postDialog.findViewById(R.id.postLikeImageButton);
+        postDetailDescriptionTextView = postDialog.findViewById(R.id.postDetailDescriptionTextView);
+        postDetailDateView = postDialog.findViewById(R.id.postDetailDate);
+        postdetaitLikeCount = postDialog.findViewById(R.id.postLikeDetailTextView);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postDialog.dismiss();
+            }
+        });
+
+        postDialog.setCancelable(false);
+        postDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        postDialog.show();
+
+
+
+        postDialog.show();
+    };
 
 }
 
