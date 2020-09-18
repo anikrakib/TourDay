@@ -48,8 +48,8 @@
                 android:layout_height="193dp"
                 android:layout_below="@+id/id_Title_TextView"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/event_pic2"
@@ -58,11 +58,10 @@
 
             <com.codesgood.views.JustifiedTextView
                 android:id="@+id/eventDescription"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="157dp"
+                android:layout_height="84dp"
                 android:layout_margin="5dp"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
                 android:gravity="start"
                 android:maxLines="5"
@@ -75,7 +74,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/listItemEventLocationLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/eventImage"
-                app:layout_constraintTop_toBottomOf="@+id/eventDate" />
+                app:layout_constraintTop_toBottomOf="@+id/eventPrice" />
 
 
             <ImageButton
@@ -95,6 +94,7 @@
                 android:layout_width="274dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginBottom="5dp"
                 android:background="@android:color/transparent"
                 android:gravity="left"
@@ -181,65 +181,43 @@
 
             </LinearLayout>
 
-<!--            <LinearLayout-->
-<!--                android:id="@+id/eventTime"-->
-<!--                android:layout_width="150dp"-->
-<!--                android:layout_height="25dp"-->
-<!--                android:layout_marginStart="5dp"-->
-<!--                android:layout_marginBottom="5dp"-->
-<!--                android:background="@drawable/horizontal_calender_background"-->
-<!--                android:gravity="left|center"-->
-<!--                android:onClick="chooseDate"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:paddingLeft="3dp"-->
-<!--                android:paddingRight="3dp"-->
-<!--                app:layout_constraintBottom_toTopOf="@+id/eventDescription"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/eventImage">-->
+            <LinearLayout
+                android:id="@+id/eventPrice"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_recat"
+                android:gravity="center"
+                android:onClick="chooseDate"
+                android:orientation="horizontal"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/eventImage"
+                app:layout_constraintTop_toBottomOf="@+id/eventDate">
 
-<!--                <ImageView-->
-<!--                    android:layout_width="15dp"-->
-<!--                    android:layout_height="15dp"-->
-<!--                    android:src="@drawable/ic_baseline_access_time_24"-->
-<!--                    app:tint="@color/black" />-->
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/taka"
+                    app:tint="@color/black" />
 
 
-<!--                <TextView-->
-<!--                    android:id="@+id/eventStartTime"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="5dp"-->
-<!--                    android:layout_marginRight="5dp"-->
-<!--                    android:background="@null"-->
-<!--                    android:paddingLeft="3dp"-->
-<!--                    android:paddingTop="1dp"-->
-<!--                    android:text="9:00 AM"-->
-<!--                    android:textColor="#FF0000"-->
-<!--                    android:textSize="10sp"-->
-<!--                    android:textStyle="bold" />-->
+                <TextView
+                    android:id="@+id/eventStartTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@null"
+                    android:paddingLeft="3dp"
+                    android:paddingTop="1dp"
+                    android:text="1000"
+                    android:textColor="#0B0B0B"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="1dp"-->
-<!--                    android:layout_marginRight="1dp"-->
-<!--                    android:text="To"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="12sp"-->
-<!--                    android:textStyle="bold" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/eventEndTime"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:background="@null"-->
-<!--                    android:layout_marginLeft="5dp"-->
-<!--                    android:padding="1dp"-->
-<!--                    android:text="10:00 PM"-->
-<!--                    android:textColor="#FF0000"-->
-<!--                    android:textSize="10sp"-->
-<!--                    android:textStyle="bold" />-->
-
-<!--            </LinearLayout>-->
+            </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
