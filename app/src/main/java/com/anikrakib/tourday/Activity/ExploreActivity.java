@@ -52,6 +52,15 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
         setSupportActionBar(toolbarMenu);
 
+        if(SignInActivity.getToken()!= null){
+            Menu menu = navigationView.getMenu();
+            menu.findItem(R.id.profile).setVisible(true);
+            menu.findItem(R.id.login).setVisible(false);
+        }else{
+            Menu menu = navigationView.getMenu();
+            menu.findItem(R.id.profile).setVisible(false);
+        }
+
         navigationView.bringToFront();
         toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbarMenu,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -59,9 +68,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
-
-        Menu menu = navigationView.getMenu();
-        menu.findItem(R.id.profile).setVisible(true);
 
 
     }
