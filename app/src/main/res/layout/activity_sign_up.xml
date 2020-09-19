@@ -53,12 +53,82 @@
         </TextView>
 
 
-        <include layout="@layout/username"/>
-        <include layout="@layout/email"/>
-        <include layout="@layout/password"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_input_layout_custom"
+                android:padding="3dp">
 
-<!--        <include layout="@layout/already_have_account" />-->
+                <EditText
+                    android:id="@+id/userNameSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@string/hint_username"
+                    android:inputType="textNoSuggestions"
+                    android:padding="5dp"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_input_layout_custom"
+                android:padding="3dp">
+
+                <EditText
+                    android:id="@+id/emailSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@string/hint_email"
+                    android:inputType="textEmailAddress"
+                    android:padding="5dp"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_input_layout_custom"
+                android:padding="3dp">
+
+                <EditText
+                    android:id="@+id/passwordSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"
+                    android:padding="5dp"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <!--        <include layout="@layout/already_have_account" />-->
 
         <include layout="@layout/already_have_account" />
 
@@ -136,14 +206,14 @@
     </LinearLayout>
 
 
-    <include
-        layout="@layout/gif_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/signUpBody"
-        app:layout_constraintEnd_toEndOf="@+id/signUpBody"
-        app:layout_constraintStart_toStartOf="@+id/signUpBody"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--    <include-->
+    <!--        layout="@layout/gif_view"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/signUpBody"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/signUpBody"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/signUpBody"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
 

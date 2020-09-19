@@ -8,9 +8,10 @@
     <string name="hint_password">Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
-    <string name="err_msg_name">Enter your username</string>
+    <string name="err_msg_userName1">Enter your username</string>
+    <string name="err_msg_userName2">Enter valid username</string>
     <string name="err_msg_email">Enter valid email address</string>
-    <string name="err_msg_password">Enter the password</string>
+    <string name="err_msg_password">Password Must be 8 Character</string>
     <string name="facebook_Signin">Sign In with Facebook</string>
     <string name="facebook_Signup">Sign Up with Facebook</string>
     <string name="google_Signin">Sign In with Google</string>
