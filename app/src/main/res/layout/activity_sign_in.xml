@@ -18,7 +18,7 @@
         app:navigationIcon="@drawable/ic_arrow_back_black_24dp"/>
 
     <LinearLayout
-        android:id="@+id/signUpBody"
+        android:id="@+id/signInBody"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
@@ -51,15 +51,63 @@
         </TextView>
 
 
-        <include layout="@layout/username"/>
-        <include layout="@layout/password"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_input_layout_custom"
+                android:padding="3dp">
+
+                <EditText
+                    android:id="@+id/userNameSignIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@string/hint_username"
+                    android:inputType="textNoSuggestions"
+                    android:padding="5dp"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/text_input_layout_custom"
+                android:padding="3dp">
+
+                <EditText
+                    android:id="@+id/passwordSignIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"
+                    android:padding="5dp"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
 
         <include layout="@layout/have_no_account" />
 
 
         <Button
-            android:id="@+id/signUpButton"
+            android:id="@+id/signInButton"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_gravity="center"
