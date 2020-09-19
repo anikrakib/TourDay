@@ -25,11 +25,24 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MyProfileActivity extends AppCompatActivity {
@@ -43,6 +56,12 @@ public class MyProfileActivity extends AppCompatActivity {
     FloatingActionButton floatingActionButtonCreatePost;
     Button uploadButton;
     EditText socialMediaLinkEditText,postPopUpTitle,postPopUpDescription;
+    TextView userFullName;
+    private static MyProfileActivity instance;
+
+
+    /** Either on the constructor or the 'OnCreate' method, you should add: */
+
 
 
 
@@ -57,13 +76,17 @@ public class MyProfileActivity extends AppCompatActivity {
         instagramLinkImageView = findViewById(R.id.instagramLinkImageView);
         messengerLinkImageView = findViewById(R.id.messengerLinkImageView);
         floatingActionButtonCreatePost = findViewById(R.id.fabButtonCreatePost);
+        userFullName = findViewById(R.id.userFullName);
 
 
         myDialog = new Dialog(this);
+        instance = this;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+
+        showUserData();
 
         /////*     Click Listener     */////
 
@@ -116,6 +139,10 @@ public class MyProfileActivity extends AppCompatActivity {
 
     }
 
+    public static MyProfileActivity getInstance(){
+        return instance;
+    }
+
     @Override
     public void onBackPressed() {
         MyProfileActivity.this.finish();
@@ -159,21 +186,21 @@ public class MyProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //final RoundButton bt = (RoundButton) v;
-               // bt.startAnimation();
-               // bt.postDelayed(new Runnable() {
-                   // @Override
-                   // public void run() {
-                        myDialog.dismiss();
-                        if(id == R.id.facebookLinkImageView){
-                            facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
-                        }else if(id == R.id.instagramLinkImageView){
-                            instagramLinkImageView.setImageResource(R.drawable.instagram);
-                        }
-                        else if(id == R.id.messengerLinkImageView){
-                            messengerLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
-                        }
-                   // }
-               // }, 3000);
+                // bt.startAnimation();
+                // bt.postDelayed(new Runnable() {
+                // @Override
+                // public void run() {
+                myDialog.dismiss();
+                if(id == R.id.facebookLinkImageView){
+                    facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
+                }else if(id == R.id.instagramLinkImageView){
+                    instagramLinkImageView.setImageResource(R.drawable.instagram);
+                }
+                else if(id == R.id.messengerLinkImageView){
+                    messengerLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
+                }
+                // }
+                // }, 3000);
             }
         });
 
@@ -259,40 +286,41 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
 
-
-    public void showDialog(){
-
-        final Dialog postDialog = new Dialog(this);
-        postDialog.setCancelable(true);
-
-        //postDialog.setContentView(R.layout.post_details);
-
-        ImageView close,postDetailImage,postDetailLike;
-        TextView postDetailDescriptionTextView,postDetailDateView,postdetaitLikeCount;
-
-        postDialog.setContentView(R.layout.custom_social_media_link_pop_up);
-        close = postDialog.findViewById(R.id.postDetailsClose);
-        postDetailImage = postDialog.findViewById(R.id.postDetailImage);
-        postDetailLike = postDialog.findViewById(R.id.postLikeImageButton);
-        postDetailDescriptionTextView = postDialog.findViewById(R.id.postDetailDescriptionTextView);
-        postDetailDateView = postDialog.findViewById(R.id.postDetailDate);
-        postdetaitLikeCount = postDialog.findViewById(R.id.postLikeDetailTextView);
-
-        close.setOnClickListener(new View.OnClickListener() {
+    public void showUserData(){
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .userProfile("Token "+SignInActivity.getToken());
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onClick(View v) {
-                postDialog.dismiss();
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    //DynamicToast.makeError(getApplicationContext(), "Login Success").show();
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+                        //DynamicToast.makeError(getApplicationContext(), ""+profile.getString("name")).show();
+                        userFullName.setText(profile.getString("name"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+
             }
         });
+    }
 
-        postDialog.setCancelable(false);
-        postDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        postDialog.show();
-
-
-
-        postDialog.show();
-    };
 
 }
 

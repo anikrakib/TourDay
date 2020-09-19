@@ -57,7 +57,7 @@
                             android:layout_width="170dp"
                             android:layout_height="170dp"
                             android:layout_centerHorizontal="true"
-                            android:src="@drawable/anik"
+                            android:src="@drawable/user_profile_pic"
                             app:civ_border_color="#050505"
                             app:civ_border_width="4dp"
                             app:civ_shadow="true"
@@ -84,7 +84,7 @@
                     <!-- User Name  -->
 
                     <TextView
-                        android:id="@+id/id_fullName_TextView"
+                        android:id="@+id/userFullName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/id_ProfileImage_RelativeLayout"
@@ -92,7 +92,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/sf_bold"
-                        android:text="AN IK"
+                        android:text="None"
                         android:textColor="@color/color_primary_text"
                         android:textSize="20sp" />
 
