@@ -8,7 +8,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -52,13 +54,20 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
         setSupportActionBar(toolbarMenu);
 
-        if(SignInActivity.getToken()!= null){
+
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        boolean isLoggedIn = userPref.getBoolean("isLoggedIn",false);
+
+        if (isLoggedIn){
             Menu menu = navigationView.getMenu();
             menu.findItem(R.id.profile).setVisible(true);
             menu.findItem(R.id.login).setVisible(false);
+            menu.findItem(R.id.logout).setVisible(true);
         }else{
             Menu menu = navigationView.getMenu();
+            menu.findItem(R.id.logout).setVisible(false);
             menu.findItem(R.id.profile).setVisible(false);
+            menu.findItem(R.id.login).setVisible(true);
         }
 
         navigationView.bringToFront();
@@ -68,6 +77,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
+
 
 
     }
@@ -104,6 +114,15 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 break;
             case R.id.bdmap:
                 startActivity(new Intent(ExploreActivity.this, BDMapViewActivity.class));
+                break;
+            case R.id.logout:
+                SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
+                SharedPreferences.Editor editor = userPref.edit();
+                editor.putBoolean("isLoggedIn",false);
+                editor.putString("token","");
+                editor.putString("username","");
+                editor.apply();
+                startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + menuItem.getItemId());
