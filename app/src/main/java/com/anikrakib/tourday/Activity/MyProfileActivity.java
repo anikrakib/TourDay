@@ -6,20 +6,31 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,7 +43,9 @@ import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,8 +69,9 @@ public class MyProfileActivity extends AppCompatActivity {
     FloatingActionButton floatingActionButtonCreatePost;
     Button uploadButton;
     EditText socialMediaLinkEditText,postPopUpTitle,postPopUpDescription;
-    TextView userFullName;
+    TextView userFullName,facebookLink,instagramLink;
     private static MyProfileActivity instance;
+    CircularImageView userProfilePic;
 
 
     /** Either on the constructor or the 'OnCreate' method, you should add: */
@@ -77,6 +91,9 @@ public class MyProfileActivity extends AppCompatActivity {
         messengerLinkImageView = findViewById(R.id.messengerLinkImageView);
         floatingActionButtonCreatePost = findViewById(R.id.fabButtonCreatePost);
         userFullName = findViewById(R.id.userFullName);
+        facebookLink = findViewById(R.id.facebookLinkTextView);
+        instagramLink = findViewById(R.id.instagramLinkTextView);
+        userProfilePic = findViewById(R.id.userProfilePic);
 
 
         myDialog = new Dialog(this);
@@ -85,6 +102,9 @@ public class MyProfileActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+
+
+
 
         showUserData();
 
@@ -106,6 +126,8 @@ public class MyProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showSocialMediaPopup(v.getId());
+
+
             }
         });
         floatingActionButtonCreatePost.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +140,8 @@ public class MyProfileActivity extends AppCompatActivity {
         profileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
+
             }
         });
 
@@ -137,10 +160,7 @@ public class MyProfileActivity extends AppCompatActivity {
         /////*     Check SocialMediaLink is null or not   */////
 
 
-    }
 
-    public static MyProfileActivity getInstance(){
-        return instance;
     }
 
     @Override
@@ -183,6 +203,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
                 //final RoundButton bt = (RoundButton) v;
@@ -194,7 +215,7 @@ public class MyProfileActivity extends AppCompatActivity {
                 if(id == R.id.facebookLinkImageView){
                     facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
                 }else if(id == R.id.instagramLinkImageView){
-                    instagramLinkImageView.setImageResource(R.drawable.instagram);
+                    instagramLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),  R.color.instagram_color));
                 }
                 else if(id == R.id.messengerLinkImageView){
                     messengerLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
@@ -287,10 +308,12 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
     public void showUserData(){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .userProfile("Token "+SignInActivity.getToken());
+                .userProfile("Token "+token);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -302,6 +325,10 @@ public class MyProfileActivity extends AppCompatActivity {
                         JSONObject profile = jsonObject.getJSONObject("profile");
                         //DynamicToast.makeError(getApplicationContext(), ""+profile.getString("name")).show();
                         userFullName.setText(profile.getString("name"));
+                        facebookLink.setText(profile.getString("fb"));
+                        instagramLink.setText(profile.getString("insta"));
+                        Picasso.get().load(profile.getString("picture")).into(userProfilePic);
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -324,5 +351,3 @@ public class MyProfileActivity extends AppCompatActivity {
 
 }
 
-//Remaining Work in this part
-// add draft post

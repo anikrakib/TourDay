@@ -1,6 +1,8 @@
 package com.anikrakib.tourday.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,13 +18,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anikrakib.tourday.Activity.DescriptionActivity;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.WebService.RetrofitClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class About extends Fragment {
 
     RecyclerView recyclerView;
+    TextView userEmail,userUserName,userLocation,userBio;
+
 
     public About() {
 
@@ -39,6 +55,56 @@ public class About extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
+        userEmail = view.findViewById(R.id.email);
+        userLocation = view.findViewById(R.id.location);
+        userUserName = view.findViewById(R.id.userName);
+        userBio = view.findViewById(R.id.userBio);
+
+
+        showUserData();
+
+
+        return view;
+    }
+
+    public void showUserData(){
+        SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        final String userName = userPref.getString("username","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .userProfile("Token "+ token);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    //DynamicToast.makeError(getApplicationContext(), "Login Success").show();
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+                        userEmail.setText(profile.getString("email"));
+                        userLocation.setText(profile.getString("city"));
+                        userBio.setText(profile.getString("bio"));
+                        userUserName.setText(userName);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 }

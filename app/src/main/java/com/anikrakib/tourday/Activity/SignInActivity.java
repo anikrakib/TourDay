@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anikrakib.tourday.Models.LogIn;
 import com.anikrakib.tourday.Models.Token;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
@@ -100,10 +99,36 @@ public class SignInActivity extends AppCompatActivity {
         if (!validatePassword()) {
             return;
         }
-        loder();
+        loader();
 
     }
 
+    private class MyTextWatcher implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.input_username:
+                    validateUsername();
+                    break;
+                case R.id.input_password:
+                    validatePassword();
+                    break;
+            }
+        }
+
+    }
     private boolean validatePassword() {
         if(inputPassword.getText().toString().length() <=7) {
             inputLayoutPassword.setError(getString(R.string.err_msg_password));
@@ -120,10 +145,9 @@ public class SignInActivity extends AppCompatActivity {
         handler = new Handler();
         handler.postDelayed(new Runnable(){
             public void run(){
-                postDialog.cancel();
-                postDialog.dismiss();
+
             }
-        }, 2000);
+        }, 1500);
     }
 
     private boolean validateUsername() {
@@ -139,12 +163,14 @@ public class SignInActivity extends AppCompatActivity {
         return true;
     }
 
-    public void loder(){
-        accessData();
+    public void loader(){
         postDialog.setContentView(R.layout.gif_view);
         postDialog.setCancelable(false);
         postDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        setTimeForRunLoder();
         postDialog.show();
+        accessData();
+
     }
 
     private void accessData() {
@@ -178,6 +204,7 @@ public class SignInActivity extends AppCompatActivity {
                     inputUsername.setText("");
                     inputPassword.setText("");
                     requestFocus(inputUsername);
+                    postDialog.dismiss();
                 }
             }
 
@@ -192,5 +219,9 @@ public class SignInActivity extends AppCompatActivity {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
+    }
+
+    public static String getToken() {
+        return token;
     }
 }

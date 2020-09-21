@@ -53,7 +53,7 @@
                         <!--  Profile Image -->
 
                         <com.mikhaellopez.circularimageview.CircularImageView
-                            android:id="@+id/id_Profile_Image"
+                            android:id="@+id/userProfilePic"
                             android:layout_width="170dp"
                             android:layout_height="170dp"
                             android:layout_centerHorizontal="true"
@@ -69,7 +69,6 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_alignStart="@+id/id_Profile_Image"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentBottom="true"
