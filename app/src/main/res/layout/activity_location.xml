@@ -47,20 +47,22 @@
 
         <EditText
             android:id="@+id/newlocationEditText"
-            android:layout_width="281dp"
+            android:layout_width="220dp"
             android:layout_height="50dp"
             android:layout_marginLeft="5dp"
             android:background="@null"
+            android:singleLine="false"
             android:hint="Enter a new address"
             android:textColor="@color/color_secondary_text"
             android:textSize="14sp"
             android:theme="@style/cutomTextstyle"
             tools:ignore="ContentDescription" />
         <ImageButton
-            android:id="@+id/clickOkImageButton"
+            android:id="@+id/clickOkNewLocationImageButton"
             android:src="@drawable/ic_baseline_check_24"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
             android:tint="@color/color_secondary_text"
@@ -95,7 +97,7 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
@@ -109,13 +111,22 @@
 
             <TextView
                 android:id="@+id/currentLocation"
-                android:layout_width="wrap_content"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="14dp"
                 android:text=""
-                android:layout_marginLeft="5dp"
                 android:textColor="@color/color_primary_text"
                 android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/copyLocationButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_baseline_file_copy_24"
+                app:tint="@color/color_secondary_text" />
 
         </LinearLayout>
 

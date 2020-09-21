@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -22,11 +23,14 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,8 +54,9 @@ public class LocationActivity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     Dialog mDialog;
     LinearLayout editLocationBody;
-    ImageView backButton;
-    ImageButton refreshLocation;
+    ImageView backButton,copyLocation;
+    ImageButton refreshLocation,saveNewLocation;
+    EditText newLocationEdit;
 
 
     @Override
@@ -63,6 +68,9 @@ public class LocationActivity extends AppCompatActivity {
         editLocationBody = findViewById(R.id.editLocationBody);
         refreshLocation = findViewById(R.id.refreshLocation);
         backButton = findViewById(R.id.backButtonLocation);
+        copyLocation = findViewById(R.id.copyLocationButton);
+        newLocationEdit = findViewById(R.id.newlocationEditText);
+        saveNewLocation = findViewById(R.id.clickOkNewLocationImageButton);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -105,17 +113,35 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
 
-        currentLocation.setOnClickListener(new View.OnClickListener() {
+        copyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("label", currentLocation.getText().toString());
                 clipboard.setPrimaryClip(clip);
-                DynamicToast.makeWarning(getApplicationContext(), "Your Current Address copy to Clipboard").show();
+                DynamicToast.makeSuccess(getApplicationContext(), "Your Current Address copy to Clipboard").show();
+                copyLocation.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.black));
 
             }
         });
 
+        newLocationEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                saveNewLocation.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.black));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
     }
 
