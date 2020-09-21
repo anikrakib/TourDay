@@ -318,12 +318,10 @@ public class MyProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    //DynamicToast.makeError(getApplicationContext(), "Login Success").show();
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject(response.body().string());
                         JSONObject profile = jsonObject.getJSONObject("profile");
-                        //DynamicToast.makeError(getApplicationContext(), ""+profile.getString("name")).show();
                         userFullName.setText(profile.getString("name"));
                         facebookLink.setText(profile.getString("fb"));
                         instagramLink.setText(profile.getString("insta"));
