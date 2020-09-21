@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -156,29 +157,35 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    JSONObject jObjError = null;
+                    JSONObject jsonObject = null;
                     try {
-                        jObjError = new JSONObject(response.body().string());
-                        DynamicToast.makeSuccess(getApplicationContext(), jObjError.getJSONArray("username").getString(0)).show();
+                        jsonObject = new JSONObject(response.body().string());
+                        String token = jsonObject.getString("token");
+                        //make shared preference user
+                        SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
+                        SharedPreferences.Editor editor = userPref.edit();
+                        editor.putString("token",token);
+                        editor.putBoolean("isLoggedIn",true);
+                        editor.apply();
+                        DynamicToast.makeSuccess(getApplicationContext(), "Registration Success").show();
+                        startActivity(new Intent(SignUpActivity.this, MyProfileActivity.class));
+                        finish();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    startActivity(new Intent(SignUpActivity.this, MyProfileActivity.class));
-                    finish();
+
                 }else {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("username").getString(0)).show();
+                        inputUsername.setText("");
+                        requestFocus(inputUsername);
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        DynamicToast.makeError(getApplicationContext(),"Email Already Used!").show();
+                        requestFocus(inputEmail);
                     }
-//                    Toast.makeText(getApplicationContext(),"A user with that username already exists.",Toast.LENGTH_LONG).show();
-//                    if(response.errorBody()!=null)
-//                        Toast.makeText(SignUpActivity.this,response.errorBody().toString(),Toast.LENGTH_LONG).show();
-                    inputUsername.setText("");
-                    requestFocus(inputUsername);
                 }
             }
 

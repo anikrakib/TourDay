@@ -70,7 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:hint="@string/hint_username"
+                    android:hint="Username"
                     android:inputType="textNoSuggestions"
                     android:padding="5dp"
                     android:singleLine="true" />
