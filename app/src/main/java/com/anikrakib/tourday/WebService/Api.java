@@ -23,8 +23,15 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("auth/login/")
-    Call<Token> logInUser(
+    Call<Token> logInUsingUserName(
             @Field("username") String username,
+            @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST("auth/login/")
+    Call<Token> logInUsingEmail(
+            @Field("email") String email,
             @Field("password") String password
     );
 

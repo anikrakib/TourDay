@@ -152,7 +152,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 SharedPreferences.Editor editor = userPref.edit();
                 editor.putBoolean("isLoggedIn",false);
                 editor.putString("token","");
-                editor.putString("username","");
                 editor.apply();
                 startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
                 myDialog.dismiss();

@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
@@ -169,16 +170,61 @@ public class SignInActivity extends AppCompatActivity {
         postDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setTimeForRunLoder();
         postDialog.show();
-        accessData();
+        if(validateEmail()){
+            accessDataUsingEmail();
+        }else {
+            accessDataUserName();
+        }
 
     }
 
-    private void accessData() {
+    private void accessDataUsingEmail() {
         setTimeForRunLoder();
         Call<Token> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .logInUser(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
+                .logInUsingUserName(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
+        call.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if(response.isSuccessful()){
+                    DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
+                    //make shared preference user
+                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
+                    SharedPreferences.Editor editor = userPref.edit();
+                    editor.putString("token",response.body().getKey());
+                    editor.putBoolean("isLoggedIn",true);
+                    editor.putString("username",inputUsername.getText().toString().trim());
+                    editor.apply();
+                    startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
+                    token=response.body().getKey();
+                    finish();
+                }else{
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                    inputUsername.setText("");
+                    inputPassword.setText("");
+                    requestFocus(inputUsername);
+                    postDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    private void accessDataUserName() {
+        setTimeForRunLoder();
+        Call<Token> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .logInUsingUserName(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
@@ -220,6 +266,21 @@ public class SignInActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+    private boolean validateEmail() {
+        String email = inputUsername.getText().toString().trim();
+
+        if (email.isEmpty() || !isValidEmail(email)) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    private static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
 
     public static String getToken() {
         return token;

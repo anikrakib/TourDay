@@ -71,7 +71,6 @@ public class About extends Fragment {
     public void showUserData(){
         SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
-        final String userName = userPref.getString("username","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -88,7 +87,7 @@ public class About extends Fragment {
                         userEmail.setText(profile.getString("email"));
                         userLocation.setText(profile.getString("city"));
                         userBio.setText(profile.getString("bio"));
-                        userUserName.setText(userName);
+                        userUserName.setText(jsonObject.getString("username"));
 
                     } catch (JSONException e) {
                         e.printStackTrace();
