@@ -38,4 +38,9 @@ public interface Api {
     @GET("profile/")
     Call<ResponseBody> userProfile(@Header("Authorization") String authToken);
 
+    @FormUrlEncoded
+    @POST("profile/")
+    Call<ResponseBody> updateProfileName(@Header("Authorization") String authToken, @Field("name") String name);
+
+
 }

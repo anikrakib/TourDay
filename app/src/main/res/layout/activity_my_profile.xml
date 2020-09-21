@@ -82,19 +82,38 @@
 
                     <!-- User Name  -->
 
-                    <TextView
-                        android:id="@+id/userFullName"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:layout_below="@+id/id_ProfileImage_RelativeLayout"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:fontFamily="@font/sf_bold"
-                        android:text="None"
-                        android:textColor="@color/color_primary_text"
-                        android:textSize="20sp" />
+                        android:gravity="center"
+                        >
 
+                        <TextView
+                            android:id="@+id/userFullName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:fontFamily="@font/sf_bold"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="30dp"
+                            android:text="None"
+                            android:textColor="@color/color_primary_text"
+                            android:textSize="20sp" />
+
+                        <ImageView
+                            android:id="@+id/editNameImageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:src="@drawable/ic_baseline_edit_24"
+                            app:tint="@color/colorPrimary" />
+
+
+                    </LinearLayout>
                 </RelativeLayout>
 
                 <LinearLayout

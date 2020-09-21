@@ -39,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
+import com.anikrakib.tourday.Models.Token;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -64,11 +65,11 @@ public class MyProfileActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewProfilePagerAdapter viewProfilePagerAdapter;
-    ImageView facebookLinkImageView,instagramLinkImageView,messengerLinkImageView,popupAddBtn;
+    ImageView facebookLinkImageView,instagramLinkImageView,messengerLinkImageView,editNameImageView;
     Dialog myDialog;
     FloatingActionButton floatingActionButtonCreatePost;
-    Button uploadButton;
-    EditText socialMediaLinkEditText,postPopUpTitle,postPopUpDescription;
+    Button uploadButton,saveButton;
+    EditText socialMediaLinkEditText,postPopUpTitle,postPopUpDescription,nameEditTest;
     TextView userFullName,facebookLink,instagramLink;
     private static MyProfileActivity instance;
     CircularImageView userProfilePic;
@@ -94,6 +95,7 @@ public class MyProfileActivity extends AppCompatActivity {
         facebookLink = findViewById(R.id.facebookLinkTextView);
         instagramLink = findViewById(R.id.instagramLinkTextView);
         userProfilePic = findViewById(R.id.userProfilePic);
+        editNameImageView = findViewById(R.id.editNameImageView);
 
 
         myDialog = new Dialog(this);
@@ -144,6 +146,12 @@ public class MyProfileActivity extends AppCompatActivity {
 
             }
         });
+        editNameImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditNamePopUp(userFullName.getText().toString());
+            }
+        });
 
         /////*     initialize view   */////
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -161,6 +169,96 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void showEditNamePopUp(String name) {
+        ImageView close;
+
+        myDialog.setContentView(R.layout.custom_edit_name_pop_up);
+        nameEditTest = myDialog.findViewById(R.id.nameEditText);
+        close = myDialog.findViewById(R.id.closeButtonEditNamePopUp);
+        saveButton = myDialog.findViewById(R.id.saveButton);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+
+        nameEditTest.setText(name);
+
+        nameEditTest.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkInputsEditName();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                //rest of the work here about edit name
+                if(!TextUtils.isEmpty(nameEditTest.getText().toString())){
+                    updateName();
+                    myDialog.dismiss();
+                    userFullName.setText(nameEditTest.getText().toString());
+                }else{
+                    DynamicToast.makeError(getApplicationContext(), "Name Can't Empty!").show();
+                }
+            }
+        });
+
+
+        myDialog.setCancelable(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
+    }
+
+    private void updateName() {
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .updateProfileName("Token "+token,nameEditTest.getText().toString().trim());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    DynamicToast.makeSuccess(getApplicationContext(), "Name Update Successfully").show();
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+                        userFullName.setText(profile.getString("name"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -192,7 +290,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                checkInputs();
+                checkInputsSocialMediaLink();
             }
 
             @Override
@@ -296,13 +394,23 @@ public class MyProfileActivity extends AppCompatActivity {
 
     }
 
-    private void checkInputs() {
+    private void checkInputsSocialMediaLink() {
         if (!TextUtils.isEmpty(socialMediaLinkEditText.getText())) {
             uploadButton.setEnabled(true);
             uploadButton.setBackgroundResource(R.drawable.button_background);
         } else {
             uploadButton.setEnabled(false);
             uploadButton.setBackgroundResource(R.drawable.disable_button_background);
+        }
+    }
+
+    private void checkInputsEditName() {
+        if (!TextUtils.isEmpty(userFullName.getText())) {
+            saveButton.setEnabled(true);
+            saveButton.setBackgroundResource(R.drawable.button_background);
+        } else {
+            saveButton.setEnabled(false);
+            saveButton.setBackgroundResource(R.drawable.disable_button_background);
         }
     }
 
