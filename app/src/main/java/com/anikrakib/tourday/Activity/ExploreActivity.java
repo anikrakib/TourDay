@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.anikrakib.tourday.R;
@@ -116,13 +117,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 startActivity(new Intent(ExploreActivity.this, BDMapViewActivity.class));
                 break;
             case R.id.logout:
-                SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
-                SharedPreferences.Editor editor = userPref.edit();
-                editor.putBoolean("isLoggedIn",false);
-                editor.putString("token","");
-                editor.putString("username","");
-                editor.apply();
-                startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
+                showLogoutPopUp();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + menuItem.getItemId());
@@ -143,5 +138,35 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         myDialog.setCancelable(false);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
+    }
+    public void showLogoutPopUp() {
+        Button yesButton,noButton;
+        myDialog.setContentView(R.layout.custom_logout_pop_up);
+        yesButton = myDialog.findViewById(R.id.yesButton);
+        noButton = myDialog.findViewById(R.id.noButton);
+
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
+                SharedPreferences.Editor editor = userPref.edit();
+                editor.putBoolean("isLoggedIn",false);
+                editor.putString("token","");
+                editor.putString("username","");
+                editor.apply();
+                startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
+                myDialog.dismiss();
+            }
+        });
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.setCancelable(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
+
     }
 }
