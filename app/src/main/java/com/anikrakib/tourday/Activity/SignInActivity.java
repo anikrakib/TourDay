@@ -183,20 +183,19 @@ public class SignInActivity extends AppCompatActivity {
         Call<Token> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .logInUsingUserName(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
+                .logInUsingEmail(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
         call.enqueue(new Callback<Token>() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
                 if(response.isSuccessful()){
-                    DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
                     //make shared preference user
                     SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
                     SharedPreferences.Editor editor = userPref.edit();
                     editor.putString("token",response.body().getKey());
                     editor.putBoolean("isLoggedIn",true);
-                    editor.putString("username",inputUsername.getText().toString().trim());
                     editor.apply();
                     startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
+                    DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
                     token=response.body().getKey();
                     finish();
                 }else{
@@ -235,7 +234,6 @@ public class SignInActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = userPref.edit();
                     editor.putString("token",response.body().getKey());
                     editor.putBoolean("isLoggedIn",true);
-                    editor.putString("username",inputUsername.getText().toString().trim());
                     editor.apply();
                     startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
                     token=response.body().getKey();
