@@ -14,6 +14,7 @@
 
         <!-- body  -->
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -34,9 +35,9 @@
                 android:textStyle="bold"
                 android:textSize="12sp" />
 
-            <com.codesgood.views.JustifiedTextView
+            <com.uncopt.android.widget.text.justify.JustifiedTextView
                 android:background="@drawable/bg_recat"
-                android:id="@+id/aboutBioEdit"
+                android:id="@+id/aboutBio"
                 android:layout_below="@+id/id_titleDescription_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,6 +48,41 @@
                 android:minHeight="50dp"
                 android:textSize="16sp"
                 />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/editBioLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <com.uncopt.android.widget.text.justify.JustifiedEditText
+                    android:background="@drawable/bg_recat_edit"
+                    android:id="@+id/aboutBioEdit"
+                    android:layout_below="@+id/id_titleDescription_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_secondary_text"
+                    android:gravity="start"
+                    android:layout_margin="5dp"
+                    android:padding="7dp"
+                    android:minHeight="50dp"
+                    android:textSize="16sp"
+                    />
+
+
+                <ImageButton
+                    android:id="@+id/clickOkBioImageButton"
+                    android:src="@drawable/ic_baseline_check_24"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:tint="@color/color_secondary_text"
+                    />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -129,7 +165,7 @@
                     android:textSize="16sp" />
 
                 <ImageButton
-                    android:id="@+id/clickOkImageButton"
+                    android:id="@+id/clickOkEmailImageButton"
                     android:src="@drawable/ic_baseline_check_24"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
