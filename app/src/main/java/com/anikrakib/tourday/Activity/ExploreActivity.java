@@ -80,6 +80,12 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         navigationView.setCheckedItem(R.id.nav_home);
 
 
+        //change user profile name when userLogin
+        SharedPreferences userUserName = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String username = userPref.getString("userName","");
+        Menu menu = navigationView.getMenu();
+        MenuItem userProfileName = menu.findItem(R.id.profile);
+        userProfileName.setTitle(username);
 
     }
 
@@ -152,6 +158,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 SharedPreferences.Editor editor = userPref.edit();
                 editor.putBoolean("isLoggedIn",false);
                 editor.putString("token","");
+                editor.putString("userName","");
                 editor.apply();
                 startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
                 myDialog.dismiss();
