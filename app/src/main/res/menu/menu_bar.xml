@@ -47,6 +47,12 @@
                     android:title="Profile"
                     android:iconTint="@color/colorPrimaryDark"
                     />
+                <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/logout"
+                    android:title="Log Out"
+                    android:iconTint="@color/colorPrimaryDark"
+                    />
             </menu>
 
         </item>
