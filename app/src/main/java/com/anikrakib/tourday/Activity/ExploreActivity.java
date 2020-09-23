@@ -81,7 +81,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
 
         //change user profile name when userLogin
-        SharedPreferences userUserName = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String username = userPref.getString("userName","");
         Menu menu = navigationView.getMenu();
         MenuItem userProfileName = menu.findItem(R.id.profile);
