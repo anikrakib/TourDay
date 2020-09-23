@@ -12,10 +12,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,14 +35,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
-import com.anikrakib.tourday.Models.Token;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.mikhaellopez.circularimageview.CircularImageView;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 
@@ -53,6 +48,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,20 +61,17 @@ public class MyProfileActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewProfilePagerAdapter viewProfilePagerAdapter;
-    ImageView facebookLinkImageView,instagramLinkImageView,messengerLinkImageView,editNameImageView;
+    ImageView facebookLinkImageView,instagramLinkImageView,bangladeshImageView,editNameImageView;
     Dialog myDialog;
     FloatingActionButton floatingActionButtonCreatePost;
     Button uploadButton,saveButton;
     EditText socialMediaLinkEditText,postPopUpTitle,postPopUpDescription,nameEditTest;
     TextView userFullName,facebookLink,instagramLink;
     private static MyProfileActivity instance;
-    CircularImageView userProfilePic;
+    CircleImageView userProfilePic;
 
 
     /** Either on the constructor or the 'OnCreate' method, you should add: */
-
-
-
 
 
     @Override
@@ -89,7 +82,7 @@ public class MyProfileActivity extends AppCompatActivity {
         profileBackButton = findViewById(R.id.profileBackButton);
         facebookLinkImageView = findViewById(R.id.facebookLinkImageView);
         instagramLinkImageView = findViewById(R.id.instagramLinkImageView);
-        messengerLinkImageView = findViewById(R.id.messengerLinkImageView);
+        bangladeshImageView = findViewById(R.id.bangladeshImageView);
         floatingActionButtonCreatePost = findViewById(R.id.fabButtonCreatePost);
         userFullName = findViewById(R.id.userFullName);
         facebookLink = findViewById(R.id.facebookLinkTextView);
@@ -124,12 +117,10 @@ public class MyProfileActivity extends AppCompatActivity {
                 showSocialMediaPopup(v.getId());
             }
         });
-        messengerLinkImageView.setOnClickListener(new View.OnClickListener() {
+        bangladeshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSocialMediaPopup(v.getId());
-
-
+                showBdMap();
             }
         });
         floatingActionButtonCreatePost.setOnClickListener(new View.OnClickListener() {
@@ -304,22 +295,13 @@ public class MyProfileActivity extends AppCompatActivity {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                //final RoundButton bt = (RoundButton) v;
-                // bt.startAnimation();
-                // bt.postDelayed(new Runnable() {
-                // @Override
-                // public void run() {
                 myDialog.dismiss();
                 if(id == R.id.facebookLinkImageView){
                     facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
                 }else if(id == R.id.instagramLinkImageView){
                     instagramLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),  R.color.instagram_color));
                 }
-                else if(id == R.id.messengerLinkImageView){
-                    messengerLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
-                }
-                // }
-                // }, 3000);
+
             }
         });
 
@@ -327,9 +309,6 @@ public class MyProfileActivity extends AppCompatActivity {
             socialMediaLinkEditText.setHint("Enter Your Facebook URl");
         }else if(id == R.id.instagramLinkImageView){
             socialMediaLinkEditText.setHint("Enter Your Instagram URl");
-        }
-        else if(id == R.id.messengerLinkImageView){
-            socialMediaLinkEditText.setHint("Enter Your Messenger URl");
         }
 
         myDialog.setCancelable(false);
@@ -433,7 +412,7 @@ public class MyProfileActivity extends AppCompatActivity {
                         userFullName.setText(profile.getString("name"));
                         facebookLink.setText(profile.getString("fb"));
                         instagramLink.setText(profile.getString("insta"));
-                        Picasso.get().load(profile.getString("picture")).into(userProfilePic);
+                        Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
 
 
                     } catch (JSONException e) {
@@ -454,6 +433,41 @@ public class MyProfileActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    public void showBdMap() {
+        ImageView close;
+        myDialog.setContentView(R.layout.custom_bd_map_pop_up);
+        close = myDialog.findViewById(R.id.socialMediaClose);
+
+        final WebView webView = myDialog.findViewById(R.id.webViewSocialMedia);
+
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String username = userPref.getString("userName","");
+
+        WebSettings webSettings = webView.getSettings();
+        webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        WebViewClient webViewClient = new WebViewClient();
+        webView.setWebViewClient(webViewClient);
+
+        webView.loadUrl("https://www.tourday.team/api/map/"+username);
+        // set image scale to fit screen if larger than screen width
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) MyProfileActivity.this.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.setCancelable(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
+    }
 
 }
 

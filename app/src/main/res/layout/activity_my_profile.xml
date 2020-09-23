@@ -52,17 +52,14 @@
 
                         <!--  Profile Image -->
 
-                        <com.mikhaellopez.circularimageview.CircularImageView
-                            android:id="@+id/userProfilePic"
+                        <de.hdodenhof.circleimageview.CircleImageView
                             android:layout_width="170dp"
                             android:layout_height="170dp"
                             android:layout_centerHorizontal="true"
-                            android:src="@drawable/user_profile_pic"
-                            app:civ_border_color="#050505"
-                            app:civ_border_width="4dp"
-                            app:civ_shadow="true"
-                            app:civ_shadow_color="#f4f5f9"
-                            app:civ_shadow_radius="10" />
+                            android:id="@+id/userProfilePic"
+                            app:civ_border_color="@color/black"
+                            app:civ_border_width="3dp"
+                            android:layout_marginBottom="10dp"/>
 
                         <!--  Change Image -->
 
@@ -149,11 +146,10 @@
                         android:visibility="gone"
                         />
                     <ImageView
-                        android:id="@+id/messengerLinkImageView"
+                        android:id="@+id/bangladeshImageView"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/messenger"
-                        app:tint="@color/color_secondary_text" />
+                        android:src="@drawable/bangladesh" />
                     <TextView
                         android:id="@+id/messengerLinkTextView"
                         android:layout_width="wrap_content"
