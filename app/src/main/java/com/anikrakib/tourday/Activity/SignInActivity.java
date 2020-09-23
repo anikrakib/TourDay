@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -83,7 +86,11 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitForm();
+                if(isConnected(SignInActivity.this)){
+                    submitForm();
+                }else{
+                    showNoInternetPopUp();
+                }
             }
         });
 
@@ -279,8 +286,22 @@ public class SignInActivity extends AppCompatActivity {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    private boolean isConnected(SignInActivity signInActivity){
+        ConnectivityManager connectivityManager = (ConnectivityManager) signInActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobileData = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-    public static String getToken() {
-        return token;
+        if((wifi != null && wifi.isConnected()) || (mobileData != null && mobileData.isConnected())){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    private void showNoInternetPopUp(){
+        postDialog.setContentView(R.layout.custom_no_internet_pop_up);
+        postDialog.setCancelable(false);
+        postDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        setTimeForRunLoder();
+        postDialog.show();
     }
 }
