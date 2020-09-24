@@ -124,14 +124,15 @@ public class EventActivity extends AppCompatActivity {
 
         /* start 2 months ago from now */
         Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MONTH, -1);
+        startDate.add(Calendar.MONTH, -2);
 
         /* end after 2 months from now */
         Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.MONTH, 1);
+        endDate.add(Calendar.MONTH, 2);
 
         // Default Date set to Today.
         Calendar calendar = Calendar.getInstance();
+        
 
         horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
                 .range(startDate, endDate)
