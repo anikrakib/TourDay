@@ -72,6 +72,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     //picasso for retrive profile pic
     implementation 'com.squareup.picasso:picasso:2.71828'
+    // swiperefreshlayout dependencies
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    //volley
+    implementation 'com.android.volley:volley:1.1.1'
+    //custom TextView
+    implementation 'net.kianoni:fontloader:0.3.0'
 
 
 
