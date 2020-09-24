@@ -26,13 +26,13 @@
             app:layout_constraintVertical_bias="0.0"
             tools:layout_editor_absoluteX="5dp">
 
-            <com.mikhaellopez.circularimageview.CircularImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/popup_user_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
-                android:src="@drawable/anik"
                 app:civ_border_color="#000000"
+                android:src="@color/color_primary_text"
                 app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

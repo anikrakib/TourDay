@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="322dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:elevation="10dp"
@@ -17,7 +17,7 @@
         tools:layout_editor_absoluteY="501dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="322dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_recat">
 
@@ -30,6 +30,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
                 android:text="Google IO 2020 "
+                android:gravity="center"
                 android:textColor="#747e87"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -57,7 +58,7 @@
             <com.codesgood.views.JustifiedTextView
                 android:id="@+id/eventDescription"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="84dp"
                 android:layout_margin="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
@@ -78,18 +79,18 @@
             <LinearLayout
                 android:id="@+id/listItemEventLocationLayout"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:background="@android:color/transparent"
                 android:gravity="left"
                 android:onClick="chooseTime"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventImage">
+                app:layout_constraintTop_toBottomOf="@+id/eventImage"
+                tools:layout_editor_absoluteX="4dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
                     app:tint="@color/black"
@@ -119,6 +120,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/eventImage"
                 app:layout_constraintTop_toBottomOf="@+id/titleEvent">
 
@@ -208,7 +210,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray"
+                android:background="@drawable/bg_recat_edit"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
