@@ -9,104 +9,141 @@
     android:layout_margin="20dp"
     >
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="320dp"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    >
-
-    <ImageView
-        android:id="@+id/postDetailsClose"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="end"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/ic_cancel_black_24dp"
-        android:gravity="center"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/postDetailImage"
-        android:layout_width="0dp"
-        android:layout_height="238dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/post1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postDetailsClose" />
-
-    <ScrollView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postDetailDate">
+        android:layout_marginBottom="10dp"
+        >
 
-        <com.codesgood.views.JustifiedTextView
-            android:id="@+id/postDetailDescriptionTextView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="start"
-            android:minHeight="50dp"
-            android:padding="5dp"
-            android:text="@string/bio"
-            android:textColor="@color/color_third_text"
-            android:textSize="16sp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <!-- Location Text -->
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/ic_baseline_location_on_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </ScrollView>
+            <TextView
+                android:id="@+id/postDetailsLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="left"
+                android:maxLines="1"
+                android:text="Location"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/postDetailsClose"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/ic_cancel_black_24dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <TextView
-        android:id="@+id/postDetailDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="7dp"
-        android:text="29/07/2020"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postDetailImage" />
+        <ImageView
+            android:id="@+id/postDetailImage"
+            android:layout_width="0dp"
+            android:layout_height="238dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/post1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postDetailImage">
-
-        <!-- Like Icon -->
-        <ImageButton
-            android:id="@+id/postLikeImageButton"
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:src="@drawable/ic_unlike" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postDetailDate">
 
-        <!-- Like Count Text -->
+            <net.kianoni.fontloader.TextView
+                android:id="@+id/postDetailDescriptionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:textColor="@color/color_primary_text"
+                android:textSize="18sp"
+                />
+
+        </ScrollView>
+
+
         <TextView
-            android:id="@+id/postLikeDetailTextView"
+            android:id="@+id/postDetailDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@id/postLikeImageButton"
-            android:textSize="10sp"
-            android:text="1000"
-            tools:ignore="SmallSp" />
-    </RelativeLayout>
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:text="29/07/2020"
+            android:textColor="@color/color_primary_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postDetailImage" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postDetailImage">
+
+            <!-- Like Icon -->
+            <ImageButton
+                android:id="@+id/postLikeImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_unlike" />
+
+            <!-- Like Count Text -->
+            <TextView
+                android:id="@+id/postLikeDetailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@id/postLikeImageButton"
+                android:textSize="10sp"
+                android:text="1000"
+                android:textColor="@color/color_primary_text"
+                tools:ignore="SmallSp" />
+        </RelativeLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

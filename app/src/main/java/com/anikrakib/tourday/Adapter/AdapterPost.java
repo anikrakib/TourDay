@@ -14,105 +14,85 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Models.PostItem;
 import com.anikrakib.tourday.R;
-import java.util.List;
+import com.squareup.picasso.Picasso;
 
-public class AdapterPost  extends RecyclerView.Adapter<AdapterPost.ViewHolder>{
-    private LayoutInflater mInflater;
-    private List<PostItem> mData;
+import java.util.ArrayList;
+
+
+public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHolder> {
+    private Context mContext;
+    private ArrayList<PostItem> mPostItemList;
     Context context;
     Dialog myDialog;
 
-
-    public AdapterPost(Context context,List<PostItem> Data) {
-        this.context =context;
-        mData = Data;
+    public AdapterPost(Context context, ArrayList<PostItem> exampleList) {
+        mContext = context;
+        mPostItemList = exampleList;
     }
-
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        Context context = viewGroup.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.list_post_item, viewGroup, false);
-        ViewHolder vh = new ViewHolder(view);
-        return vh;
-
+    public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item, parent, false);
+        return new ExampleViewHolder(v);
     }
-
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-
-        final PostItem item = mData.get(position);
-        viewHolder.txTitle.setText(item.Title);
-        viewHolder.txtBody.setText(item.Body);
-        viewHolder.txtcommentcount.setText(String.valueOf(item.commentCount));
-        viewHolder.txtDate.setText(item.Date);
-        viewHolder.txtlikecount.setText(String.valueOf(item.likecount));
-        viewHolder.postImage.setImageResource(item.imageUrl);
+    public void onBindViewHolder(ExampleViewHolder holder, int position) {
+        final PostItem currentItem = mPostItemList.get(position);
+        String imageUrl = currentItem.getImageUrl();
+        String post = currentItem.getPost();
+        String date = currentItem.getDate();
+        String location = currentItem.getLocation();
+        int likeCount = currentItem.getLikeCount();
+        boolean selfLike = currentItem.getSelfLike();
+        holder.txtPost.setText(post);
+        holder.txtLocation.setText(location);
+        holder.txtDate.setText(date);
+        holder.mTextViewLikes.setText(""+likeCount);
+        Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
 
         // check if it was liked or no
-        if (item.like) {
-            viewHolder.bLike.setImageResource(R.drawable.ic_like);
+        if (selfLike) {
+            holder.blike.setImageResource(R.drawable.ic_like);
         } else {
-            viewHolder.bLike.setImageResource(R.drawable.ic_unlike);
+            holder.blike.setImageResource(R.drawable.ic_unlike);
         }
 
-
-        viewHolder.relativeLayoutPostItem.setOnClickListener(new View.OnClickListener() {
+        holder.relativeLayoutPostItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog = new Dialog(context);
-                showDialog(item);
+                myDialog = new Dialog(mContext);
+                showDialog(currentItem);
             }
         });
-
     }
-
-
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mPostItemList.size();
     }
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener  {
-        public TextView txTitle, txtBody, txtDate, txtcommentcount, txtlikecount;
-        public ImageButton bLike;
-        public ImageView postImage,morePostButton;
+    public class ExampleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener  {
+        public ImageView postImage,morePostButton,blike;
+        public TextView txtLocation,txtPost,txtDate;
+        public TextView mTextViewLikes;
         RelativeLayout relativeLayoutPostItem;
 
+        public ExampleViewHolder(View itemView) {
+            super(itemView);
 
-
-        public ViewHolder(View v) {
-            super(v);
-            txTitle = v.findViewById(R.id.id_Title_TextView);
-            txtBody = v.findViewById(R.id.postDescriptionTextView);
-            txtDate = v.findViewById(R.id.id_Date_TextView);
-            txtcommentcount = v.findViewById(R.id.id_commentCount_TextView);
-            txtlikecount = v.findViewById(R.id.id_likeCount_TextView);
-            bLike = v.findViewById(R.id.id_like_ImageButton);
-            postImage = v.findViewById(R.id.postImage);
-            morePostButton = v.findViewById(R.id.moreButtonPost);
-            relativeLayoutPostItem = v.findViewById(R.id.relativeLayoutPostItem);
+            mTextViewLikes = itemView.findViewById(R.id.id_likeCount_TextView);
+            txtLocation = itemView.findViewById(R.id.postLocation);
+            txtPost = itemView.findViewById(R.id.postDescriptionTextView);
+            txtDate = itemView.findViewById(R.id.id_Date_TextView);
+            postImage = itemView.findViewById(R.id.postImage);
+            relativeLayoutPostItem = itemView.findViewById(R.id.relativeLayoutPostItem);
+            morePostButton = itemView.findViewById(R.id.moreButtonPost);
+            blike = itemView.findViewById(R.id.id_like_ImageButton);
 
 
             morePostButton.setOnClickListener(this);
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()){
-                case R.id.editPost:
-                    return true;
-                case R.id.delete_post:
-                    return true;
-            }
-            return false;
         }
 
         @Override
@@ -127,13 +107,24 @@ public class AdapterPost  extends RecyclerView.Adapter<AdapterPost.ViewHolder>{
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
         }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.editPost:
+                    return true;
+                case R.id.delete_post:
+                    return true;
+            }
+            return false;
+        }
     }
 
     public void showDialog(PostItem item){
 
         ImageView close,postDetailImage;
         ImageButton postDetailLike;
-        TextView postDetailDescriptionTextView,postDetailDateView,postDetailsLikeCount;
+        TextView postDetailDescriptionTextView,postDetailDateView,postDetailsLikeCount,postDetailsLocation;
 
 
         myDialog.setContentView(R.layout.post_details);
@@ -143,17 +134,19 @@ public class AdapterPost  extends RecyclerView.Adapter<AdapterPost.ViewHolder>{
         postDetailDescriptionTextView = myDialog.findViewById(R.id.postDetailDescriptionTextView);
         postDetailDateView = myDialog.findViewById(R.id.postDetailDate);
         postDetailsLikeCount = myDialog.findViewById(R.id.postLikeDetailTextView);
+        postDetailsLocation = myDialog.findViewById(R.id.postDetailsLocation);
 
 
-        postDetailDateView.setText(item.Date);
-        postDetailImage.setImageResource(item.imageUrl);
-        postDetailDescriptionTextView.setText(item.Body);
-        if (item.like) {
+        postDetailDateView.setText(item.getDate());
+        Picasso.get().load("https://tourday.team/"+item.getImageUrl()).fit().centerInside().into(postDetailImage);
+        postDetailDescriptionTextView.setText(item.getPost());
+        postDetailsLocation.setText(item.getLocation());
+        postDetailsLikeCount.setText(String.valueOf(item.getLikeCount()));
+        if (item.getSelfLike()) {
             postDetailLike.setImageResource(R.drawable.ic_like);
         } else {
             postDetailLike.setImageResource(R.drawable.ic_unlike);
         }
-        postDetailsLikeCount.setText(String.valueOf(item.likecount));
 
 
         close.setOnClickListener(new View.OnClickListener() {
@@ -168,5 +161,4 @@ public class AdapterPost  extends RecyclerView.Adapter<AdapterPost.ViewHolder>{
         myDialog.show();
 
     };
-
 }

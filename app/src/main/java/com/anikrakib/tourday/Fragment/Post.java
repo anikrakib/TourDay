@@ -1,8 +1,7 @@
 package com.anikrakib.tourday.Fragment;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,15 +11,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.anikrakib.tourday.Adapter.AdapterPost;
 import com.anikrakib.tourday.Models.PostItem;
 import com.anikrakib.tourday.R;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class Post extends Fragment {
@@ -28,6 +36,9 @@ public class Post extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private AdapterPost mPostAdapter;
+    private ArrayList<PostItem> mPostItem;
+    private RequestQueue mRequestQueue;
 
 
     public Post() {
@@ -49,35 +60,65 @@ public class Post extends Fragment {
 
         /////*     initialize view   */////
         recyclerView = (RecyclerView)v. findViewById(R.id.postRecyclerView);
+
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setFocusable(false);
-
-        //create dummy data to show in list
-        List<PostItem> list = new ArrayList();
-        list.add(new PostItem("QUOTES", "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.", "4th october", 50, 40, true, R.drawable.post1));
-        list.add(new PostItem("QUOTES", "Life is what happens when you’re busy making other plans. John Lennon", "4th october ", 14, 12, false, R.drawable.post2));
-        list.add(new PostItem("QUOTES", "Very little is needed to make a happy life; it is all within yourself, in your way of thinking. Marcus Aurelius", "4th November", 31, 12, true, R.drawable.post3));
-        list.add(new PostItem("QUOTES", "Life is like playing a violin in public and learning the instrument as one goes on. Samuel Butler", "4th october", 11, 14, true, R.drawable.post4));
-        list.add(new PostItem("QUOTES", "In the end, it’s not the years in your life that count. It’s the life in your years. Abraham Lincoln ", "4th october", 51, 51, false, R.drawable.post5));
-        list.add(new PostItem("QUOTES", "Believe that life is worth living and your belief will help create the fact. William James", "9th october", 21, 51, true, R.drawable.post6));
-        list.add(new PostItem("QUOTES", "The trick in life is learning how to deal with it. Helen Mirren", "4th october", 11, 51, false, R.drawable.post7));
-        list.add(new PostItem("QUOTES", "Don’t gain the world and lose your soul, wisdom is better than silver or gold. Bob Marley", "4th october", 21, 58, false, R.drawable.post8));
-        list.add(new PostItem("QUOTES", "Anyone who lives within their means suffers from a lack of imagination. Oscar Wilde", "4th october", 61, 52, true, R.drawable.post9));
-        list.add(new PostItem("QUOTES", "Not how long, but how well you have lived is the main thing. Seneca", "4th october", 44, 52, true, R.drawable.post10));
-        list.add(new PostItem("QUOTES", "Tis better to have loved and lost than never to have loved at all. St. Augustine", "10th october", 21, 52, false, R.drawable.post9));
-        list.add(new PostItem("QUOTES", "You only live once, but if you do it right, once is enough. Mae West", "4th october", 32, 42, true, R.drawable.post5));
 
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        ///  add items to the adapter
-        mAdapter = new AdapterPost(getContext(),list);
-        ///  set Adapter to RecyclerView
-        recyclerView.setAdapter(mAdapter);
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mPostItem = new ArrayList<>();
+        mRequestQueue = Volley.newRequestQueue(getContext());
+        parseJSON();
 
 
         return v;
     }
 
+    private void parseJSON() {
+        SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String userName = userPref.getString("userName","");
+
+        String url = "https://tourday.team/api/get_posts/"+userName;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("results");
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject hit = jsonArray.getJSONObject(i);
+                                String post = hit.getString("post");
+                                String date = hit.getString("date");
+                                String location = hit.getString("location");
+                                String imageUrl = hit.getString("image");
+                                JSONArray likeArray = hit.getJSONArray("likes");
+                                int likeCount = likeArray.length();
+                                int user = hit.getInt("user");
+                                boolean selfLike = false;
+                                for (int j = 0; j < likeArray.length(); j++)
+                                    if (likeArray.getInt(j) == user) {
+                                        selfLike = true;
+                                        break;
+                                    }
+
+                                mPostItem.add(new PostItem(imageUrl, post, location, date, likeCount, selfLike));
+                            }
+                            mPostAdapter = new AdapterPost(getContext(), mPostItem);
+                            recyclerView.setAdapter(mPostAdapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        mRequestQueue.add(request);
+    }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="210dp"
     android:layout_marginTop="8dp"
@@ -12,20 +13,34 @@
         android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <!-- Title Text -->
-        <TextView
-            android:id="@+id/id_Title_TextView"
+        <!-- Location Text -->
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/ic_baseline_location_on_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/postLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:gravity="left"
             android:maxLines="1"
-            android:text="Title"
+            android:text="Location"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/moreButtonPost"
@@ -45,7 +60,7 @@
 
     <ImageView
         android:id="@+id/postImage"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
         android:layout_marginRight="5dp"
@@ -85,30 +100,6 @@
         android:layout_marginRight="22dp"
         android:layout_marginBottom="2dp">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="6dp"
-            android:orientation="horizontal">
-
-            <!-- comment icon -->
-            <ImageButton
-                android:id="@+id/id_comment_ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/ic_chat" />
-
-            <!-- comment count Text -->
-            <TextView
-                android:id="@+id/id_commentCount_TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/id_comment_ImageButton"
-                android:layout_toRightOf="@+id/id_comment_ImageButton"
-                android:textSize="10sp" />
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
