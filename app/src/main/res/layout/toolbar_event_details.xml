@@ -2,11 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@android:color/transparent"
     android:layout_height="56dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <!--  back  -->
         <ImageButton
@@ -16,6 +18,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:background="@android:color/transparent"
+            android:tint="@color/colorPrimary"
             android:src="@drawable/ic_arrow_back_black_24dp" />
 
         <!--  Title icon  -->
@@ -33,23 +36,24 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit Bio"
+                android:text="Event Details"
                 android:textStyle="bold"
-                android:textColor="@color/color_third_text"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18dp" />
 
 
         </LinearLayout>
         <!-- Check Done   -->
         <ImageButton
+            android:id="@+id/shareEventImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="34dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_check_24"
-            android:tint="@color/black"
+            android:src="@drawable/ic_baseline_share_24"
+            android:tint="@color/colorPrimary"
             />
     </RelativeLayout>
 </RelativeLayout>

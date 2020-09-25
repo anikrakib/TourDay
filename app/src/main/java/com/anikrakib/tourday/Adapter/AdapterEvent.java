@@ -1,16 +1,20 @@
 package com.anikrakib.tourday.Adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anikrakib.tourday.Activity.EventDetailsActivity;
 import com.anikrakib.tourday.Models.PostEvent;
 import com.anikrakib.tourday.Models.PostItem;
 import com.anikrakib.tourday.R;
@@ -20,9 +24,12 @@ import java.util.List;
 public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder> {
     private LayoutInflater mInflater;
     private List<PostEvent> mData;
+    private Context mContext;
 
-    public AdapterEvent(List<PostEvent> Data) {
+
+    public AdapterEvent(Context context,List<PostEvent> Data) {
         mData = Data;
+        mContext=context;
     }
 
     @NonNull
@@ -43,8 +50,6 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
         viewHolder.txTitle.setText(item.Title);
         viewHolder.txtBody.setText(item.Body);
         viewHolder.eventLocation.setText(item.location);
-//        viewHolder.startTime.setText(item.startTime);
-//        viewHolder.endTime.setText(item.endTime);
         viewHolder.startDate.setText(item.startDate);
         viewHolder.endDate.setText(item.endDate);
         viewHolder.eventImage.setImageResource(item.imageUrl);
@@ -55,6 +60,15 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
             viewHolder.bLike.setImageResource(R.drawable.ic_unlike);
         }
 
+        viewHolder.linearLayOutEventItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent;
+                intent =  new Intent(mContext, EventDetailsActivity.class);
+                mContext.startActivity(intent);
+
+            }
+        });
 
     }
 
@@ -64,9 +78,11 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txTitle, txtBody, startDate, endDate, startTime, endTime, eventLocation;
+        public TextView txTitle, txtBody, startDate, endDate,eventLocation;
         public ImageButton bLike;
         public ImageView eventImage;
+        LinearLayout linearLayOutEventItem;
+
 
         public ViewHolder(View v) {
             super(v);
@@ -75,10 +91,10 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
             startDate = v.findViewById(R.id.eventStartDate);
             endDate = v.findViewById(R.id.eventEndDate);
             bLike = v.findViewById(R.id.eventInterestedLikeImage);
-//            startTime = v.findViewById(R.id.eventStartTime);
-//            endTime = v.findViewById(R.id.eventEndTime);
             eventLocation = v.findViewById(R.id.eventLocation);
             eventImage = v.findViewById(R.id.eventImage);
+            linearLayOutEventItem = v.findViewById(R.id.linearLayOutEventItem);
+
         }
     }
 }
