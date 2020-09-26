@@ -1,16 +1,20 @@
 package com.anikrakib.tourday.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anikrakib.tourday.Activity.EventDetailsActivity;
+import com.anikrakib.tourday.Activity.YourEventDetailsActivity;
 import com.anikrakib.tourday.Models.PostEvent;
 import com.anikrakib.tourday.R;
 
@@ -19,9 +23,11 @@ import java.util.List;
 public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.ViewHolder> {
     private LayoutInflater mInflater;
     private List<PostEvent> mData;
+    private Context mContext;
 
-    public AdapterYourEvent(List<PostEvent> Data) {
+    public AdapterYourEvent(Context context,List<PostEvent> Data) {
         mData = Data;
+        mContext=context;
     }
 
     @NonNull
@@ -48,6 +54,16 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
         viewHolder.endDate.setText(item.endDate);
         viewHolder.eventImage.setImageResource(item.imageUrl);
 
+        viewHolder.yourEventLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent;
+                intent =  new Intent(mContext, YourEventDetailsActivity.class);
+                mContext.startActivity(intent);
+
+            }
+        });
+
     }
 
     @Override
@@ -58,6 +74,8 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txTitle, txtBody, startDate, endDate, startTime, endTime, eventLocation;
         public ImageView eventImage;
+        LinearLayout yourEventLinearLayout;
+
 
         public ViewHolder(View v) {
             super(v);
@@ -69,6 +87,7 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
 //            endTime = v.findViewById(R.id.eventEndTime);
             eventLocation = v.findViewById(R.id.eventLocation);
             eventImage = v.findViewById(R.id.eventImage);
+            yourEventLinearLayout = v.findViewById(R.id.yourEventLinearLayout);
         }
     }
 }

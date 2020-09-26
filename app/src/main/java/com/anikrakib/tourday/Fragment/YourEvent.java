@@ -57,7 +57,7 @@ public class YourEvent extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         ///  add items to the adapter
-        mAdapter = new AdapterYourEvent(list);
+        mAdapter = new AdapterYourEvent(getContext(),list);
         ///  set Adapter to RecyclerView
         recyclerView.setAdapter(mAdapter);
 

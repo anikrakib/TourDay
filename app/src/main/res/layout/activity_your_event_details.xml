@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa"
+    android:orientation="vertical"
+    >
+
+    <com.github.florent37.shapeofview.shapes.DiagonalView
+        android:id="@+id/diagonalLayoutEventDetailImage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:elevation="5dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape_arc_height="-50dp"
+        app:shape_arc_position="bottom">
+
+        <com.flaviofaria.kenburnsview.KenBurnsView
+            android:id="@+id/eventDetailsImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/post1" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                layout="@layout/toolbar_event_details"
+                app:layout_collapseMode="pin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/eventDetailsTitleTextView"
+                android:layout_width="290dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="40dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/event_details_title_background"
+                android:gravity="center"
+                android:text="Saintmartin Tour"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/listItemEventLocationLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="25dp"
+                android:adjustViewBounds="true">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    android:id="@+id/eventDetailsLocationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Saintmartin,CoxBazar"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+    </com.github.florent37.shapeofview.shapes.DiagonalView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="72dp"
+        android:layout_above="@+id/layoutBottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="5dp"
+        android:background="@drawable/bg_recat"
+        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage">
+
+        <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:shape_dot_radius="4dp"
+            app:shape_dot_spacing="3dp"
+            app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
+            app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
+            app:shape_edge_position="right">
+
+            <LinearLayout
+                android:id="@+id/goingYourEventLinearLayout"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Going"
+                    android:layout_marginBottom="10dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:id="@+id/eventDetailsTotalGoingTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:text="20"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="@color/txtWhite"
+                    android:background="@color/colorPrimary" />
+            </LinearLayout>
+        </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+
+        <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:shape_dot_radius="4dp"
+            app:shape_dot_spacing="3dp"
+            app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
+            app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
+            app:shape_edge_position="left">
+
+            <LinearLayout
+                android:id="@+id/pendingYourEventLinearLayout"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pending"
+                    android:layout_marginBottom="10dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:id="@+id/eventDetailsTotalPendingTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:text="10"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="@color/txtWhite"
+                    android:background="@color/colorPrimary" />
+            </LinearLayout>
+        </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/eventGoingRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_recat"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/eventLikeFloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/diagonalLayoutEventDetailImage"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/event_edit"
+        android:tint="@color/white"
+        app:elevation="15dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/diagonalLayoutEventDetailImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/eventLikeFloatingActionButton"
+        app:layout_constraintBottom_toTopOf="@+id/layoutBottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventGoingRecyclerView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif"
+                android:text="Event Details"
+                android:textColor="#3A3A3A"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/eventDetailsDescriptionTextView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/bio"
+                android:textColor="#979696"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pendingUserRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:visibility="gone"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/bg_recat"
+        app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.github.florent37.shapeofview.shapes.CutCornerView
+        android:id="@+id/layoutBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:shape_cutCorner_bottomLeftSize="8dp"
+        app:shape_cutCorner_bottomRightSize="8dp"
+        app:shape_cutCorner_topLeftSize="8dp"
+        app:shape_cutCorner_topRightSize="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@color/color_secondary_text">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/dottedEdgesCutCornerView"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/eventPriceTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@null"
+                    android:paddingLeft="3dp"
+                    android:paddingTop="1dp"
+                    android:text="Pending Payment"
+                    android:textColor="#0B0B0B"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+            <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
+                android:id="@+id/dottedEdgesCutCornerView"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:shape_dot_radius="3dp"
+                app:shape_dot_spacing="2dp"
+                app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
+                app:shape_dottedEdgesCutCorner_topRightSize="8dp"
+                app:shape_edge_position="left">
+
+                <RelativeLayout
+                    android:id="@+id/upDownArrowPendingPaymentRelativeLayOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@color/colorPrimaryDark">
+
+                    <TextView
+                        android:id="@+id/upDownArrowPendingPaymentTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@null"
+                        android:paddingLeft="3dp"
+                        android:paddingTop="1dp"
+                        android:text="↑↓"
+                        android:textColor="@color/txtWhite"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+            </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.github.florent37.shapeofview.shapes.CutCornerView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

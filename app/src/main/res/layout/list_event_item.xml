@@ -134,7 +134,6 @@
                 android:layout_marginStart="5dp"
                 android:background="@drawable/horizontal_calender_background"
                 android:gravity="left|center"
-                android:onClick="chooseDate"
                 android:orientation="horizontal"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
