@@ -128,8 +128,8 @@
 
         <org.angmarch.views.NiceSpinner
             android:id="@+id/nice_spinner"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="110dp"
+            android:layout_height="27dp"
             android:layout_margin="5dp" />
     </LinearLayout>
 
@@ -160,11 +160,12 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@null"
+            android:background="@drawable/bg_recat"
             android:hint="TrxID XXXXXXXXXXXX"
             android:paddingLeft="3dp"
             android:gravity="center"
             android:paddingTop="1dp"
+            android:singleLine="true"
             android:textColor="#0B0B0B"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -173,7 +174,7 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center"
