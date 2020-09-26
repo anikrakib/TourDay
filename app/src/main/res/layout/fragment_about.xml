@@ -80,7 +80,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/id_UsernmaeTitle_TextView"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/color_secondary_text"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
                     android:textSize="16sp" />
 
             </RelativeLayout>
@@ -107,7 +108,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/id_EmailTitle_TextView"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/color_secondary_text"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
                     android:textSize="16sp" />
 
             </RelativeLayout>
@@ -134,7 +136,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/id_LocationTitle_TextView"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/color_secondary_text"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
                     android:textSize="16sp" />
 
             </RelativeLayout>

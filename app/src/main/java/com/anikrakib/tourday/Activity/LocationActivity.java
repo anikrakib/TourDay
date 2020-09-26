@@ -14,6 +14,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -35,8 +36,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,6 +50,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LocationActivity extends AppCompatActivity {
     Intent intent;
@@ -69,7 +77,7 @@ public class LocationActivity extends AppCompatActivity {
         refreshLocation = findViewById(R.id.refreshLocation);
         backButton = findViewById(R.id.backButtonLocation);
         copyLocation = findViewById(R.id.copyLocationButton);
-        newLocationEdit = findViewById(R.id.newlocationEditText);
+        newLocationEdit = findViewById(R.id.newLocationEditText);
         saveNewLocation = findViewById(R.id.clickOkNewLocationImageButton);
 
 
@@ -143,6 +151,13 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
 
+        saveNewLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateLocation();
+            }
+        });
+
     }
 
     @Override
@@ -206,5 +221,30 @@ public class LocationActivity extends AppCompatActivity {
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mDialog.show();
 
+    }
+
+    private void updateLocation() {
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .updateLocation("Token "+token,newLocationEdit.getText().toString().trim());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    DynamicToast.makeSuccess(getApplicationContext(), "Location Update Successfully").show();
+                    startActivity(new Intent(LocationActivity.this, MyProfileActivity.class));
+                }else{
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
