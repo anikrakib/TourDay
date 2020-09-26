@@ -88,7 +88,8 @@ public class EditProfile extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                checkInputs();
+                //checkInputs();
+                validateEmail();
             }
 
             @Override
@@ -122,6 +123,21 @@ public class EditProfile extends Fragment {
                 return true;
             }
         });
+        saveEmailImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(validateEmail()){
+                    updateEmail();
+                    userEmailTextView.setVisibility(View.VISIBLE);
+                    userEmailLayout.setVisibility(View.GONE);
+                    saveEmailImageButton.setEnabled(false);
+                    saveEmailImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.color_secondary_text));
+                }else{
+                    DynamicToast.makeError(getContext(), "Enter Valid Email").show();
+                }
+            }
+        });
+
         userLocationTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -168,15 +184,6 @@ public class EditProfile extends Fragment {
 
     }
 
-    private void checkInputs() {
-        if (!TextUtils.isEmpty(userEmailEditText.getText())) {
-            saveEmailImageButton.setEnabled(true);
-            saveEmailImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.black));
-        } else {
-            saveEmailImageButton.setEnabled(false);
-            saveEmailImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.color_secondary_text));
-        }
-    }
     public void showUserData(){
         SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
@@ -188,7 +195,6 @@ public class EditProfile extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    //DynamicToast.makeError(getApplicationContext(), "Login Success").show();
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject(response.body().string());
@@ -214,5 +220,48 @@ public class EditProfile extends Fragment {
 
             }
         });
+    }
+
+    private void updateEmail() {
+        SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .updateEmail("Token "+token,userEmailEditText.getText().toString().trim());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    DynamicToast.makeSuccess(getContext(), "Email Update Successfully").show();
+                    userEmailTextView.setText(userEmailEditText.getText().toString());
+                }else{
+                    DynamicToast.makeError(getContext(), "Email Already Exists!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private boolean validateEmail() {
+        String email = userEmailEditText.getText().toString().trim();
+
+        if (email.isEmpty() || !isValidEmail(email)) {
+            saveEmailImageButton.setEnabled(false);
+            saveEmailImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.color_secondary_text));
+            return false;
+        } else {
+            saveEmailImageButton.setEnabled(true);
+            saveEmailImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.black));
+        }
+        return true;
+    }
+
+    private static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
