@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import devs.mulham.horizontalcalendar.utils.Utils;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -105,11 +106,28 @@ public class EditProfile extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                saveBioImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.black));
+                if(!aboutBioEdit.getText().toString().isEmpty()){
+                    saveBioImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.black));
+                    saveBioImageButton.setEnabled(true);
+                }else{
+                    saveBioImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.color_secondary_text));
+                    saveBioImageButton.setEnabled(false);
+
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        saveBioImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    updateBio();
+                    aboutBio.setVisibility(View.VISIBLE);
+                    editBioLayout.setVisibility(View.GONE);
 
             }
         });
@@ -263,5 +281,30 @@ public class EditProfile extends Fragment {
 
     private static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void updateBio() {
+        SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .updateBio("Token "+token,aboutBioEdit.getText().toString().trim());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    DynamicToast.makeSuccess(getContext(), "Bio Update Successfully").show();
+                    aboutBio.setText(aboutBioEdit.getText().toString());
+                }else{
+                    DynamicToast.makeError(getContext(), "Something Wrong!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

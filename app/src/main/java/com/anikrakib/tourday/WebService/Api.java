@@ -49,4 +49,8 @@ public interface Api {
     @FormUrlEncoded
     @POST("profile/")
     Call<ResponseBody> updateLocation(@Header("Authorization") String authToken, @Field("city") String location);
+
+    @FormUrlEncoded
+    @POST("profile/")
+    Call<ResponseBody> updateBio(@Header("Authorization") String authToken, @Field("bio") String location);
 }
