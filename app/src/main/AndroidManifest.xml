@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.EventDetailsActivity"></activity>
+        <activity android:name=".Activity.EditEventDetailsActivity"></activity>
+        <activity android:name=".Activity.EventDetailsActivity" />
         <activity android:name=".Activity.EventActivity" />
         <activity android:name=".Activity.LocationActivity" />
         <activity android:name=".Activity.BDMapViewActivity" />
