@@ -88,5 +88,6 @@ dependencies {
     implementation 'com.github.arcadefire:nice-spinner:1.4.4'
     //socialText  Dependencies
     implementation 'com.github.tylersuehr7:social-text-view:1.0.0'
-
+    //richTextEditor Dependencies
+    implementation 'com.fiberlink.maas360.android:richtexteditor:0.1.1'
 }
