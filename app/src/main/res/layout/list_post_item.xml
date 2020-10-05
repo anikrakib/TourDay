@@ -69,17 +69,37 @@
         android:src="@drawable/post1" />
 
     <!-- body Text -->
-    <TextView
+<!--    <TextView-->
+<!--        android:id="@+id/postDescriptionTextView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/postImage"-->
+<!--        android:layout_marginLeft="16dp"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:text="@string/bio"-->
+<!--        android:textSize="16dp"-->
+<!--        android:layout_marginRight="21dp"-->
+<!--        android:maxLines="2" />-->
+
+
+    <com.tylersuehr.socialtextview.SocialTextView
         android:id="@+id/postDescriptionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="\@tylersuehr7, you're the coolest! #AndriodDev\n\nEmail: tylersuehr@gmail.com\nWebsite: http://www.suehrsolutions.net"
         android:layout_below="@+id/postImage"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp"
-        android:text="@string/bio"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginRight="21dp"
-        android:maxLines="2" />
+        android:maxLines="2"
+        app:hashtagColor="@color/flamingo.900"
+        app:mentionColor="@color/flamingo.900"
+        app:phoneColor="@color/flamingo.900"
+        app:emailColor="@color/flamingo.900"
+        app:urlColor="@color/flamingo.900"
+        app:linkModes="mention|hashtag|email|url"
+        />
 
     <!-- Date Text -->
     <TextView

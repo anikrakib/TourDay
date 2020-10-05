@@ -84,8 +84,9 @@ dependencies {
     implementation 'com.github.florent37:shapeofview:1.4.7'
     //kenBursView Dependencies for Event Image
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
-    //niceSpinner Dependencies
+    //niceSpinner Dependencies needed api level 26
     implementation 'com.github.arcadefire:nice-spinner:1.4.4'
-
+    //socialText  Dependencies
+    implementation 'com.github.tylersuehr7:social-text-view:1.0.0'
 
 }

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anikrakib.tourday.Models.PostItem;
 import com.anikrakib.tourday.R;
 import com.squareup.picasso.Picasso;
+import com.tylersuehr.socialtextview.SocialTextView;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         String location = currentItem.getLocation();
         int likeCount = currentItem.getLikeCount();
         boolean selfLike = currentItem.getSelfLike();
-        holder.txtPost.setText(post);
+        holder.txtPost.setLinkText(post);
         holder.txtLocation.setText(location);
         holder.txtDate.setText(date);
         holder.mTextViewLikes.setText(""+likeCount);
@@ -75,9 +76,10 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     }
     public class ExampleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener  {
         public ImageView postImage,morePostButton,blike;
-        public TextView txtLocation,txtPost,txtDate;
+        public TextView txtLocation,txtDate;
         public TextView mTextViewLikes;
         RelativeLayout relativeLayoutPostItem;
+        SocialTextView txtPost;
 
         public ExampleViewHolder(View itemView) {
             super(itemView);
@@ -124,7 +126,8 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
 
         ImageView close,postDetailImage;
         ImageButton postDetailLike;
-        TextView postDetailDescriptionTextView,postDetailDateView,postDetailsLikeCount,postDetailsLocation;
+        TextView postDetailDateView,postDetailsLikeCount,postDetailsLocation;
+        SocialTextView postDetailDescriptionTextView;
 
 
         myDialog.setContentView(R.layout.post_details);
@@ -139,7 +142,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
 
         postDetailDateView.setText(item.getDate());
         Picasso.get().load("https://tourday.team/"+item.getImageUrl()).fit().centerInside().into(postDetailImage);
-        postDetailDescriptionTextView.setText(item.getPost());
+        postDetailDescriptionTextView.setLinkText(item.getPost());
         postDetailsLocation.setText(item.getLocation());
         postDetailsLikeCount.setText(String.valueOf(item.getLikeCount()));
         if (item.getSelfLike()) {
