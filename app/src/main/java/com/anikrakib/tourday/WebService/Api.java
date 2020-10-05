@@ -9,6 +9,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 
 public interface Api {
@@ -53,4 +54,8 @@ public interface Api {
     @FormUrlEncoded
     @POST("profile/")
     Call<ResponseBody> updateBio(@Header("Authorization") String authToken, @Field("bio") String location);
+
+    @FormUrlEncoded
+    @POST("profile/")
+    Call<ResponseBody> updatePhoto(@Header("Authorization") String authToken, @Field("picture") String imageUri);
 }

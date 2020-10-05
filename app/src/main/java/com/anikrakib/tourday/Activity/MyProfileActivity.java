@@ -1,25 +1,35 @@
 package com.anikrakib.tourday.Activity;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -46,6 +56,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -61,7 +72,7 @@ public class MyProfileActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewProfilePagerAdapter viewProfilePagerAdapter;
-    ImageView facebookLinkImageView,instagramLinkImageView,bangladeshImageView,editNameImageView;
+    ImageView chooseImage_ImageView,facebookLinkImageView,instagramLinkImageView,bangladeshImageView,editNameImageView;
     Dialog myDialog;
     FloatingActionButton floatingActionButtonCreatePost;
     Button uploadButton,saveButton;
@@ -69,6 +80,10 @@ public class MyProfileActivity extends AppCompatActivity {
     TextView userFullName,facebookLink,instagramLink;
     private static MyProfileActivity instance;
     CircleImageView userProfilePic;
+    private static final int GALLERY_CHANGE_PROFILE = 5;
+    private Bitmap bitmap = null;
+    private static final int SELECT_REQUEST_CODE = 1;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99 ;
 
 
     /** Either on the constructor or the 'OnCreate' method, you should add: */
@@ -89,26 +104,33 @@ public class MyProfileActivity extends AppCompatActivity {
         instagramLink = findViewById(R.id.instagramLinkTextView);
         userProfilePic = findViewById(R.id.userProfilePic);
         editNameImageView = findViewById(R.id.editNameImageView);
+        chooseImage_ImageView = findViewById(R.id.chooseImage_ImageView);
 
 
         myDialog = new Dialog(this);
         instance = this;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
-
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
 
         showUserData();
 
         /////*     Click Listener     */////
 
+        chooseImage_ImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK);
+                i.setType("image/*");
+                startActivityForResult(i,GALLERY_CHANGE_PROFILE);
+            }
+        });
+
         facebookLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSocialMediaPopup(v.getId());
+                //showSocialMediaPopup(v.getId());
+                updatePhoto();
             }
         });
         instagramLinkImageView.setOnClickListener(new View.OnClickListener() {
@@ -467,6 +489,62 @@ public class MyProfileActivity extends AppCompatActivity {
         myDialog.setCancelable(false);
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
+    }
+
+    private void updatePhoto() {
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .updatePhoto("Token "+token,bitmapToString(bitmap));
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    DynamicToast.makeSuccess(getApplicationContext(), response.body()+" Image Update Successfully").show();
+                    //userFullName.setText(response.body().toString());
+                    //userEmailTextView.setText(userEmailEditText.getText().toString());
+                }else{
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==GALLERY_CHANGE_PROFILE && resultCode==RESULT_OK){
+            Uri uri = data.getData();
+            userProfilePic.setImageURI(uri);
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private String bitmapToString(Bitmap bitmap) {
+        if (bitmap!=null){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+            byte [] array = byteArrayOutputStream.toByteArray();
+            return Base64.encodeToString(array,Base64.DEFAULT);
+        }
+
+        return "";
     }
 
 }
