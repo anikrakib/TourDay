@@ -115,6 +115,9 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             case R.id.event:
                 startActivity(new Intent(ExploreActivity.this, EventActivity.class));
                 break;
+            case R.id.blog:
+                startActivity(new Intent(ExploreActivity.this, BlogActivity.class));
+                break;
             case R.id.setting:
                 showPopup();
                 break;
