@@ -14,9 +14,6 @@
     <color name="dark_yellow">#FBC02D</color>
     <color name="txtWhite">#FFFFFF</color>
     <color name="whiteColor">#FFFFFF</color>
-
-
-
     <color name="color_primary_text">#1a162c</color>
     <color name="color_secondary_text">#bac0d3</color>
     <color name="color_third_text">#393648</color>
@@ -24,10 +21,7 @@
     <color name="color_fourd_text">#ffa689</color>
     <color name="switch_color">#ff7346</color>
     <color name="dividerColor">#ff7346</color>
-
     <color name="txt" tool:override="true">#992f31</color>
-
-
     <color name="instagram_color">#C13584</color>
 
 

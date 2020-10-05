@@ -2,7 +2,6 @@
     <string name="app_name">TourdaY</string>
     <string name="sring1">With You Wherever You</string>
     <string name="sring2"> Go</string>
-
     <string name="hint_username">Username Or Email</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
