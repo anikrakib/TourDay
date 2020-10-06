@@ -9,13 +9,6 @@ public class BlogItem {
     private String blogAuthorName;
     private String blogId;
 
-    public BlogItem(String blogImageUrl, String blogTitle, String blogDivision, String blogDate) {
-        this.blogImageUrl = blogImageUrl;
-        this.blogTitle = blogTitle;
-        this.blogDivision = blogDivision;
-        this.blogDate = blogDate;
-    }
-
     public BlogItem(String blogImageUrl, String blogTitle, String blogDescription, String blogDivision, String blogDate, String blogAuthorName, String blogId) {
         this.blogImageUrl = blogImageUrl;
         this.blogTitle = blogTitle;
