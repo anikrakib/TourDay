@@ -10,7 +10,7 @@
         android:id="@+id/blogRecyclerView"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        tools:listitem="@layout/list_event_item"
+        tools:listitem="@layout/list_blog_item"
         android:layout_marginBottom="10dp"
         />
 
