@@ -34,7 +34,6 @@ import java.util.ArrayList;
 public class Post extends Fragment {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private AdapterPost mPostAdapter;
     private ArrayList<PostItem> mPostItem;
@@ -59,7 +58,7 @@ public class Post extends Fragment {
         View v = inflater.inflate(R.layout.fragment_post, container, false);
 
         /////*     initialize view   */////
-        recyclerView = (RecyclerView)v. findViewById(R.id.postRecyclerView);
+        recyclerView = v. findViewById(R.id.postRecyclerView);
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setFocusable(false);
