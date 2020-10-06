@@ -50,6 +50,8 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.20'
     //circle ImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //rounded ImageView
+    implementation 'com.makeramen:roundedimageview:2.3.0'
     //Justified Textview
     implementation 'com.codesgood:justifiedtextview:1.1.0'
     implementation 'com.uncopt:android.justified:1.0'
@@ -90,4 +92,5 @@ dependencies {
     implementation 'com.github.tylersuehr7:social-text-view:1.0.0'
     //richTextEditor Dependencies
     implementation 'com.fiberlink.maas360.android:richtexteditor:0.1.1'
+    implementation 'jp.wasabeef:richeditor-android:2.0.0'
 }

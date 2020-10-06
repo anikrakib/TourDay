@@ -18,6 +18,7 @@ import com.anikrakib.tourday.Activity.EventDetailsActivity;
 import com.anikrakib.tourday.Models.PostEvent;
 import com.anikrakib.tourday.Models.PostItem;
 import com.anikrakib.tourday.R;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txTitle, txtBody, startDate, endDate,eventLocation;
         public ImageButton bLike;
-        public ImageView eventImage;
+        public RoundedImageView eventImage;
         LinearLayout linearLayOutEventItem;
 
 

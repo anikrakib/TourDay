@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anikrakib.tourday.Models.BlogItem;
 import com.anikrakib.tourday.Models.PostItem;
 import com.anikrakib.tourday.R;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,7 +62,8 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
     }
 
     public class BlogViewHolder extends RecyclerView.ViewHolder {
-        public ImageView blogImage;
+
+        public RoundedImageView blogImage;
         public TextView blogLocation,blogDate,blogTitle;
         RelativeLayout relativeLayoutPostItem;
 

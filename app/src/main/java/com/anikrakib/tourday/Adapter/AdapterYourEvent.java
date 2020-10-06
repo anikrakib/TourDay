@@ -17,6 +17,7 @@ import com.anikrakib.tourday.Activity.EventDetailsActivity;
 import com.anikrakib.tourday.Activity.YourEventDetailsActivity;
 import com.anikrakib.tourday.Models.PostEvent;
 import com.anikrakib.tourday.R;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView txTitle, txtBody, startDate, endDate, startTime, endTime, eventLocation;
-        public ImageView eventImage;
+        public RoundedImageView eventImage;
         LinearLayout yourEventLinearLayout;
 
 

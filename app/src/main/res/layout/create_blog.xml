@@ -9,7 +9,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/createEventLayout"
+        android:id="@+id/createBlogLayout"
         android:background="@drawable/dialog_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/createEventCloseButton"
+                android:id="@+id/createBlogCloseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -64,7 +64,7 @@
             app:layout_constraintTop_toBottomOf="@+id/layout2" />
 
         <EditText
-            android:id="@+id/popupEventTitle"
+            android:id="@+id/popupBlogTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/popup_create_post_and_event_edittext_style"
@@ -86,7 +86,7 @@
             android:text="Enter Blog Description"
             android:paddingLeft="15dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popupEventTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/popupBlogTitle" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,14 +102,12 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2">
 
             <com.fiberlink.maas360.android.richtexteditor.RichEditText
-                android:id="@+id/popupEventDescription"
+                android:id="@+id/popupBlogDescription"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:gravity="top|left"
-                android:inputType="textMultiLine"
-                android:lines="8"
-                android:minLines="6"
-                android:scrollbars="vertical"
+                android:gravity="left"
+                android:background="@color/white"
+                android:outlineAmbientShadowColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
