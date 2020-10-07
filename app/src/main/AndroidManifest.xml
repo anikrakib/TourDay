@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".Activity.BlogDetailsActivity"></activity>
+        <activity android:name=".Activity.YourBlogDetailsActivity"></activity>
+        <activity android:name=".Activity.BlogDetailsActivity" />
         <activity android:name=".Activity.BlogActivity" />
         <activity android:name=".Activity.YourEventDetailsActivity" />
         <activity android:name=".Activity.EventDetailsActivity" />

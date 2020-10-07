@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.anikrakib.tourday.R;
@@ -18,6 +20,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
     KenBurnsView blogImageKenBurnsView;
     TextView blogDetailsTitleTextView,blogDetailsDescriptionTextView,blogDetailsDivisionTextView,blogDetailsDateTextView;
     SocialTextView blogAuthorName;
+    ImageButton blogDetailsBackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +33,13 @@ public class BlogDetailsActivity extends AppCompatActivity {
         blogDetailsDivisionTextView = findViewById(R.id.blogDetailsLocationTextView);
         blogDetailsDescriptionTextView = findViewById(R.id.blogDetailsDescriptionTextView);
         blogDetailsDateTextView = findViewById(R.id.blogDetailsDate);
+        blogDetailsBackButton = findViewById(R.id.backButtonBlogDetails);
 
         intent = getIntent();
         Bundle extras = intent.getExtras();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
 
         assert extras != null;
         String blogTitle = extras.getString("blogTitle");
@@ -54,6 +61,14 @@ public class BlogDetailsActivity extends AppCompatActivity {
         } else {
             blogDetailsDescriptionTextView.setText(Html.fromHtml(blogDescription));
         }
+
+        // on click listener
+        blogDetailsBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 }

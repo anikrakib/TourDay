@@ -2,16 +2,17 @@ package com.anikrakib.tourday.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.anikrakib.tourday.Models.BlogItem;
+import com.anikrakib.tourday.Activity.YourBlogDetailsActivity;
 import com.anikrakib.tourday.Models.YourBlogItem;
 import com.anikrakib.tourday.R;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -52,6 +53,15 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
         holder.yourBlogDate.setText(date);
         holder.yourBlogTitle.setText(title);
         Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.yourBlogImage);
+
+        holder.cardViewYourBlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent;
+                intent =  new Intent(mContext, YourBlogDetailsActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -63,7 +73,7 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
 
         public RoundedImageView yourBlogImage;
         public TextView yourBlogLocation,yourBlogDate,yourBlogTitle;
-        RelativeLayout relativeLayoutYourBlogItem;
+        CardView cardViewYourBlog;
 
 
         public YourBlogViewHolder(@NonNull View itemView) {
@@ -73,6 +83,7 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
             yourBlogDate = itemView.findViewById(R.id.yourBlogDate);
             yourBlogLocation = itemView.findViewById(R.id.yourBlogLocation);
             yourBlogTitle = itemView.findViewById(R.id.yourBlogTitle);
+            cardViewYourBlog = itemView.findViewById(R.id.cardViewYourBlog);
         }
     }
 }
