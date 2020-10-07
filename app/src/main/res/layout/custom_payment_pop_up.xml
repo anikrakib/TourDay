@@ -126,7 +126,7 @@
             android:textSize="15sp"
             android:textStyle="bold" />
 
-        <org.angmarch.views.NiceSpinner
+        <Spinner
             android:id="@+id/nice_spinner"
             android:layout_width="110dp"
             android:layout_height="27dp"
