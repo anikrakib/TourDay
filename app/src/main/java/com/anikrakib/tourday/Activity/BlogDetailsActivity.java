@@ -31,7 +31,6 @@ public class BlogDetailsActivity extends AppCompatActivity {
         blogDetailsDescriptionTextView = findViewById(R.id.blogDetailsDescriptionTextView);
         blogDetailsDateTextView = findViewById(R.id.blogDetailsDate);
 
-
         intent = getIntent();
         Bundle extras = intent.getExtras();
 
@@ -41,7 +40,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
         String blogDescription = extras.getString("blogDescription");
         String division = extras.getString("division");
         String blogDate = extras.getString("blogDate");
-        //String blogId = extras.getString("blogId");
+        int blogId = extras.getInt("blogId");
         String blogAuthor = extras.getString("blogAuthor");
 
         Picasso.get().load("https://tourday.team"+blogImage).into(blogImageKenBurnsView);

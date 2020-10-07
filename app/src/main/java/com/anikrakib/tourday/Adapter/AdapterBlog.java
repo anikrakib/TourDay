@@ -65,7 +65,6 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
         holder.cardViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // myDialog = new Dialog(mContext);
                 final Intent intent;
                 intent =  new Intent(mContext, BlogDetailsActivity.class);
                 intent.putExtra("blogTitle",title);
@@ -76,7 +75,6 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
                 intent.putExtra("blogId",id);
                 intent.putExtra("blogAuthor",author);
                 mContext.startActivity(intent);
-
             }
         });
     }
@@ -104,11 +102,5 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
             blogItemLayout = itemView.findViewById(R.id.blogItemLayout);
             cardViewBlog = itemView.findViewById(R.id.cardViewBlog);
         }
-    }
-    public void  showBlogDetailsPopUp(){
-        myDialog.setContentView(R.layout.blog_details_pop_up);
-
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        myDialog.show();
     }
 }

@@ -12,6 +12,7 @@
 
         <!--  back  -->
         <ImageButton
+            android:id="@+id/backButtonBlogDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -21,7 +22,6 @@
             android:tint="@color/colorPrimary"
             android:src="@drawable/ic_arrow_back_black_24dp" />
 
-        <!--  Title icon  -->
         <!--  Title Toolbar  -->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -29,10 +29,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:orientation="horizontal"
-            >
-
-
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,10 +37,9 @@
                 android:textStyle="bold"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18dp" />
-
-
         </LinearLayout>
-        <!-- Check Done   -->
+
+        <!-- Share   -->
         <ImageButton
             android:id="@+id/shareEventImageButton"
             android:layout_width="wrap_content"
@@ -55,5 +51,7 @@
             android:src="@drawable/ic_baseline_share_24"
             android:tint="@color/colorPrimary"
             />
+
     </RelativeLayout>
+
 </RelativeLayout>
