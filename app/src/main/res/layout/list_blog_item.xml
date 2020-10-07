@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/linearLayOutEventItem"
+    android:id="@+id/blogItemLayout"
     android:gravity="center"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cardViewBlog"
         android:layout_width="match_parent"
         android:layout_height="225dp"
         android:layout_margin="5dp"

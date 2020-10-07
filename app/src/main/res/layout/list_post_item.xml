@@ -68,19 +68,6 @@
         android:layout_below="@+id/constraintLayout"
         android:src="@drawable/post1" />
 
-    <!-- body Text -->
-<!--    <TextView-->
-<!--        android:id="@+id/postDescriptionTextView"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/postImage"-->
-<!--        android:layout_marginLeft="16dp"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:text="@string/bio"-->
-<!--        android:textSize="16dp"-->
-<!--        android:layout_marginRight="21dp"-->
-<!--        android:maxLines="2" />-->
-
 
     <com.tylersuehr.socialtextview.SocialTextView
         android:id="@+id/postDescriptionTextView"
