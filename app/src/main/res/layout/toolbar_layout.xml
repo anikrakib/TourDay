@@ -54,7 +54,8 @@
 
         <!-- Check Done   -->
         <ImageButton
-            android:src="@drawable/ic_baseline_close_24"
+            android:id="@+id/updateImage"
+            android:src="@drawable/ic_baseline_check_24"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_marginRight="20dp"

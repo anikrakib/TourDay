@@ -3,6 +3,7 @@ package com.anikrakib.tourday.WebService;
 
 import com.anikrakib.tourday.Models.Token;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -11,6 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 public interface Api {
 
@@ -55,7 +57,7 @@ public interface Api {
     @POST("profile/")
     Call<ResponseBody> updateBio(@Header("Authorization") String authToken, @Field("bio") String location);
 
-    @FormUrlEncoded
+    @Multipart
     @POST("profile/")
-    Call<ResponseBody> updatePhoto(@Header("Authorization") String authToken, @Field("picture") String imageUri);
+    Call<ResponseBody> updateImage(@Header("Authorization") String authToken, @Part MultipartBody.Part image);
 }

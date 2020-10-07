@@ -1,11 +1,8 @@
 package com.anikrakib.tourday.Activity;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
@@ -18,18 +15,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -45,6 +39,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
@@ -58,8 +53,12 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,10 +79,11 @@ public class MyProfileActivity extends AppCompatActivity {
     TextView userFullName,facebookLink,instagramLink;
     private static MyProfileActivity instance;
     CircleImageView userProfilePic;
-    private static final int GALLERY_CHANGE_PROFILE = 5;
-    private Bitmap bitmap = null;
-    private static final int SELECT_REQUEST_CODE = 1;
+    private static final int INTENT_REQUEST_CODE = 100;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99 ;
+    private static final int CAPTURE_REQUEST_CODE = 0;
+    private static final int SELECT_REQUEST_CODE = 1;
+
 
 
     /** Either on the constructor or the 'OnCreate' method, you should add: */
@@ -120,17 +120,23 @@ public class MyProfileActivity extends AppCompatActivity {
         chooseImage_ImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK);
-                i.setType("image/*");
-                startActivityForResult(i,GALLERY_CHANGE_PROFILE);
+
+                if (ActivityCompat.checkSelfPermission(MyProfileActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                    Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, 100);
+                } else {
+                    ActivityCompat.requestPermissions(MyProfileActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 44);
+                }
+
             }
         });
 
         facebookLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showSocialMediaPopup(v.getId());
-                updatePhoto();
+                showSocialMediaPopup(v.getId());
             }
         });
         instagramLinkImageView.setOnClickListener(new View.OnClickListener() {
@@ -167,14 +173,14 @@ public class MyProfileActivity extends AppCompatActivity {
         });
 
         /////*     initialize view   */////
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = findViewById(R.id.viewPager);
 
         /////*     initialize ViewPager   */////
         viewProfilePagerAdapter = new ViewProfilePagerAdapter(getSupportFragmentManager());
 
         /////*     add adapter to ViewPager  */////
         viewPager.setAdapter(viewProfilePagerAdapter);
-        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabRippleColor(null);
 
@@ -276,6 +282,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
         MyProfileActivity.this.finish();
     }
 
@@ -491,28 +498,27 @@ public class MyProfileActivity extends AppCompatActivity {
         myDialog.show();
     }
 
-    private void updatePhoto() {
+    private void updatePhoto(byte[] imageBytes) {
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
 
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image"), imageBytes);
 
+        MultipartBody.Part body = MultipartBody.Part.createFormData("picture", "image.jpg", requestFile);
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .updatePhoto("Token "+token,bitmapToString(bitmap));
-
+                .updateImage("Token "+token,body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    DynamicToast.makeSuccess(getApplicationContext(), response.body()+" Image Update Successfully").show();
-                    //userFullName.setText(response.body().toString());
-                    //userEmailTextView.setText(userEmailEditText.getText().toString());
-                }else{
-                    DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+
+                if (response.isSuccessful()) {
+                    DynamicToast.makeSuccess(getApplicationContext(), "Image Updated").show();
+                } else {
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong").show();
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
@@ -521,31 +527,85 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==GALLERY_CHANGE_PROFILE && resultCode==RESULT_OK){
-            Uri uri = data.getData();
-            userProfilePic.setImageURI(uri);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-            } catch (IOException e) {
-                e.printStackTrace();
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == INTENT_REQUEST_CODE) {
+
+            if (resultCode == RESULT_OK) {
+                Uri selectedImage = data.getData();
+                try {
+
+                    InputStream is = getContentResolver().openInputStream(data.getData());
+                    userProfilePic.setImageURI(selectedImage);
+                    updatePhoto(getBytes(is));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
     }
 
-    private String bitmapToString(Bitmap bitmap) {
-        if (bitmap!=null){
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-            byte [] array = byteArrayOutputStream.toByteArray();
-            return Base64.encodeToString(array,Base64.DEFAULT);
+    public byte[] getBytes(InputStream is) throws IOException {
+        ByteArrayOutputStream byteBuff = new ByteArrayOutputStream();
+
+        int buffSize = 1024;
+        byte[] buff = new byte[buffSize];
+
+        int len = 0;
+        while ((len = is.read(buff)) != -1) {
+            byteBuff.write(buff, 0, len);
         }
 
-        return "";
+        return byteBuff.toByteArray();
     }
 
+    public boolean CheckPermission() {
+        if (ContextCompat.checkSelfPermission(MyProfileActivity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(MyProfileActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(MyProfileActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MyProfileActivity.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(MyProfileActivity.this,
+                    Manifest.permission.CAMERA) || ActivityCompat.shouldShowRequestPermissionRationale(MyProfileActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                new AlertDialog.Builder(MyProfileActivity.this)
+                        .setTitle("Permission")
+                        .setMessage("Please accept the permissions")
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(MyProfileActivity.this,
+                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+
+
+                                startActivity(new Intent(MyProfileActivity
+                                        .this, MyProfileActivity.class));
+                                MyProfileActivity.this.overridePendingTransition(0, 0);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                ActivityCompat.requestPermissions(MyProfileActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+
+            return false;
+        } else {
+
+            return true;
+
+        }
+    }
 }
 
