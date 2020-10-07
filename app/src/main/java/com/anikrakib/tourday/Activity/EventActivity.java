@@ -72,9 +72,6 @@ public class EventActivity extends AppCompatActivity {
     ImageButton profileBackButton, refreshLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     EditText editTextLocation,eventPopUpTitle,eventPopUpDescription;;
-    HorizontalCalendar horizontalCalendar;
-    public java.text.DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    private Calendar mDate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +87,7 @@ public class EventActivity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
 
         createEvent.setOnClickListener(new View.OnClickListener() {
@@ -119,46 +114,6 @@ public class EventActivity extends AppCompatActivity {
         tabLayoutEvent = (TabLayout) findViewById(R.id.slidingTabsEventActivity);
         tabLayoutEvent.setupWithViewPager(viewPagerEvent);
         tabLayoutEvent.setTabRippleColor(null);
-
-
-
-        /* start 2 months ago from now */
-        Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MONTH, -2);
-
-        /* end after 2 months from now */
-        Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.MONTH, 2);
-
-        // Default Date set to Today.
-        Calendar calendar = Calendar.getInstance();
-        
-
-        horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
-                .range(startDate, endDate)
-                .datesNumberOnScreen(5)
-                .configure()
-                .formatTopText("MMM")
-                .formatMiddleText("dd")
-                .formatBottomText("EEE")
-                .showTopText(true)
-                .showBottomText(true)
-                .textColor(Color.LTGRAY, Color.WHITE)
-                .selectedDateBackground(ContextCompat.getDrawable(EventActivity.this, R.drawable.horizontal_calender_selector_background))
-                .colorTextMiddle(Color.LTGRAY, Color.parseColor("#ffd54f"))
-                .end()
-                .defaultSelectedDate(calendar)
-                .build();
-
-
-//        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
-//            @Override
-//            public void onDateSelected(Calendar date, int position) {
-//
-//            }
-//
-//        });
-
 
     }
 
