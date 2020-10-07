@@ -1,6 +1,6 @@
 package com.anikrakib.tourday.Models;
 
-public class DistrictModelItem {
+public class DivisionModelItem {
     int imageUrl;
     String districtName;
 
@@ -12,7 +12,7 @@ public class DistrictModelItem {
         return districtName;
     }
 
-    public DistrictModelItem(int imageUrl, String districtName) {
+    public DivisionModelItem(int imageUrl, String districtName) {
         this.imageUrl = imageUrl;
         this.districtName = districtName;
     }

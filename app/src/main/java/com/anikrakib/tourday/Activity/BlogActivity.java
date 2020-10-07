@@ -4,21 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -29,10 +25,9 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.anikrakib.tourday.Adapter.DistrictAdapter;
+import com.anikrakib.tourday.Adapter.DivisionAdapter;
 import com.anikrakib.tourday.Adapter.ViewBlogPagerAdapter;
-import com.anikrakib.tourday.Adapter.ViewEventPagerAdapter;
-import com.anikrakib.tourday.Models.DistrictModelItem;
+import com.anikrakib.tourday.Models.DivisionModelItem;
 import com.anikrakib.tourday.R;
 import com.fiberlink.maas360.android.richtexteditor.RichEditText;
 import com.fiberlink.maas360.android.richtexteditor.RichTextActions;
@@ -45,8 +40,8 @@ import java.util.List;
 public class BlogActivity extends AppCompatActivity {
 
     ViewPager2 viewPager;
-    DistrictAdapter adapter;
-    List<DistrictModelItem> models;
+    DivisionAdapter adapter;
+    List<DivisionModelItem> models;
     ViewBlogPagerAdapter viewBlogPagerAdapter;
     ViewPager viewPagerBlog;
     TabLayout tabLayoutBlog;
@@ -85,17 +80,17 @@ public class BlogActivity extends AppCompatActivity {
 
         models = new ArrayList<>();
 
-        models.add(new DistrictModelItem(R.drawable.sylhet,"Sylhet"));
-        models.add(new DistrictModelItem(R.drawable.dhaka,"Dhaka"));
-        models.add(new DistrictModelItem(R.drawable.chattogram,"Chattogram"));
-        models.add(new DistrictModelItem(R.drawable.rangpur,"Rangpur"));
-        models.add(new DistrictModelItem(R.drawable.rajshahi,"Rajshahi"));
-        models.add(new DistrictModelItem(R.drawable.mymensingh,"Mymensingh"));
-        models.add(new DistrictModelItem(R.drawable.barishal,"Barishal"));
-        models.add(new DistrictModelItem(R.drawable.khulna,"Khulna"));
+        models.add(new DivisionModelItem(R.drawable.sylhet,"Sylhet"));
+        models.add(new DivisionModelItem(R.drawable.dhaka,"Dhaka"));
+        models.add(new DivisionModelItem(R.drawable.chattogram,"Chattogram"));
+        models.add(new DivisionModelItem(R.drawable.rangpur,"Rangpur"));
+        models.add(new DivisionModelItem(R.drawable.rajshahi,"Rajshahi"));
+        models.add(new DivisionModelItem(R.drawable.mymensingh,"Mymensingh"));
+        models.add(new DivisionModelItem(R.drawable.barishal,"Barishal"));
+        models.add(new DivisionModelItem(R.drawable.khulna,"Khulna"));
 
 
-        adapter = new DistrictAdapter(this,models);
+        adapter = new DivisionAdapter(this,models);
 
         viewPager.setAdapter(adapter);
 

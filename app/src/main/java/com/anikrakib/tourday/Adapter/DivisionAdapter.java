@@ -1,7 +1,6 @@
 package com.anikrakib.tourday.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.anikrakib.tourday.Models.DistrictModelItem;
-import com.anikrakib.tourday.Models.PostEvent;
+import com.anikrakib.tourday.Models.DivisionModelItem;
 import com.anikrakib.tourday.R;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.squareup.picasso.Picasso;
@@ -18,30 +16,30 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 
-public class DistrictAdapter extends RecyclerView.Adapter<DistrictAdapter.ViewHolder> {
+public class DivisionAdapter extends RecyclerView.Adapter<DivisionAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
-    private List<DistrictModelItem> mData;
+    private List<DivisionModelItem> mData;
     private Context mContext;
 
-    public DistrictAdapter(Context context,List<DistrictModelItem> Data) {
+    public DivisionAdapter(Context context, List<DivisionModelItem> Data) {
         mData = Data;
         mContext=context;
     }
 
     @NonNull
     @Override
-    public DistrictAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public DivisionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.district_blog_item, viewGroup, false);
-        DistrictAdapter.ViewHolder vh = new DistrictAdapter.ViewHolder(view);
+        DivisionAdapter.ViewHolder vh = new DivisionAdapter.ViewHolder(view);
         return vh;
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DistrictAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull DivisionAdapter.ViewHolder viewHolder, int position) {
         viewHolder.setData(mData.get(position));
 
     }
@@ -63,9 +61,9 @@ public class DistrictAdapter extends RecyclerView.Adapter<DistrictAdapter.ViewHo
             textView=v.findViewById(R.id.txtDistrict);
         }
 
-        public void setData(DistrictModelItem districtModelItem){
-            Picasso.get().load(districtModelItem.getImageUrl()).into(kenBurnsView);
-            textView.setText(districtModelItem.getDistrictName());
+        public void setData(DivisionModelItem divisionModelItem){
+            Picasso.get().load(divisionModelItem.getImageUrl()).into(kenBurnsView);
+            textView.setText(divisionModelItem.getDistrictName());
         }
     }
 }
