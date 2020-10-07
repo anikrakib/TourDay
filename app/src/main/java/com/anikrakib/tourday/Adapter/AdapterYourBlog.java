@@ -47,7 +47,6 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
         String division = currentItem.getYourBlogDivision();
         String date = currentItem.getYourBlogDate();
         String id = currentItem.getYourBlogId();
-        String author = currentItem.getYourBlogAuthorName();
 
         holder.yourBlogLocation.setText(division);
         holder.yourBlogDate.setText(date);
@@ -59,6 +58,12 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
             public void onClick(View v) {
                 final Intent intent;
                 intent =  new Intent(mContext, YourBlogDetailsActivity.class);
+                intent.putExtra("yourBlogTitle",title);
+                intent.putExtra("yourBlogImage",imageUrl);
+                intent.putExtra("yourBlogDescription",description);
+                intent.putExtra("yourBlogDivision",division);
+                intent.putExtra("yourBlogDate",date);
+                intent.putExtra("yourBlogId",id);
                 mContext.startActivity(intent);
             }
         });
