@@ -27,7 +27,7 @@
             tools:layout_editor_absoluteX="5dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/popup_user_image"
+                android:id="@+id/userProfilePicture"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
@@ -52,21 +52,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <EditText
-            android:id="@+id/popup_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/popup_create_post_and_event_edittext_style"
-            android:ems="10"
-            android:hint="Title"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout2" />
-
 
 
         <EditText
@@ -86,9 +71,61 @@
             android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popup_title" />
+            app:layout_constraintTop_toBottomOf="@+id/layout2" />
 
 
+        <LinearLayout
+            android:id="@+id/linearLayout9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/popup_description">
+
+            <Spinner
+                android:id="@+id/districtSpinner"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_outline_custom_spinner"
+                android:popupBackground="@drawable/blue_outline_custom_spinner"
+                android:spinnerMode="dropdown"
+                tools:listitem="@layout/custom_district_spinner_item" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_date_range_black_24dp"
+                    app:tint="@color/black" />
+
+                <TextView
+                    android:id="@+id/createPostDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@null"
+                    android:paddingLeft="3dp"
+                    android:paddingTop="1dp"
+                    android:paddingRight="3dp"
+                    android:text="29/07/2020"
+                    android:textColor="@color/color_secondary_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
 
 
         <include
@@ -98,7 +135,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popup_description" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout9" />
 
         <com.marozzi.roundbutton.RoundButton
             android:id="@+id/uploadButton"
