@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://tourday.team/api/";
+    private static final String BASE_URL = "https://www.tourday.team/api/";
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
 
