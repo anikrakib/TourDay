@@ -348,42 +348,37 @@ public class MyProfileActivity extends AppCompatActivity {
     public void createPostPopUp() {
         ImageButton postCloseButton;
         Animation top_to_bottom;
+        CircleImageView userProfilePictureCircleImageView;
         final ConstraintLayout createPostLayout;
-        final String[] postTitleSave = new String[1];
         final String[] postDescriptionSave = new String[1];
 
         myDialog.setContentView(R.layout.create_post);
         postCloseButton= myDialog.findViewById(R.id.postCloseButton);
         createPostLayout = myDialog.findViewById(R.id.createPostLayout);
-        postPopUpTitle = myDialog.findViewById(R.id.popup_title);
         postPopUpDescription = myDialog.findViewById(R.id.popup_description);
-
+        userProfilePictureCircleImageView = myDialog.findViewById(R.id.userProfilePicture);
 
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
 
-        // Retrieve and set Post Title and Description from SharedPreferences when again open Post PopUp
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String postTitle = sharedPreferences.getString("postTitle","");
         String postDescription = sharedPreferences.getString("postDescription","");
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String userProfilePicture = userPref.getString("userProfilePicture","");
 
-//        //delete SharedPreference data
-//        SharedPreferences preferences = getSharedPreferences("postTitle", 0);
-//        preferences.edit().remove("postTitle").apply();
-
-        postPopUpTitle.setText(postTitle);
         postPopUpDescription.setText(postDescription);
+        Picasso.get().load("https://tourday.team"+userProfilePicture).into(userProfilePictureCircleImageView);
+
 
         postCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Save Post Title and Description in SharedPreferences when close Post PopUp
 
-                postTitleSave[0] = postPopUpTitle.getText().toString();
                 postDescriptionSave[0] = postPopUpDescription.getText().toString();
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("postTitle", postTitleSave[0]);
                 editor.putString("postDescription", postDescriptionSave[0]);
                 editor.apply();
 
@@ -434,6 +429,7 @@ public class MyProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
+                    SharedPreferences.Editor editor = userPref.edit();
                     JSONObject jsonObject = null;
                     try {
                         jsonObject = new JSONObject(response.body().string());
@@ -441,6 +437,8 @@ public class MyProfileActivity extends AppCompatActivity {
                         userFullName.setText(profile.getString("name"));
                         facebookLink.setText(profile.getString("fb"));
                         instagramLink.setText(profile.getString("insta"));
+                        editor.putString("userProfilePicture",profile.getString("picture"));
+                        editor.apply();
                         Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
 
 
@@ -561,51 +559,5 @@ public class MyProfileActivity extends AppCompatActivity {
         return byteBuff.toByteArray();
     }
 
-    public boolean CheckPermission() {
-        if (ContextCompat.checkSelfPermission(MyProfileActivity.this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(MyProfileActivity.this,
-                Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(MyProfileActivity.this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MyProfileActivity.this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(MyProfileActivity.this,
-                    Manifest.permission.CAMERA) || ActivityCompat.shouldShowRequestPermissionRationale(MyProfileActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                new AlertDialog.Builder(MyProfileActivity.this)
-                        .setTitle("Permission")
-                        .setMessage("Please accept the permissions")
-                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(MyProfileActivity.this,
-                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-
-                                startActivity(new Intent(MyProfileActivity
-                                        .this, MyProfileActivity.class));
-                                MyProfileActivity.this.overridePendingTransition(0, 0);
-                            }
-                        })
-                        .create()
-                        .show();
-
-
-            } else {
-                ActivityCompat.requestPermissions(MyProfileActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-
-            return false;
-        } else {
-
-            return true;
-
-        }
-    }
 }
 
