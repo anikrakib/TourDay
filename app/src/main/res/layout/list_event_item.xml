@@ -192,7 +192,6 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/bg_recat"
                 android:gravity="center"
-                android:onClick="chooseDate"
                 android:orientation="horizontal"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"

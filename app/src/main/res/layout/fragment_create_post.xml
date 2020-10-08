@@ -78,7 +78,6 @@
             android:layout_marginStart="10dp"
             android:background="@android:color/transparent"
             android:gravity="left"
-            android:onClick="chooseDate"
             android:orientation="horizontal"
             android:paddingHorizontal="5dp"
             android:paddingVertical="5dp"
