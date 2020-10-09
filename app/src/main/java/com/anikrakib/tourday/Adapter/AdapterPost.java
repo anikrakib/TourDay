@@ -20,6 +20,11 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.anikrakib.tourday.Activity.MyProfileActivity;
 import com.anikrakib.tourday.Activity.SignInActivity;
 import com.anikrakib.tourday.Models.PostItem;
@@ -30,9 +35,12 @@ import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -76,6 +84,14 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         holder.blike.setImageResource(
                 currentItem.getSelfLike()?R.drawable.ic_like:R.drawable.ic_unlike
         );
+
+        holder.blike.setOnClickListener(v->{
+            holder.blike.setImageResource(
+                    currentItem.getSelfLike()?R.drawable.ic_unlike:R.drawable.ic_like
+            );
+            selfLike(postId,position,holder,mPostItemList);
+        });
+
 
         holder.relativeLayoutPostItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +150,40 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
 
 
         }
+    }
+
+    public void selfLike(String postId, int position, ExampleViewHolder holder, ArrayList<PostItem> mPostItemList){
+        SharedPreferences userPref = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+
+        PostItem postItem = mPostItemList.get(position);
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .selfLike("Token "+token,postId);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    postItem.setSelfLike(!postItem.getSelfLike());
+                    postItem.setLikes(postItem.getSelfLike()?postItem.getLikeCount()+1:postItem.getLikeCount()-1);
+                    mPostItemList.set(position,postItem);
+                    notifyItemChanged(position);
+                    notifyDataSetChanged();
+                }else{
+                    holder.blike.setImageResource(
+                            postItem.getSelfLike()?R.drawable.ic_like:R.drawable.ic_unlike
+                    );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void deletePost(String getId,int position){

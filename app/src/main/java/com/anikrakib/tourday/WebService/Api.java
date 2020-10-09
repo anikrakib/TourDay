@@ -81,4 +81,9 @@ public interface Api {
     Call<ResponseBody> deletePost(@Header("Authorization") String authToken,
                                  @Field("id") String postId);
 
+    @FormUrlEncoded
+    @POST("post/like/")
+    Call<ResponseBody> selfLike(@Header("Authorization") String authToken,
+                                  @Field("post_id") String postId);
+
 }

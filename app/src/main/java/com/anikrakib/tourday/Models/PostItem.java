@@ -42,6 +42,12 @@ public class PostItem {
             return selfLike;
         }
 
+        public void setSelfLike(boolean userSelfLike) {
+            this.selfLike = userSelfLike;
+        }
+        public void setLikes(int mLikes) {
+            this.mLikes = mLikes;
+        }
 }
 
 
