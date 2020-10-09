@@ -15,6 +15,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -33,18 +36,22 @@ import android.view.animation.AnimationUtils;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.marozzi.roundbutton.RoundButton;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 
@@ -52,8 +59,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -65,7 +81,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MyProfileActivity extends AppCompatActivity {
+public class MyProfileActivity extends AppCompatActivity{
 
     ImageButton profileBackButton;
     TabLayout tabLayout;
@@ -76,13 +92,18 @@ public class MyProfileActivity extends AppCompatActivity {
     FloatingActionButton floatingActionButtonCreatePost;
     Button uploadButton,saveButton;
     EditText socialMediaLinkEditText,postPopUpTitle,postPopUpDescription,nameEditTest;
-    TextView userFullName,facebookLink,instagramLink;
+    TextView userFullName,facebookLink,instagramLink,createPostDate;
     private static MyProfileActivity instance;
     CircleImageView userProfilePic;
     private static final int INTENT_REQUEST_CODE = 100;
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99 ;
-    private static final int CAPTURE_REQUEST_CODE = 0;
-    private static final int SELECT_REQUEST_CODE = 1;
+    Resources resources;
+    String[] districtKeys;
+    InputStream postInputStream;
+    Boolean createPostImageClick = false;
+    ImageView postImageView;
+    Bitmap bitmap;
+
+
 
 
 
@@ -106,6 +127,8 @@ public class MyProfileActivity extends AppCompatActivity {
         editNameImageView = findViewById(R.id.editNameImageView);
         chooseImage_ImageView = findViewById(R.id.chooseImage_ImageView);
 
+        resources= getResources();
+        districtKeys = resources.getStringArray(R.array.bdDistrict);
 
         myDialog = new Dialog(this);
         instance = this;
@@ -347,39 +370,89 @@ public class MyProfileActivity extends AppCompatActivity {
 
     public void createPostPopUp() {
         ImageButton postCloseButton;
+        RoundButton createPostButton;
         Animation top_to_bottom;
         CircleImageView userProfilePictureCircleImageView;
         final ConstraintLayout createPostLayout;
         final String[] postDescriptionSave = new String[1];
+        Spinner districtSpinner;
+        SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = userPref.edit();
+
+
 
         myDialog.setContentView(R.layout.create_post);
         postCloseButton= myDialog.findViewById(R.id.postCloseButton);
         createPostLayout = myDialog.findViewById(R.id.createPostLayout);
         postPopUpDescription = myDialog.findViewById(R.id.popup_description);
         userProfilePictureCircleImageView = myDialog.findViewById(R.id.userProfilePicture);
+        districtSpinner = myDialog.findViewById(R.id.districtSpinner);
+        createPostButton = myDialog.findViewById(R.id.createPostButton);
+        createPostDate = myDialog.findViewById(R.id.createPostDate);
+        postImageView = myDialog.findViewById(R.id.postImageView);
 
+        // set animation in create post pop up
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
 
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String postDescription = sharedPreferences.getString("postDescription","");
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        //set user profile pic and draft description using Shared Preference
         String userProfilePicture = userPref.getString("userProfilePicture","");
+        String postDescription = userPref.getString("postDescription","");
 
         postPopUpDescription.setText(postDescription);
         Picasso.get().load("https://tourday.team"+userProfilePicture).into(userProfilePictureCircleImageView);
 
+        //get current date and set date textView
+        Date date = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String formattedDate = df.format(date);
+        createPostDate.setText(formattedDate);
+
+        // set value in district spinner
+        ArrayAdapter<String> arrayAdapterGameQuality = new ArrayAdapter<String>(this,R.layout.custom_district_spinner_item,R.id.districtNameTextView,districtKeys);
+        districtSpinner.setAdapter(arrayAdapterGameQuality);
+
+
+        // onClick Listener
+        createPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!districtHashMap(districtSpinner.getSelectedItem().toString()).isEmpty()){
+                    try {
+                        createPost(createPostDate.getText().toString(),postPopUpDescription.getText().toString(),districtHashMap(districtSpinner.getSelectedItem().toString()),getBytes(postInputStream));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    DynamicToast.makeWarning(getApplicationContext(), "Select District").show();
+                }
+            }
+        });
+
+        postImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createPostImageClick = true;
+
+                if (ActivityCompat.checkSelfPermission(MyProfileActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                    Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, 100);
+                } else {
+                    ActivityCompat.requestPermissions(MyProfileActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 44);
+                }
+
+            }
+        });
 
         postCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Save Post Title and Description in SharedPreferences when close Post PopUp
 
-                postDescriptionSave[0] = postPopUpDescription.getText().toString();
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("postDescription", postDescriptionSave[0]);
+                editor.putString("postDescription",postPopUpDescription.getText().toString());
                 editor.apply();
 
                 myDialog.dismiss();
@@ -395,6 +468,65 @@ public class MyProfileActivity extends AppCompatActivity {
         myDialog.setCancelable(false);
         myDialog.show();
 
+    }
+
+    public void createPost(String posDate, String postDescription, String districtCode, byte[] imageBytes){
+
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image"), imageBytes);
+        RequestBody description = RequestBody.create(MediaType.parse("text/plain"),postDescription );
+        RequestBody location = RequestBody.create(MediaType.parse("text/plain"),districtCode );
+        RequestBody date = RequestBody.create(MediaType.parse("text/plain"),posDate );
+
+        MultipartBody.Part postImage = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .createPost("Token "+token,description,location,date,postImage);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    DynamicToast.makeSuccess(getApplicationContext(), "Post Created").show();
+                    myDialog.dismiss();
+                    // post description shared pref removed
+                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = userPref.edit();
+                    editor.putString("postDescription","");
+                    editor.apply();
+                } else {
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong").show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public String districtHashMap(String districtKey){
+        String districtCode = "";
+        Resources resources = getResources();
+
+        HashMap<String, String> meMap=new HashMap<String, String>();
+
+        String[] keys = resources.getStringArray(R.array.bdDistrict);
+        String[] values = resources.getStringArray(R.array.bdDistrictLocationCode);
+
+
+        for(int i = 0; i < keys.length; i++){
+            meMap.put(keys[i], values[i]);
+        }
+
+        for (String s : meMap.keySet()) {
+            districtCode = meMap.get(districtKey);
+
+        }
+        return districtCode;
     }
 
     private void checkInputsSocialMediaLink() {
@@ -529,17 +661,24 @@ public class MyProfileActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == INTENT_REQUEST_CODE) {
-
             if (resultCode == RESULT_OK) {
-                Uri selectedImage = data.getData();
-                try {
-
-                    InputStream is = getContentResolver().openInputStream(data.getData());
-                    userProfilePic.setImageURI(selectedImage);
-                    updatePhoto(getBytes(is));
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(createPostImageClick){
+                    Uri selectedImage = data.getData();
+                    try {
+                        postInputStream = getContentResolver().openInputStream(data.getData());
+                        postImageView.setImageURI(selectedImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Uri selectedImage = data.getData();
+                    try {
+                        InputStream is = getContentResolver().openInputStream(data.getData());
+                        userProfilePic.setImageURI(selectedImage);
+                        updatePhoto(getBytes(is));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

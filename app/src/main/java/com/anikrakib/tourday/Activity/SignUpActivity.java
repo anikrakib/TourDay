@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -162,7 +163,7 @@ public class SignUpActivity extends AppCompatActivity {
                         jsonObject = new JSONObject(response.body().string());
                         String token = jsonObject.getString("token");
                         //make shared preference user
-                        SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
+                        SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
                         SharedPreferences.Editor editor = userPref.edit();
                         editor.putString("token",token);
                         editor.putBoolean("isLoggedIn",true);
