@@ -113,7 +113,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     public int getItemCount() {
         return mPostItemList.size();
     }
-    public class ExampleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener  {
+    public class ExampleViewHolder extends RecyclerView.ViewHolder{
         public ImageView postImage,morePostButton,blike;
         public TextView txtLocation,txtDate;
         public TextView mTextViewLikes;
@@ -133,32 +133,6 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
             blike = itemView.findViewById(R.id.id_like_ImageButton);
 
 
-            //morePostButton.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            PopupMenu popupMenu = new PopupMenu(v.getContext(),v);
-            popupMenu.inflate(R.menu.edit_delete_post_menu);
-            popupMenu.setOnMenuItemClickListener(this);
-            popupMenu.show();
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()){
-                case R.id.editPost:
-                    return true;
-                case R.id.delete_post:
-                    DynamicToast.makeError(mContext, item.getItemId()+" ").show();
-                    return true;
-            }
-            return false;
         }
     }
 
