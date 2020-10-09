@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
@@ -46,6 +47,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.anikrakib.tourday.Adapter.AdapterPost;
 import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
@@ -374,7 +377,6 @@ public class MyProfileActivity extends AppCompatActivity{
         Animation top_to_bottom;
         CircleImageView userProfilePictureCircleImageView;
         final ConstraintLayout createPostLayout;
-        final String[] postDescriptionSave = new String[1];
         Spinner districtSpinner;
         SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = userPref.edit();
@@ -471,7 +473,6 @@ public class MyProfileActivity extends AppCompatActivity{
     }
 
     public void createPost(String posDate, String postDescription, String districtCode, byte[] imageBytes){
-
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
 

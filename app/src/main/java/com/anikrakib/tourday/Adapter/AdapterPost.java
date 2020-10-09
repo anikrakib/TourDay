@@ -43,7 +43,6 @@ import retrofit2.Response;
 public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHolder> {
     private Context mContext;
     private ArrayList<PostItem> mPostItemList;
-    Context context;
     Dialog myDialog;
     String postId;
 
@@ -65,19 +64,18 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         String location = currentItem.getLocation();
         int likeCount = currentItem.getLikeCount();
         postId = currentItem.getmId();
-        boolean selfLike = currentItem.getSelfLike();
+//        boolean selfLike = currentItem.getSelfLike();
         holder.txtPost.setLinkText(post);
         holder.txtLocation.setText(location);
         holder.txtDate.setText(date);
         holder.mTextViewLikes.setText(""+likeCount);
         Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
 
-        // check if it was liked or no
-        if (selfLike) {
-            holder.blike.setImageResource(R.drawable.ic_like);
-        } else {
-            holder.blike.setImageResource(R.drawable.ic_unlike);
-        }
+        // check post is self liked or not
+
+        holder.blike.setImageResource(
+                currentItem.getSelfLike()?R.drawable.ic_like:R.drawable.ic_unlike
+        );
 
         holder.relativeLayoutPostItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +83,30 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
                 myDialog = new Dialog(mContext);
                 showDialog(currentItem);
             }
+        });
+
+        holder.morePostButton.setOnClickListener(v->{
+            PopupMenu popupMenu = new PopupMenu(mContext,holder.morePostButton);
+            popupMenu.inflate(R.menu.edit_delete_post_menu);
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    switch (item.getItemId()){
+                        case R.id.editPost: {
+
+                            return true;
+                        }
+                        case R.id.delete_post: {
+                            deletePost(currentItem.getmId(),position);
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+            });
+            popupMenu.show();
         });
     }
     @Override
@@ -111,7 +133,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
             blike = itemView.findViewById(R.id.id_like_ImageButton);
 
 
-            morePostButton.setOnClickListener(this);
+            //morePostButton.setOnClickListener(this);
         }
 
         @Override
@@ -133,26 +155,28 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
                 case R.id.editPost:
                     return true;
                 case R.id.delete_post:
-                    deletePost();
+                    DynamicToast.makeError(mContext, item.getItemId()+" ").show();
                     return true;
             }
             return false;
         }
     }
 
-    public void deletePost(){
+    public void deletePost(String getId,int position){
         SharedPreferences userPref = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
 
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .deletePost("Token "+token,postId);
+                .deletePost("Token "+token,getId);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
+                    mPostItemList.remove(position);
+                    notifyItemRemoved(position);
                     DynamicToast.makeError(mContext, "Post Deleted !!").show();
                 }else{
                     DynamicToast.makeError(mContext, "Something Wrong !!").show();
@@ -189,12 +213,10 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         postDetailDescriptionTextView.setLinkText(item.getPost());
         postDetailsLocation.setText(item.getLocation());
         postDetailsLikeCount.setText(String.valueOf(item.getLikeCount()));
-        if (item.getSelfLike()) {
-            postDetailLike.setImageResource(R.drawable.ic_like);
-        } else {
-            postDetailLike.setImageResource(R.drawable.ic_unlike);
-        }
 
+        postDetailLike.setImageResource(
+                item.getSelfLike()?R.drawable.ic_like:R.drawable.ic_unlike
+        );
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
