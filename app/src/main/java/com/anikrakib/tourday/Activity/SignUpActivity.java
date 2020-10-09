@@ -277,13 +277,13 @@ public class SignUpActivity extends AppCompatActivity {
 
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
-                case R.id.input_username:
+                case R.id.userNameSignUp:
                     validateUsername();
                     break;
-                case R.id.input_email:
+                case R.id.emailSignUp:
                     validateEmail();
                     break;
-                case R.id.input_password:
+                case R.id.passwordSignUp:
                     validatePassword();
                     break;
             }

@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
-
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,15 +14,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -32,12 +27,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
-import com.anikrakib.tourday.Adapter.ViewCreatePostAndEventPagerAdapter;
 import com.anikrakib.tourday.Adapter.ViewEventPagerAdapter;
-import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
-import com.anikrakib.tourday.Fragment.Event;
 import com.anikrakib.tourday.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -45,23 +35,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
-import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.HorizontalCalendarView;
-import devs.mulham.horizontalcalendar.model.CalendarEvent;
-import devs.mulham.horizontalcalendar.utils.CalendarEventsPredicate;
-import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class EventActivity extends AppCompatActivity {
     TabLayout tabLayoutEvent;

@@ -111,32 +111,6 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    private class MyTextWatcher implements TextWatcher {
-
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.input_username:
-                    validateUsername();
-                    break;
-                case R.id.input_password:
-                    validatePassword();
-                    break;
-            }
-        }
-
-    }
     private boolean validatePassword() {
         if(inputPassword.getText().toString().length() <=7) {
             inputLayoutPassword.setError(getString(R.string.err_msg_password));

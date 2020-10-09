@@ -9,10 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.anikrakib.tourday.Adapter.ViewCreatePostAndEventPagerAdapter;
-import com.anikrakib.tourday.Adapter.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
-import com.google.android.material.tabs.TabLayout;
 
 
 public class CreatePost extends Fragment {
