@@ -148,13 +148,12 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
                 .getInstance()
                 .getApi()
                 .deletePost("Token "+token,postId);
-        DynamicToast.makeError(mContext, postId+" Post Deleted !!").show();
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    //DynamicToast.makeError(mContext, "Post Deleted !!").show();
+                    DynamicToast.makeError(mContext, "Post Deleted !!").show();
                 }else{
                     DynamicToast.makeError(mContext, "Something Wrong !!").show();
                 }
