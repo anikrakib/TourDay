@@ -2,6 +2,8 @@ package com.anikrakib.tourday.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.ContextMenu;
@@ -14,15 +16,28 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anikrakib.tourday.Activity.MyProfileActivity;
+import com.anikrakib.tourday.Activity.SignInActivity;
 import com.anikrakib.tourday.Models.PostItem;
+import com.anikrakib.tourday.Models.Token;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHolder> {
@@ -30,6 +45,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     private ArrayList<PostItem> mPostItemList;
     Context context;
     Dialog myDialog;
+    String postId;
 
     public AdapterPost(Context context, ArrayList<PostItem> exampleList) {
         mContext = context;
@@ -48,6 +64,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         String date = currentItem.getDate();
         String location = currentItem.getLocation();
         int likeCount = currentItem.getLikeCount();
+        postId = currentItem.getmId();
         boolean selfLike = currentItem.getSelfLike();
         holder.txtPost.setLinkText(post);
         holder.txtLocation.setText(location);
@@ -116,10 +133,38 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
                 case R.id.editPost:
                     return true;
                 case R.id.delete_post:
+                    deletePost();
                     return true;
             }
             return false;
         }
+    }
+
+    public void deletePost(){
+        SharedPreferences userPref = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .deletePost("Token "+token,postId);
+        DynamicToast.makeError(mContext, postId+" Post Deleted !!").show();
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    //DynamicToast.makeError(mContext, "Post Deleted !!").show();
+                }else{
+                    DynamicToast.makeError(mContext, "Something Wrong !!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void showDialog(PostItem item){

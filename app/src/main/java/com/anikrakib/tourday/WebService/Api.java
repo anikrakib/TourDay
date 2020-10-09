@@ -75,4 +75,10 @@ public interface Api {
                                   @Part("location") RequestBody postLocation,
                                   @Part("date") RequestBody postDate,
                                   @Part MultipartBody.Part postImage);
+
+    @FormUrlEncoded
+    @POST("post_delete/")
+    Call<ResponseBody> deletePost(@Header("Authorization") String authToken,
+                                 @Field("id") String postId);
+
 }

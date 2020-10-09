@@ -7,21 +7,25 @@ public class PostItem {
         private String mLocation;
         private String mDate;
         private int mLikes;
+        private String mId;
         private boolean selfLike;
 
 
-        public PostItem(String mImageUrl, String mPost, String mLocation, String mDate, int mLikes,boolean selfLike) {
+        public PostItem(String mImageUrl, String mPost, String mLocation, String mDate, int mLikes, String mId, boolean selfLike) {
             this.mImageUrl = mImageUrl;
             this.mPost = mPost;
             this.mLocation = mLocation;
             this.mDate = mDate;
             this.mLikes = mLikes;
+            this.mId = mId;
             this.selfLike = selfLike;
         }
+
 
         public String getImageUrl() {
             return mImageUrl;
         }
+        public String getmId() { return mId; }
         public String getPost() {
             return mPost;
         }
@@ -38,6 +42,6 @@ public class PostItem {
             return selfLike;
         }
 
-    }
+}
 
 

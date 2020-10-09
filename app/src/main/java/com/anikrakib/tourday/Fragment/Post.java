@@ -7,7 +7,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,7 @@ public class Post extends Fragment {
     private AdapterPost mPostAdapter;
     private ArrayList<PostItem> mPostItem;
     private RequestQueue mRequestQueue;
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     public Post() {
@@ -59,6 +62,7 @@ public class Post extends Fragment {
 
         /////*     initialize view   */////
         recyclerView = v. findViewById(R.id.postRecyclerView);
+        swipeRefreshLayout = v. findViewById(R.id.swipeRefreshLayout);
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setFocusable(false);
@@ -97,6 +101,7 @@ public class Post extends Fragment {
                                 JSONArray likeArray = hit.getJSONArray("likes");
                                 int likeCount = likeArray.length();
                                 int user = hit.getInt("user");
+                                String id = hit.getString("id");
                                 boolean selfLike = false;
                                 for (int j = 0; j < likeArray.length(); j++)
                                     if (likeArray.getInt(j) == user) {
@@ -104,7 +109,7 @@ public class Post extends Fragment {
                                         break;
                                     }
 
-                                mPostItem.add(new PostItem(imageUrl, post, location, date, likeCount, selfLike));
+                                mPostItem.add(new PostItem(imageUrl, post, location, date, likeCount, id, selfLike));
                             }
                             mPostAdapter = new AdapterPost(getContext(), mPostItem);
                             recyclerView.setAdapter(mPostAdapter);
@@ -120,4 +125,6 @@ public class Post extends Fragment {
         });
         mRequestQueue.add(request);
     }
+
+
 }
