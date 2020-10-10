@@ -27,7 +27,7 @@
             tools:layout_editor_absoluteX="5dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/popup_user_image"
+                android:id="@+id/createBlogPopUpUserProfilePicture"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
@@ -123,14 +123,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <jp.wasabeef.richeditor.RichEditor
-                android:id="@+id/editor"
+            <ScrollView
                 android:layout_width="0dp"
                 android:layout_height="195dp"
                 app:layout_constraintBottom_toTopOf="@+id/include3"
                 app:layout_constraintEnd_toStartOf="@+id/include4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent">
+
+                <jp.wasabeef.richeditor.RichEditor
+                    android:id="@+id/popUpBlogTextEditor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </ScrollView>
+
+
 
             <include
                 android:id="@+id/include3"
@@ -183,7 +190,7 @@
                 tools:ignore="RtlHardcoded" />
 
             <TextView
-                android:id="@+id/createEventLocationTextView"
+                android:id="@+id/popUpBlogLocationTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -193,7 +200,7 @@
                 android:textStyle="bold" />
 
             <Spinner
-                android:id="@+id/eventLocationSpinner"
+                android:id="@+id/blogLocationSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -215,7 +222,7 @@
             app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
 
         <com.marozzi.roundbutton.RoundButton
-            android:id="@+id/uploadButton"
+            android:id="@+id/createBlogButton"
             android:layout_width="88dp"
             android:layout_height="35dp"
             android:gravity="center"
