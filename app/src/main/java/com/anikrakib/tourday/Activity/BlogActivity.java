@@ -1,45 +1,75 @@
 package com.anikrakib.tourday.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.text.Html;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.anikrakib.tourday.Adapter.DivisionAdapter;
 import com.anikrakib.tourday.Adapter.ViewBlogPagerAdapter;
 import com.anikrakib.tourday.Models.DivisionModelItem;
 import com.anikrakib.tourday.R;
-import com.fiberlink.maas360.android.richtexteditor.RichEditText;
+import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.marozzi.roundbutton.RoundButton;
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.richeditor.RichEditor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import petrov.kristiyan.colorpicker.ColorPicker;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class BlogActivity extends AppCompatActivity {
 
@@ -50,9 +80,18 @@ public class BlogActivity extends AppCompatActivity {
     ViewPager viewPagerBlog;
     TabLayout tabLayoutBlog;
     FloatingActionButton createBlog;
-    Dialog myDialog;
+    Dialog myDialog,previewDialog;
     EditText blogPopUpTitle;
+    Resources resources;
+    String[] division;
+    InputStream blogPostInputStream;
+    ImageView blogImageView;
+    TextView preview;
+    private static String data;
+    private static final int INTENT_REQUEST_CODE = 100;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +102,11 @@ public class BlogActivity extends AppCompatActivity {
 
 
 
+        resources= getResources();
+        division = resources.getStringArray(R.array.bdDivision);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         myDialog = new Dialog(this);
+        previewDialog = new Dialog(this);
 
 
 
@@ -133,9 +175,14 @@ public class BlogActivity extends AppCompatActivity {
 
     private void createEventPopUp() {
         ImageButton postCloseButton;
+        ImageView descriptionPreview;
         Animation top_to_bottom;
         RichEditor blogTextEditor;
         CircleImageView userProfilePicturePopUP;
+        Spinner divisionSpinner;
+        TextView popUpBlogLocationTextView,textPreview;
+        RoundButton createBlog;
+
         final ConstraintLayout createEventLayout;
         SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = userPref.edit();
@@ -148,6 +195,13 @@ public class BlogActivity extends AppCompatActivity {
         blogPopUpTitle = myDialog.findViewById(R.id.popupBlogTitle);
         blogTextEditor = myDialog.findViewById(R.id.popUpBlogTextEditor);
         userProfilePicturePopUP = myDialog.findViewById(R.id.createBlogPopUpUserProfilePicture);
+        divisionSpinner = myDialog.findViewById(R.id.blogLocationSpinner);
+        blogImageView = myDialog.findViewById(R.id.postImageView);
+        popUpBlogLocationTextView = myDialog.findViewById(R.id.popUpBlogLocationTextView);
+        createBlog = myDialog.findViewById(R.id.createBlogButton);
+        descriptionPreview = myDialog.findViewById(R.id.descriptionPreView);
+        textPreview = myDialog.findViewById(R.id.text);
+
 
         blogTextEditor.setEditorFontColor(R.color.color_primary_text);
         blogTextEditor.setPlaceholder("Write Here your Blog .....");
@@ -159,20 +213,74 @@ public class BlogActivity extends AppCompatActivity {
         // Retrieve and set Event Title and Description from SharedPreferences when again open CreateEvent PopUp
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String userProfilePicture = userPref.getString("userProfilePicture","");
+        String blogTitle = userPref.getString("blogTitle","");
+        String blogDescription = userPref.getString("blogDescription","");
 
 
         //set data in element
+        blogPopUpTitle.setText(blogTitle);
+        blogTextEditor.setHtml(blogDescription);
         Picasso.get().load("https://tourday.team"+userProfilePicture).into(userProfilePicturePopUP);
+        // set value in district spinner
+        ArrayAdapter<String> arrayAdapterDivision = new ArrayAdapter<String>(this,R.layout.custom_district_spinner_item,R.id.districtNameTextView,division);
+        divisionSpinner.setAdapter(arrayAdapterDivision);
+
 
         findVieByIdPopUpMethod(myDialog,blogTextEditor,getApplicationContext());
 
 
+        // onClick Listener
+        blogImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ActivityCompat.checkSelfPermission(BlogActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                    Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, 100);
+                } else {
+                    ActivityCompat.requestPermissions(BlogActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 44);
+                }
+
+            }
+        });
+
+        descriptionPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), blogTextEditor.getHtml(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        divisionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+                popUpBlogLocationTextView.setText(divisionSpinner.getSelectedItem().toString());
+            }
+            public void onNothingSelected(AdapterView<?> arg0) { }
+        });
+
         postCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String blogDescriptionString = Html.fromHtml(blogTextEditor.getHtml()).toString();
+                editor.putString("blogDescription",blogDescriptionString);
+                editor.putString("blogTitle",blogPopUpTitle.getText().toString());
+                editor.apply();
 
                 myDialog.dismiss();
+            }
+        });
+
+        createBlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    createBlog(getBytes(blogPostInputStream),blogTextEditor.getHtml(),blogPopUpTitle.getText().toString(),popUpBlogLocationTextView.getText().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -428,7 +536,75 @@ public class BlogActivity extends AppCompatActivity {
                 blogTextEditor.insertLink("https://github.com/wasabeef", "wasabeef");
             }
         });
+    }
 
+    public void createBlog(byte[] imageBytes,String blogDescription,String blogTitle,String blogDivision){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image"), imageBytes);
+        RequestBody description = RequestBody.create(MediaType.parse("text/plain"),blogDescription );
+        RequestBody location = RequestBody.create(MediaType.parse("text/plain"),blogDivision );
+        RequestBody title = RequestBody.create(MediaType.parse("text/plain"),blogTitle );
+
+        MultipartBody.Part postImage = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .createBlog("Token "+token,title,description,postImage,location);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    DynamicToast.makeSuccess(getApplicationContext(), "Blog Created").show();
+                    myDialog.dismiss();
+                    // post description shared pref removed
+                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = userPref.edit();
+                    editor.putString("blogDescription","");
+                    editor.putString("blogTitle","");
+                    editor.apply();
+                } else {
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong").show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == INTENT_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Uri selectedImage = data.getData();
+                try {
+                    blogPostInputStream = getContentResolver().openInputStream(data.getData());
+                    blogImageView.setImageURI(selectedImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public byte[] getBytes(InputStream is) throws IOException {
+        ByteArrayOutputStream byteBuff = new ByteArrayOutputStream();
+
+        int buffSize = 1024;
+        byte[] buff = new byte[buffSize];
+
+        int len = 0;
+        while ((len = is.read(buff)) != -1) {
+            byteBuff.write(buff, 0, len);
+        }
+
+        return byteBuff.toByteArray();
     }
 
 }

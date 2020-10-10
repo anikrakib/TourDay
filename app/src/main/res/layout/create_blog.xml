@@ -123,21 +123,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ScrollView
-                android:layout_width="0dp"
-                android:layout_height="195dp"
-                app:layout_constraintBottom_toTopOf="@+id/include3"
-                app:layout_constraintEnd_toStartOf="@+id/include4"
-                app:layout_constraintStart_toStartOf="parent">
-
                 <jp.wasabeef.richeditor.RichEditor
                     android:id="@+id/popUpBlogTextEditor"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </ScrollView>
-
-
+                    android:layout_width="0dp"
+                    android:layout_height="195dp"
+                    app:layout_constraintBottom_toTopOf="@+id/include3"
+                    app:layout_constraintEnd_toStartOf="@+id/include4"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
             <include
                 android:id="@+id/include3"
@@ -195,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:paddingLeft="5dp"
-                android:hint="Enter Blog Location"
+                android:hint="@string/choose_division"
                 android:textColor="@color/color_primary_text"
                 android:textStyle="bold" />
 

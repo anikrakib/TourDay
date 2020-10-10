@@ -28,6 +28,18 @@
     <string name="enter_blog_description">Enter Blog Description</string>
     <string name="enter_blog_title">Enter Blog Title</string>
     <string name="todo">TODO</string>
+    <string name="choose_division">Choose Division</string>
+
+    <string-array name="bdDivision">
+        <item>Barishal</item>
+        <item>Chittagong</item>
+        <item>Dhaka</item>
+        <item>Mymensingh</item>
+        <item>Khulna</item>
+        <item>Rajshahi</item>
+        <item>Rangpur</item>
+        <item>Sylhet</item>
+    </string-array>
 
     <string-array name="bdDistrict">
         <item>Select District</item>

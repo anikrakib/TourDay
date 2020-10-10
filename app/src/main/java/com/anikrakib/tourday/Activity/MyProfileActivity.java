@@ -411,8 +411,8 @@ public class MyProfileActivity extends AppCompatActivity{
         createPostDate.setText(formattedDate);
 
         // set value in district spinner
-        ArrayAdapter<String> arrayAdapterGameQuality = new ArrayAdapter<String>(this,R.layout.custom_district_spinner_item,R.id.districtNameTextView,districtKeys);
-        districtSpinner.setAdapter(arrayAdapterGameQuality);
+        ArrayAdapter<String> arrayAdapterDivision = new ArrayAdapter<String>(this,R.layout.custom_district_spinner_item,R.id.districtNameTextView,districtKeys);
+        districtSpinner.setAdapter(arrayAdapterDivision);
 
 
         // onClick Listener

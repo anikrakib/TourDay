@@ -101,11 +101,9 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
                     switch (item.getItemId()){
                         case R.id.editPost: {
 
-                            return true;
                         }
                         case R.id.delete_post: {
 
-                            return true;
                         }
                     }
 
@@ -116,7 +114,7 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
         });
 
         //set Animation in recyclerView Item
-        holder.cardViewBlog.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
+        holder.blogItemLayout.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
     }
 
     @Override

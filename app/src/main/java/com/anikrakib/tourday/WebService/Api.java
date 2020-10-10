@@ -86,4 +86,11 @@ public interface Api {
     Call<ResponseBody> selfLike(@Header("Authorization") String authToken,
                                   @Field("post_id") String postId);
 
+    @Multipart
+    @POST("blog/addpost/")
+    Call<ResponseBody> createBlog(@Header("Authorization") String authToken,
+                                  @Part("title") RequestBody blogTitle,
+                                  @Part("description") RequestBody blogDescription,
+                                  @Part MultipartBody.Part blogImage,
+                                  @Part("division") RequestBody blogDivision);
 }

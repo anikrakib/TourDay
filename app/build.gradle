@@ -95,7 +95,6 @@ dependencies {
     //socialText  Dependencies
     implementation 'com.github.tylersuehr7:social-text-view:1.0.0'
     //richTextEditor Dependencies
-    implementation 'com.fiberlink.maas360.android:richtexteditor:0.1.1'
     implementation 'jp.wasabeef:richeditor-android:2.0.0'
     // color picker Dependencies
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
