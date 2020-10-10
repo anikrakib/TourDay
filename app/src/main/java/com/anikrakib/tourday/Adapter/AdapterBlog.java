@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -77,6 +78,10 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
                 mContext.startActivity(intent);
             }
         });
+
+        //set Animation in recyclerView Item
+        holder.cardViewBlog.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        holder.cardViewBlog.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
     }
 
     @Override

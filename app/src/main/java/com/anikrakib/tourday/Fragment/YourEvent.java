@@ -52,7 +52,12 @@ public class YourEvent extends Fragment {
         list.add(new PostEvent("QUOTES - 2", "Tis better to have loved and lost than never to have loved at all. St. Augustine", "22-01-2020", "30-02-2020","Laksam,Cumilla",R.drawable.event_pic4));
         list.add(new PostEvent("QUOTES - 3", "Not how long, but how well you have lived is the main thing. Seneca", "20-08-2020", "22-09-2020","Mirpur1, Dhaka",R.drawable.event_pic5));
         list.add(new PostEvent("QUOTES - 5", "In the end, it’s not the years in your life that count. It’s the life in your years. Abraham Lincoln", "20-08-2020", "22-09-2020","New Market, Dhaka",R.drawable.event_pic5));
-
+        list.add(new PostEvent("QUOTES - 2", "Tis better to have loved and lost than never to have loved at all. St. Augustine", "22-01-2020", "30-02-2020","Laksam,Cumilla",R.drawable.event_pic4));
+        list.add(new PostEvent("QUOTES - 3", "Not how long, but how well you have lived is the main thing. Seneca", "20-08-2020", "22-09-2020","Mirpur1, Dhaka",R.drawable.event_pic5));
+        list.add(new PostEvent("QUOTES - 5", "In the end, it’s not the years in your life that count. It’s the life in your years. Abraham Lincoln", "20-08-2020", "22-09-2020","New Market, Dhaka",R.drawable.event_pic5));
+        list.add(new PostEvent("QUOTES - 2", "Tis better to have loved and lost than never to have loved at all. St. Augustine", "22-01-2020", "30-02-2020","Laksam,Cumilla",R.drawable.event_pic4));
+        list.add(new PostEvent("QUOTES - 3", "Not how long, but how well you have lived is the main thing. Seneca", "20-08-2020", "22-09-2020","Mirpur1, Dhaka",R.drawable.event_pic5));
+        list.add(new PostEvent("QUOTES - 5", "In the end, it’s not the years in your life that count. It’s the life in your years. Abraham Lincoln", "20-08-2020", "22-09-2020","New Market, Dhaka",R.drawable.event_pic5));
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);

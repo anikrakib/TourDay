@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,8 +50,6 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
         viewHolder.txTitle.setText(item.Title);
         viewHolder.txtBody.setText(item.Body);
         viewHolder.eventLocation.setText(item.location);
-//        viewHolder.startTime.setText(item.startTime);
-//        viewHolder.endTime.setText(item.endTime);
         viewHolder.startDate.setText(item.startDate);
         viewHolder.endDate.setText(item.endDate);
         viewHolder.eventImage.setImageResource(item.imageUrl);
@@ -65,6 +64,10 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
             }
         });
 
+        //set Animation in recyclerView Item
+        viewHolder.yourEventLinearLayout.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        viewHolder.yourEventLinearLayout.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
+
     }
 
     @Override
@@ -73,7 +76,7 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txTitle, txtBody, startDate, endDate, startTime, endTime, eventLocation;
+        public TextView txTitle, txtBody, startDate, endDate,eventLocation;
         public RoundedImageView eventImage;
         LinearLayout yourEventLinearLayout;
 
@@ -84,8 +87,6 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
             txtBody = v.findViewById(R.id.eventDescription);
             startDate = v.findViewById(R.id.eventStartDate);
             endDate = v.findViewById(R.id.eventEndDate);
-//            startTime = v.findViewById(R.id.eventStartTime);
-//            endTime = v.findViewById(R.id.eventEndTime);
             eventLocation = v.findViewById(R.id.eventLocation);
             eventImage = v.findViewById(R.id.eventImage);
             yourEventLinearLayout = v.findViewById(R.id.yourEventLinearLayout);

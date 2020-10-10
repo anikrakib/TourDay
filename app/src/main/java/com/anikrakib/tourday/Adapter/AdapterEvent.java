@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,7 +71,9 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
 
             }
         });
-
+        //set Animation in recyclerView Item
+        viewHolder.linearLayOutEventItem.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        viewHolder.linearLayOutEventItem.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
     }
 
     @Override

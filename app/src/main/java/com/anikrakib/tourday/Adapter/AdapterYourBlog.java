@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -67,6 +68,10 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
                 mContext.startActivity(intent);
             }
         });
+
+        //set Animation in recyclerView Item
+        holder.cardViewYourBlog.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
+        holder.cardViewYourBlog.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
     }
 
     @Override
