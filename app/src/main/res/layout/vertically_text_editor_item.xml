@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/horizontalScrollView"
+    android:layout_width="wrap_content"
+    android:layout_height="200dp"
+    android:layout_marginEnd="10dp"
+    android:background="@android:color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ffffff">
+
+        <ImageButton
+            android:id="@+id/action_bold"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/ic_bold" />
+
+        <ImageButton
+            android:id="@+id/action_Italic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/ic_italic" />
+
+        <ImageButton
+            android:id="@+id/action_underline"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/ic_underlined" />
+
+        <ImageButton
+            android:id="@+id/action_color"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:padding="11dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/font_color" />
+
+        <ImageButton
+            android:id="@+id/action_ordered_numbered"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/ic_numbered" />
+
+        <ImageButton
+            android:id="@+id/action_unordered_numbered"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/ic_list_bulleted" />
+
+        <ImageButton
+            android:id="@+id/action_subscript"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/subscript"
+            />
+
+        <ImageButton
+            android:id="@+id/action_superscript"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/superscript" />
+
+        <ImageButton
+            android:id="@+id/backgroundColor"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:maxWidth="20dp"
+            android:maxHeight="20dp"
+            android:src="@drawable/background_color" />
+
+    </LinearLayout>
+</ScrollView>
+

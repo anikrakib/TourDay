@@ -137,14 +137,13 @@ public class BlogActivity extends AppCompatActivity {
         RichTextActions richTextActions ;
 
 
-
         myDialog.setContentView(R.layout.create_blog);
         postCloseButton = myDialog.findViewById(R.id.createBlogCloseButton);
 
         createEventLayout = myDialog.findViewById(R.id.createBlogLayout);
         blogPopUpTitle = myDialog.findViewById(R.id.popupBlogTitle);
-        blogPopUpDescription = myDialog.findViewById(R.id.popupBlogDescription);
-        richTextActions = myDialog.findViewById(R.id.rich_text_actions);
+//        blogPopUpDescription = myDialog.findViewById(R.id.popupBlogDescription);
+//        richTextActions = myDialog.findViewById(R.id.rich_text_actions);
 
 
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
@@ -161,7 +160,7 @@ public class BlogActivity extends AppCompatActivity {
 
         blogPopUpTitle.setText(eventTitle);
 
-        blogPopUpDescription.setRichTextActionsView(richTextActions);
+        //blogPopUpDescription.setRichTextActionsView(richTextActions);
         //blogPopUpDescription.setPreviewText(eventDescription);
         //blogPopUpDescription.setHint("Enter Blog Description");
         //blogPopUpDescription.setBackgroundColor(R.id.color_white);
@@ -173,13 +172,11 @@ public class BlogActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Save Event Title and Description in SharedPreferences when close CreateEvent PopUp
 
-                blogTitleSave[0] = blogPopUpTitle.getText().toString();
-                blogDescriptionSave[0] = blogPopUpDescription.getHtml();
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("BlogTitle", blogTitleSave[0]);
-                editor.putString("BlogDescription", blogDescriptionSave[0]);
-                editor.apply();
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putString("BlogTitle", blogTitleSave[0]);
+//                editor.putString("BlogDescription", blogDescriptionSave[0]);
+//                editor.apply();
 
                 myDialog.dismiss();
             }

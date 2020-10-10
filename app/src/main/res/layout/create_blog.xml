@@ -58,8 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Enter Blog Title"
-            android:paddingLeft="15dp"
+            android:text="@string/enter_blog_title"
+            android:layout_marginStart="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout2" />
 
@@ -83,8 +83,8 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter Blog Description"
-            android:paddingLeft="15dp"
+            android:text="@string/enter_blog_description"
+            android:layout_marginStart="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/popupBlogTitle" />
 
@@ -92,39 +92,74 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="260dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/popup_create_post_and_event_edittext_style"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-            <com.fiberlink.maas360.android.richtexteditor.RichEditText
-                android:id="@+id/popupBlogDescription"
-                android:layout_width="match_parent"
+            <!--            <com.fiberlink.maas360.android.richtexteditor.RichEditText-->
+            <!--                android:id="@+id/popupBlogDescription"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="200dp"-->
+            <!--                android:gravity="left"-->
+            <!--                android:background="@color/white"-->
+            <!--                android:outlineAmbientShadowColor="@color/white"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+            <include
+                android:id="@+id/include4"
+                layout="@layout/vertically_text_editor_item"
+                android:layout_width="wrap_content"
                 android:layout_height="200dp"
-                android:gravity="left"
-                android:background="@color/white"
-                android:outlineAmbientShadowColor="@color/white"
+                app:layout_collapseMode="pin"
+                app:layout_constraintBottom_toTopOf="@+id/include3"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <jp.wasabeef.richeditor.RichEditor
+                android:id="@+id/editor"
+                android:layout_width="0dp"
+                android:layout_height="195dp"
+                app:layout_constraintBottom_toTopOf="@+id/include3"
+                app:layout_constraintEnd_toStartOf="@+id/include4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.fiberlink.maas360.android.richtexteditor.RichTextActions
-                android:id="@+id/rich_text_actions"
+            <include
+                android:id="@+id/include3"
+                layout="@layout/horizontal_texteditor_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                app:layout_collapseMode="pin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/descriptionPreView"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/descriptionPreView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/ic_baseline_remove_red_eye_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/include4" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/eventLocation"
-            android:layout_width="320dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
@@ -147,9 +182,9 @@
                 app:tint="@color/black"
                 tools:ignore="RtlHardcoded" />
 
-            <EditText
-                android:id="@+id/createEventLocationEditText"
-                android:layout_width="260dp"
+            <TextView
+                android:id="@+id/createEventLocationTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:paddingLeft="5dp"
@@ -157,14 +192,24 @@
                 android:textColor="@color/color_primary_text"
                 android:textStyle="bold" />
 
+            <Spinner
+                android:id="@+id/eventLocationSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_recat"
+                android:popupBackground="@drawable/bg_recat"
+                android:spinnerMode="dropdown"
+                tools:listitem="@layout/custom_district_spinner_item" />
+
         </LinearLayout>
 
 
         <include
             android:id="@+id/include"
             layout="@layout/choose_image_for_post_event"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
+            android:layout_width="355dp"
+            android:layout_height="115dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
@@ -173,9 +218,9 @@
             android:id="@+id/uploadButton"
             android:layout_width="88dp"
             android:layout_height="35dp"
-            android:layout_gravity="center"
             android:gravity="center"
             android:padding="0dp"
+            android:layout_marginTop="5dp"
             android:text="Create Event"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
