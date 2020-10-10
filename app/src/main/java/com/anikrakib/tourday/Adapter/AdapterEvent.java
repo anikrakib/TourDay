@@ -72,7 +72,6 @@ public class AdapterEvent  extends RecyclerView.Adapter<AdapterEvent.ViewHolder>
             }
         });
         //set Animation in recyclerView Item
-        viewHolder.linearLayOutEventItem.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
         viewHolder.linearLayOutEventItem.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
     }
 

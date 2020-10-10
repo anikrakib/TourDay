@@ -70,7 +70,6 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
         });
 
         //set Animation in recyclerView Item
-        holder.cardViewYourBlog.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
         holder.cardViewYourBlog.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
     }
 

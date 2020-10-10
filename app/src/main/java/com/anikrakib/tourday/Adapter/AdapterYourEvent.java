@@ -65,7 +65,6 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
         });
 
         //set Animation in recyclerView Item
-        viewHolder.yourEventLinearLayout.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_transition_animation));
         viewHolder.yourEventLinearLayout.setAnimation(AnimationUtils.loadAnimation(mContext,R.anim.fade_scale_animation));
 
     }
