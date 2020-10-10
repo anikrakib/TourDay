@@ -12,6 +12,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
@@ -25,22 +27,19 @@ import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import com.anikrakib.tourday.Adapter.DivisionAdapter;
 import com.anikrakib.tourday.Adapter.ViewBlogPagerAdapter;
 import com.anikrakib.tourday.Models.DivisionModelItem;
 import com.anikrakib.tourday.R;
 import com.fiberlink.maas360.android.richtexteditor.RichEditText;
-import com.fiberlink.maas360.android.richtexteditor.RichTextActions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.richeditor.RichEditor;
+import petrov.kristiyan.colorpicker.ColorPicker;
 
 public class BlogActivity extends AppCompatActivity {
 
@@ -53,7 +52,6 @@ public class BlogActivity extends AppCompatActivity {
     FloatingActionButton createBlog;
     Dialog myDialog;
     EditText blogPopUpTitle;
-    RichEditText blogPopUpDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +164,7 @@ public class BlogActivity extends AppCompatActivity {
         //set data in element
         Picasso.get().load("https://tourday.team"+userProfilePicture).into(userProfilePicturePopUP);
 
-        findVieByIdPopUpMethod(myDialog,blogTextEditor);
+        findVieByIdPopUpMethod(myDialog,blogTextEditor,getApplicationContext());
 
 
         postCloseButton.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +185,7 @@ public class BlogActivity extends AppCompatActivity {
         myDialog.show();
     }
 
-    public void findVieByIdPopUpMethod(Dialog myDialog,RichEditor blogTextEditor){
+    public void findVieByIdPopUpMethod(Dialog myDialog, RichEditor blogTextEditor, Context context){
 
         myDialog.findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,8 +283,34 @@ public class BlogActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                blogTextEditor.setTextColor(isChanged ? Color.BLACK : Color.RED);
-                isChanged = !isChanged;
+                final ColorPicker colorPicker = new ColorPicker(BlogActivity.this);
+                ArrayList <String> colors = new ArrayList<>();
+                colors.add("#258174");
+                colors.add("#3C8D2F");
+                colors.add("#20724f");
+                colors.add("#6a3ab2");
+                colors.add("#323299");
+                colors.add("#808000");
+                colors.add("#b77231");
+                colors.add("#966d37");
+                colors.add("#FFFFFF");
+                colors.add("#000000");
+                colorPicker.setColors(colors)
+                        .setColumns(5)
+                        .setRoundColorButton(true)
+                        .setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                            @Override
+                            public void onChooseColor(int position, int color) {
+                                blogTextEditor.setTextColor(isChanged ? Color.TRANSPARENT : color);
+                                isChanged = !isChanged;
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -295,9 +319,36 @@ public class BlogActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                blogTextEditor.setTextBackgroundColor(isChanged ? Color.TRANSPARENT : Color.YELLOW);
-                isChanged = !isChanged;
+                final ColorPicker colorPicker = new ColorPicker(BlogActivity.this);
+                ArrayList <String> colors = new ArrayList<>();
+                colors.add("#258174");
+                colors.add("#3C8D2F");
+                colors.add("#20724f");
+                colors.add("#6a3ab2");
+                colors.add("#323299");
+                colors.add("#808000");
+                colors.add("#b77231");
+                colors.add("#966d37");
+                colors.add("#FFFFFF");
+                colors.add("#000000");
+                colorPicker.setColors(colors)
+                        .setColumns(5)
+                        .setRoundColorButton(true)
+                        .setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                            @Override
+                            public void onChooseColor(int position, int color) {
+                                blogTextEditor.setTextBackgroundColor(isChanged ? Color.TRANSPARENT : color);
+                                isChanged = !isChanged;
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        })
+                        .show();
             }
+
         });
 
         myDialog.findViewById(R.id.action_indent).setOnClickListener(new View.OnClickListener() {
@@ -370,7 +421,6 @@ public class BlogActivity extends AppCompatActivity {
                 blogTextEditor.insertYoutubeVideo("https://www.youtube.com/embed/pS5peqApgUA");
             }
         });
-
 
         myDialog.findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
             @Override
