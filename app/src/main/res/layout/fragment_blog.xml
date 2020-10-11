@@ -6,12 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.Event">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/blogRecyclerView"
-        android:layout_height="match_parent"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/blogRefreshLayout"
         android:layout_width="match_parent"
-        tools:listitem="@layout/list_blog_item"
-        android:layout_marginBottom="10dp"
-        />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/blogRecyclerView"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/list_blog_item"
+            android:layout_marginBottom="10dp"
+            />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

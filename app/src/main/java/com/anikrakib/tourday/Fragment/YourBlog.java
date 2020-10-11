@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ public class YourBlog extends Fragment {
     private AdapterYourBlog adapterYourBlog;
     private ArrayList<YourBlogItem> yourBlogItems;
     private RequestQueue mRequestQueue;
+    private SwipeRefreshLayout yourBlogRefreshLayout;
     String url;
 
 
@@ -59,6 +61,7 @@ public class YourBlog extends Fragment {
 
         /////*     initialize view   */////
         yourBlogRecyclerView = v. findViewById(R.id.yourBlogRecyclerView);
+        yourBlogRefreshLayout = v. findViewById(R.id.yourBlogRefreshLayout);
 
 
         layoutManager = new LinearLayoutManager(getContext());
@@ -77,6 +80,15 @@ public class YourBlog extends Fragment {
         SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String username = userPref.getString("userName","");
 
+        yourBlogRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                url = "https://tourday.team/api/blog/user/"+username;
+                yourBlogItems = new ArrayList<>();
+                parseJSON(url);
+            }
+        });
+
         url = "https://tourday.team/api/blog/user/"+username;
         parseJSON(url);
 
@@ -86,6 +98,7 @@ public class YourBlog extends Fragment {
     }
 
     private void parseJSON(String url) {
+        yourBlogRefreshLayout.setRefreshing(true);
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -114,6 +127,7 @@ public class YourBlog extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        yourBlogRefreshLayout.setRefreshing(false);
                     }
                 }, new Response.ErrorListener() {
             @Override

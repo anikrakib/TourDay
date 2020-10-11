@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ public class Blog extends Fragment {
     private AdapterBlog mAdapterBlog;
     private ArrayList<BlogItem> mBlogItem;
     private RequestQueue mRequestQueue;
+    private SwipeRefreshLayout blogRefreshLayout;
     String url;
 
     public Blog() {
@@ -58,6 +60,7 @@ public class Blog extends Fragment {
 
         /////*     initialize view   */////
         blogRecyclerView = v. findViewById(R.id.blogRecyclerView);
+        blogRefreshLayout = v. findViewById(R.id.blogRefreshLayout);
 
 
         layoutManager = new LinearLayoutManager(getContext());
@@ -70,16 +73,24 @@ public class Blog extends Fragment {
         mBlogItem = new ArrayList<>();
         mRequestQueue = Volley.newRequestQueue(getContext());
 
+        blogRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                url = "https://tourday.team/api/blog/allpost/";
+                mBlogItem = new ArrayList<>();
+                parseJSON(url);
+            }
+        });
 
         url = "https://tourday.team/api/blog/allpost/";
         parseJSON(url);
-
 
 
         return v;
     }
 
     private void parseJSON(String url) {
+        blogRefreshLayout.setRefreshing(true);
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -108,6 +119,8 @@ public class Blog extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        blogRefreshLayout.setRefreshing(false);
                     }
                 }, new Response.ErrorListener() {
             @Override
