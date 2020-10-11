@@ -1,12 +1,14 @@
 package com.anikrakib.tourday.WebService;
 
 
+import com.anikrakib.tourday.Models.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Token;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -93,4 +95,8 @@ public interface Api {
                                   @Part("description") RequestBody blogDescription,
                                   @Part MultipartBody.Part blogImage,
                                   @Part("division") RequestBody blogDivision);
+
+    @DELETE("blog/delete/{post_id}")
+    Call<DeleteBlogResponse> deleteBlog(@Header("Authorization") String authToken,
+                                        @Path("post_id") String postId);
 }
