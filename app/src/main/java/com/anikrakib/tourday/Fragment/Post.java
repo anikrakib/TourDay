@@ -73,6 +73,18 @@ public class Post extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPostItem = new ArrayList<>();
         mRequestQueue = Volley.newRequestQueue(getContext());
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                    parseJSON();
+
+            }
+
+
+        });
+
+
         parseJSON();
 
 
@@ -80,8 +92,10 @@ public class Post extends Fragment {
     }
 
     private void parseJSON() {
+        mPostItem = new ArrayList<>();
         SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String userName = userPref.getString("userName","");
+        swipeRefreshLayout.setRefreshing(true);
 
         String url = "https://tourday.team/api/get_posts/"+userName;
 
@@ -93,6 +107,7 @@ public class Post extends Fragment {
                             JSONArray jsonArray = response.getJSONArray("results");
 
                             for (int i = 0; i < jsonArray.length(); i++) {
+
                                 JSONObject hit = jsonArray.getJSONObject(i);
                                 String post = hit.getString("post");
                                 String date = hit.getString("date");
@@ -116,6 +131,7 @@ public class Post extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }, new Response.ErrorListener() {
             @Override

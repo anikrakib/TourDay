@@ -302,6 +302,13 @@ public class BlogActivity extends AppCompatActivity {
             }
         });
 
+        myDialog.findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                blogTextEditor.undo();
+            }
+        });
+
         myDialog.findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
