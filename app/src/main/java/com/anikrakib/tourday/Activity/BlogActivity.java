@@ -248,7 +248,7 @@ public class BlogActivity extends AppCompatActivity {
         descriptionPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), blogTextEditor.getHtml(), Toast.LENGTH_LONG).show();
+                showPreview(blogTextEditor.getHtml());
 
             }
         });
@@ -540,7 +540,7 @@ public class BlogActivity extends AppCompatActivity {
         myDialog.findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                blogTextEditor.insertLink("https://github.com/wasabeef", "wasabeef");
+                blogTextEditor.insertLink("https://www.tourday.team", "tourday");
             }
         });
     }
@@ -614,4 +614,19 @@ public class BlogActivity extends AppCompatActivity {
         return byteBuff.toByteArray();
     }
 
+    public void showPreview(String data){
+        TextView previewText;
+        previewDialog.setContentView(R.layout.preview_blog_description);
+
+        previewText = previewDialog.findViewById(R.id.previewDescription);
+
+        previewText.setText(data);
+
+        previewDialog.setCancelable(true);
+        previewDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        previewDialog.getWindow().getAttributes().gravity = Gravity.CENTER;
+        previewDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        previewDialog.show();
+
+    }
 }
