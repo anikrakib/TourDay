@@ -67,7 +67,11 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
         holder.blogLocation.setText(division);
         holder.blogDate.setText(date);
         holder.blogTitle.setText(title);
-        Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.blogImage);
+        if(currentItem.isSearch()){
+            Picasso.get().load(imageUrl).fit().centerInside().into(holder.blogImage);
+        }else{
+            Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.blogImage);
+        }
 
         if(currentItem.getBlogAuthorName().equals(userName)){
             holder.moreBlogButton.setVisibility(View.VISIBLE);

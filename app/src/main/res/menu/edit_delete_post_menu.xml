@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/editPost"
         android:icon="@android:drawable/ic_menu_edit"
         android:iconTint="@color/colorPrimary"
-        android:title="Edit" />
+        android:title="Edit"
+        app:showAsAction="ifRoom"
+        />
     <item
         android:id="@+id/delete_post"
         android:icon="@drawable/ic_baseline_delete_24"
         android:iconTint="@color/colorPrimary"
-        android:title="Delete" />
+        android:title="Delete"
+        app:showAsAction="ifRoom"
+
+        />
+
+
 
 </menu>

@@ -31,7 +31,6 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -86,8 +85,6 @@ public class BlogActivity extends AppCompatActivity {
     String[] division;
     InputStream blogPostInputStream;
     ImageView blogImageView;
-    TextView preview;
-    private static String data;
     private static final int INTENT_REQUEST_CODE = 100;
 
 
@@ -99,7 +96,6 @@ public class BlogActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.viewPager);
         createBlog = findViewById(R.id.fabButtonCreateBlog);
-
 
 
         resources= getResources();
@@ -121,6 +117,8 @@ public class BlogActivity extends AppCompatActivity {
         tabLayoutBlog = (TabLayout) findViewById(R.id.slidingTabsBlog);
         tabLayoutBlog.setupWithViewPager(viewPagerBlog);
         tabLayoutBlog.setTabRippleColor(null);
+
+        //this.setSupportActionBar(toolbar);
 
 
         models = new ArrayList<>();
@@ -629,4 +627,5 @@ public class BlogActivity extends AppCompatActivity {
         previewDialog.show();
 
     }
+
 }

@@ -8,6 +8,7 @@ public class BlogItem {
     private String blogDate;
     private String blogAuthorName;
     private String blogId;
+    private boolean search;
 
     public BlogItem(String blogImageUrl, String blogTitle, String blogDescription, String blogDivision, String blogDate, String blogAuthorName, String blogId) {
         this.blogImageUrl = blogImageUrl;
@@ -17,6 +18,21 @@ public class BlogItem {
         this.blogDate = blogDate;
         this.blogAuthorName = blogAuthorName;
         this.blogId = blogId;
+    }
+
+    public BlogItem(String blogImageUrl, String blogTitle, String blogDescription, String blogDivision, String blogDate, String blogAuthorName, String blogId,boolean search) {
+        this.blogImageUrl = blogImageUrl;
+        this.blogTitle = blogTitle;
+        this.blogDescription = blogDescription;
+        this.blogDivision = blogDivision;
+        this.blogDate = blogDate;
+        this.blogAuthorName = blogAuthorName;
+        this.blogId = blogId;
+        this.search = search;
+    }
+
+    public boolean isSearch() {
+        return search;
     }
 
     public String getBlogImageUrl() {
