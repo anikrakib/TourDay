@@ -98,4 +98,6 @@ dependencies {
     implementation 'jp.wasabeef:richeditor-android:2.0.0'
     // color picker Dependencies
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
+    //material design SearchBar
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
 }
