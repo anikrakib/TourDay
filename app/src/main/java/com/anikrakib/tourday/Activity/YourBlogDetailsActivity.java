@@ -81,7 +81,14 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
     private static final int INTENT_REQUEST_CODE = 100;
     String yourBlogTitle,yourBlogImage,yourBlogDescription,yourBlogDivision,yourBlogDate,yourBlogId;
     Uri selectedImage;
-    Bitmap bitmap;
+    ImageButton postCloseButton;
+    ImageView descriptionPreview;
+    Animation top_to_bottom;
+    RichEditor blogTextEditor;
+    CircleImageView userProfilePicturePopUP;
+    Spinner divisionSpinner;
+    TextView popUpBlogLocationTextView;
+    RoundButton createBlog;
 
 
 
@@ -111,25 +118,9 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
 
 
         assert extras != null;
-        yourBlogTitle = extras.getString("yourBlogTitle");
-        yourBlogImage = extras.getString("yourBlogImage");
-        yourBlogDescription = extras.getString("yourBlogDescription");
-        yourBlogDivision = extras.getString("yourBlogDivision");
-        yourBlogDate = extras.getString("yourBlogDate");
-        yourBlogId = extras.getString("yourBlogId");
+        yourBlogId = String.valueOf(extras.getInt("yourBlogId"));
 
-
-        Picasso.get().load("https://tourday.team"+yourBlogImage).into(yourBlogImageKenBurnsView);
-        yourBlogDetailsTitleTextView.setText(yourBlogTitle);
-        yourBlogDetailsDivisionTextView.setText(yourBlogDivision);
-        yourBlogDetailsDateTextView.setText(yourBlogDate);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            yourBlogDetailsDescriptionTextView.setText(Html.fromHtml(yourBlogDescription, Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            yourBlogDetailsDescriptionTextView.setText(Html.fromHtml(yourBlogDescription));
-        }
-
+        getYourPostDetails(Integer.parseInt(yourBlogId));
 
         // on click listener
         yourBlogDetailsBackButton.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +140,7 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
         editBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createEventPopUp();
+                updateBlogPopUp();
             }
         });
 
@@ -183,15 +174,7 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void createEventPopUp() {
-        ImageButton postCloseButton;
-        ImageView descriptionPreview;
-        Animation top_to_bottom;
-        RichEditor blogTextEditor;
-        CircleImageView userProfilePicturePopUP;
-        Spinner divisionSpinner;
-        TextView popUpBlogLocationTextView;
-        RoundButton createBlog;
+    private void updateBlogPopUp() {
 
 
         final ConstraintLayout createEventLayout;
@@ -225,11 +208,8 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
         //set data in element
         createBlog.setText("Update blog");
         String userProfilePicture = userPref.getString("userProfilePicture","");
-        blogPopUpTitle.setText(yourBlogTitle);
-        blogTextEditor.setHtml(yourBlogDescription);
-        popUpBlogLocationTextView.setText(yourBlogDivision);
         Picasso.get().load("https://tourday.team"+userProfilePicture).into(userProfilePicturePopUP);
-        Picasso.get().load("https://tourday.team"+yourBlogImage).into(blogImageView);
+        getYourPostDetailsInCreateBlogPopUp(Integer.parseInt(yourBlogId));
         // set value in district spinner
         ArrayAdapter<String> arrayAdapterDivision = new ArrayAdapter<String>(this,R.layout.custom_district_spinner_item,R.id.districtNameTextView,division);
         divisionSpinner.setAdapter(arrayAdapterDivision);
@@ -389,6 +369,92 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
         }
 
         return byteBuff.toByteArray();
+    }
+
+    public void getYourPostDetails(int postId){
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getPostDetails(postId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    try {
+                        JSONObject jsonObject =new JSONObject( response.body().string());
+
+                        int id  = jsonObject.getInt("id");
+                        String slug  = jsonObject.getString("slug");
+                        String date  = jsonObject.getString("date");
+                        String division  = jsonObject.getString("division");
+                        String description  = jsonObject.getString("description");
+                        String title  = jsonObject.getString("title");
+                        String image  = jsonObject.getString("image");
+                        Picasso.get().load("https://www.tourday.team"+image).into(yourBlogImageKenBurnsView);
+                        yourBlogDetailsTitleTextView.setText(title);
+                        yourBlogDetailsDivisionTextView.setText(division);
+                        yourBlogDetailsDateTextView.setText(date);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            yourBlogDetailsDescriptionTextView.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
+                        } else {
+                            yourBlogDetailsDescriptionTextView.setText(Html.fromHtml(description));
+                        }
+
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    Toast.makeText(getApplicationContext(),postId+" Try Again",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+    public void getYourPostDetailsInCreateBlogPopUp(int postId){
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getPostDetails(postId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    try {
+                        JSONObject jsonObject =new JSONObject( response.body().string());
+
+                        String division  = jsonObject.getString("division");
+                        String description  = jsonObject.getString("description");
+                        String title  = jsonObject.getString("title");
+                        String image  = jsonObject.getString("image");
+
+                        blogPopUpTitle.setText(title);
+                        blogTextEditor.setHtml(description);
+                        popUpBlogLocationTextView.setText(division);
+                        Picasso.get().load("https://www.tourday.team"+image).into(blogImageView);
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    Toast.makeText(getApplicationContext(),postId+" Try Again",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
 }

@@ -113,4 +113,6 @@ public interface Api {
     Call<UpdateBlogRequest> updateBlog(@Header("Authorization") String authToken,
                                        @Path("post_id") String postId, @PartMap Map<String, RequestBody> map, @Part MultipartBody.Part image);
 
+    @GET("blog/details/{post_id}")
+    Call<ResponseBody> getPostDetails(@Path("post_id") int postId);
 }

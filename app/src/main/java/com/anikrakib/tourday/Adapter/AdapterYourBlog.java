@@ -59,12 +59,7 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
             public void onClick(View v) {
                 final Intent intent;
                 intent =  new Intent(mContext, YourBlogDetailsActivity.class);
-                intent.putExtra("yourBlogTitle",title);
-                intent.putExtra("yourBlogImage",imageUrl);
-                intent.putExtra("yourBlogDescription",description);
-                intent.putExtra("yourBlogDivision",division);
-                intent.putExtra("yourBlogDate",date);
-                intent.putExtra("yourBlogId",id);
+                intent.putExtra("yourBlogId",Integer.parseInt(id));
                 mContext.startActivity(intent);
             }
         });

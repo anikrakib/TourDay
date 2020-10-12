@@ -84,13 +84,7 @@ public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder
             public void onClick(View v) {
                 final Intent intent;
                 intent =  new Intent(mContext, BlogDetailsActivity.class);
-                intent.putExtra("blogTitle",title);
-                intent.putExtra("blogImage",imageUrl);
-                intent.putExtra("blogDescription",description);
-                intent.putExtra("division",division);
-                intent.putExtra("blogDate",date);
-                intent.putExtra("blogId",id);
-                intent.putExtra("blogAuthor",author);
+                intent.putExtra("blogId",Integer.parseInt(id));
                 mContext.startActivity(intent);
             }
         });

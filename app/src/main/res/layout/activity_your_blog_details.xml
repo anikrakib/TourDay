@@ -23,7 +23,7 @@
             android:id="@+id/yourBlogDetailsImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/barishal" />
+            android:src="@null" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -45,7 +45,6 @@
                 android:layout_marginStart="15dp"
                 android:adjustViewBounds="true"
                 android:textIsSelectable="true"
-                android:text="সাজেক ভ্যালি"
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -75,7 +74,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Division"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -108,7 +106,6 @@
                         android:background="@null"
                         android:paddingLeft="3dp"
                         android:paddingTop="1dp"
-                        android:text="29/07/2020"
                         android:textColor="#FF0000"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -174,7 +171,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:textIsSelectable="true"
-                android:text="@string/saejk_valley_blog"
                 android:textColor="@color/color_third_text"
                 android:textSize="16sp" />
 

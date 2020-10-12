@@ -9,11 +9,23 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BlogDetailsActivity extends AppCompatActivity {
     Intent intent;
@@ -42,25 +54,10 @@ public class BlogDetailsActivity extends AppCompatActivity {
         }
 
         assert extras != null;
-        String blogTitle = extras.getString("blogTitle");
-        String blogImage = extras.getString("blogImage");
-        String blogDescription = extras.getString("blogDescription");
-        String division = extras.getString("division");
-        String blogDate = extras.getString("blogDate");
         int blogId = extras.getInt("blogId");
-        String blogAuthor = extras.getString("blogAuthor");
 
-        Picasso.get().load("https://tourday.team"+blogImage).into(blogImageKenBurnsView);
-        blogAuthorName.setLinkText("@"+blogAuthor);
-        blogDetailsTitleTextView.setText(blogTitle);
-        blogDetailsDivisionTextView.setText(division);
-        blogDetailsDateTextView.setText(blogDate);
+        getPostDetails(blogId);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            blogDetailsDescriptionTextView.setText(Html.fromHtml(blogDescription, Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            blogDetailsDescriptionTextView.setText(Html.fromHtml(blogDescription));
-        }
 
         // on click listener
         blogDetailsBackButton.setOnClickListener(new View.OnClickListener() {
@@ -70,5 +67,55 @@ public class BlogDetailsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getPostDetails(int postId){
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getPostDetails(postId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    try {
+                        JSONObject jsonObject =new JSONObject( response.body().string());
+
+                        int id  = jsonObject.getInt("id");
+                        String slug  = jsonObject.getString("slug");
+                        String date  = jsonObject.getString("date");
+                        String division  = jsonObject.getString("division");
+                        String description  = jsonObject.getString("description");
+                        String title  = jsonObject.getString("title");
+                        String image  = jsonObject.getString("image");
+                        Picasso.get().load("https://www.tourday.team/"+image).into(blogImageKenBurnsView);
+                        blogAuthorName.setLinkText("@"+slug);
+                        blogDetailsTitleTextView.setText(title);
+                        blogDetailsDivisionTextView.setText(division);
+                        blogDetailsDateTextView.setText(date);
+
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            blogDetailsDescriptionTextView.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
+                        } else {
+                            blogDetailsDescriptionTextView.setText(Html.fromHtml(description));
+                        }
+
+
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    Toast.makeText(getApplicationContext(),postId+" Try Again",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 }
