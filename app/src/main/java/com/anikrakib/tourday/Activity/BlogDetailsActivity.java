@@ -66,6 +66,12 @@ public class BlogDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+        blogAuthorName.setOnLinkClickListener(new SocialTextView.OnLinkClickListener() {
+            @Override
+            public void onLinkClicked(int i, String s) {
+                startActivity(new Intent(BlogDetailsActivity.this, OthersUserProfile.class));
+            }
+        });
 
     }
 

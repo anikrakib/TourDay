@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+        <activity android:name=".Activity.OthersUserProfile"></activity>
         <activity android:name=".Activity.YourBlogDetailsActivity" />
         <activity android:name=".Activity.BlogDetailsActivity" />
         <activity android:name=".Activity.BlogActivity" />
