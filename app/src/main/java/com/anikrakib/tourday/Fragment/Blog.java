@@ -84,6 +84,7 @@ public class Blog extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 url = "https://www.tourday.team/api/blog/query?search="+searchBar.getText();
+                mBlogItem = new ArrayList<>();
                 searchBlog(url);
             }
 
@@ -163,7 +164,6 @@ public class Blog extends Fragment {
     }
 
     private void searchBlog(String url) {
-        mBlogItem = new ArrayList<>();
         blogRefreshLayout.setRefreshing(true);
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
