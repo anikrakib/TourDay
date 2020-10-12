@@ -72,6 +72,30 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:id="@+id/otherUserName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:fontFamily="@font/sf_bold"
+                            android:layout_marginEnd="5dp"
+                            android:text="None"
+                            android:textColor="@color/color_primary_text"
+                            android:textSize="20sp" />
+
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/bioLayout"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -96,28 +120,6 @@
                             android:textSize="16sp" />
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/bioLayout"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        tools:ignore="UseCompoundDrawables">
-
-                        <TextView
-                            android:id="@+id/otherUserName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:fontFamily="@font/sf_bold"
-                            android:layout_marginEnd="5dp"
-                            android:text="None"
-                            android:textColor="@color/color_primary_text"
-                            android:textSize="20sp" />
-
-                    </LinearLayout>
                 </RelativeLayout>
 
                 <LinearLayout
@@ -125,6 +127,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:orientation="horizontal"
+                    android:padding="5dp"
                     >
                     <ImageView
                         android:id="@+id/facebookLinkImageView"

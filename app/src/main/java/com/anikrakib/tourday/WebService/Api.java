@@ -115,4 +115,7 @@ public interface Api {
 
     @GET("blog/details/{post_id}")
     Call<ResponseBody> getPostDetails(@Path("post_id") int postId);
+
+    @GET("user/{username}")
+    Call<ResponseBody> otherUserProfileInformation(@Header("Authorization") String authToken,@Path("username") String userName);
 }

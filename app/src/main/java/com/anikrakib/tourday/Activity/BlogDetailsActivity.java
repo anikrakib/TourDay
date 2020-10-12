@@ -33,6 +33,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
     TextView blogDetailsTitleTextView,blogDetailsDescriptionTextView,blogDetailsDivisionTextView,blogDetailsDateTextView;
     SocialTextView blogAuthorName;
     ImageButton blogDetailsBackButton;
+    public String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,9 @@ public class BlogDetailsActivity extends AppCompatActivity {
         blogAuthorName.setOnLinkClickListener(new SocialTextView.OnLinkClickListener() {
             @Override
             public void onLinkClicked(int i, String s) {
-                startActivity(new Intent(BlogDetailsActivity.this, OthersUserProfile.class));
+                Intent intent = new Intent(BlogDetailsActivity.this, OthersUserProfile.class);
+                intent.putExtra("userName",userName);
+                startActivity(intent);
             }
         });
 
@@ -89,6 +92,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
 
                         int id  = jsonObject.getInt("id");
                         String slug  = jsonObject.getString("slug");
+                        userName=slug;
                         String date  = jsonObject.getString("date");
                         String division  = jsonObject.getString("division");
                         String description  = jsonObject.getString("description");
