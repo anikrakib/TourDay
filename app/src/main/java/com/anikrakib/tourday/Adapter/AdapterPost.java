@@ -1,5 +1,6 @@
 package com.anikrakib.tourday.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -42,10 +43,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHolder> {
@@ -60,11 +64,13 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     }
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item_update, parent, false);
         return new ExampleViewHolder(v);
     }
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
+        SharedPreferences userPref =mContext.getSharedPreferences("user", MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = userPref.edit();
         final PostItem currentItem = mPostItemList.get(position);
         String imageUrl = currentItem.getImageUrl();
         String post = currentItem.getPost();
@@ -77,7 +83,12 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         holder.txtLocation.setText(location);
         holder.txtDate.setText(date);
         holder.mTextViewLikes.setText(""+likeCount);
-        Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
+        Picasso.get().load("https://www.tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
+
+        String userProfilePicture = userPref.getString("userProfilePicture","");
+        String userName = userPref.getString("userName","");
+        Picasso.get().load("https://www.tourday.team/"+userProfilePicture).fit().centerInside().into(holder.userProfilePic);
+        holder.userName.setText(userName);
 
         // check post is self liked or not
 
@@ -135,6 +146,8 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         public TextView mTextViewLikes;
         RelativeLayout relativeLayoutPostItem;
         SocialTextView txtPost;
+        CircleImageView userProfilePic;
+        TextView userName;
 
         public ExampleViewHolder(View itemView) {
             super(itemView);
@@ -147,13 +160,15 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
             relativeLayoutPostItem = itemView.findViewById(R.id.relativeLayoutPostItem);
             morePostButton = itemView.findViewById(R.id.moreButtonPost);
             blike = itemView.findViewById(R.id.id_like_ImageButton);
+            userProfilePic = itemView.findViewById(R.id.userProfilePicListItem);
+            userName = itemView.findViewById(R.id.userNameListItem);
 
 
         }
     }
 
     public void selfLike(String postId, int position, ExampleViewHolder holder, ArrayList<PostItem> mPostItemList){
-        SharedPreferences userPref = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = mContext.getSharedPreferences("user", MODE_PRIVATE);
         String token = userPref.getString("token","");
 
         PostItem postItem = mPostItemList.get(position);
@@ -187,7 +202,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     }
 
     public void deletePost(String getId,int position){
-        SharedPreferences userPref = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = mContext.getSharedPreferences("user", MODE_PRIVATE);
         String token = userPref.getString("token","");
 
         Call<ResponseBody> call = RetrofitClient
