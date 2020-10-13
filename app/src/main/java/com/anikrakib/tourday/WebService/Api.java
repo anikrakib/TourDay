@@ -53,6 +53,10 @@ public interface Api {
     @GET("profile/")
     Call<ResponseBody> userProfile(@Header("Authorization") String authToken);
 
+    @GET("get_posts/{username}")
+    Call<ResponseBody> getPhoto(@Path("username") String userName);
+
+
     @FormUrlEncoded
     @POST("profile/")
     Call<ResponseBody> updateProfileName(@Header("Authorization") String authToken,

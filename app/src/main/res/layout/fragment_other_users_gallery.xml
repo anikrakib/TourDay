@@ -5,12 +5,23 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.OtherUsersGallery">
 
-    <GridView
-        android:id="@+id/otherUsersGalleryGridView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:footerDividersEnabled="false"
-        android:padding="5dp"
-        android:numColumns="3" />
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/gallerySwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/galleryRecyclerView"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/gallery_image_item"
+            android:layout_marginBottom="10dp"
+
+            />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 </FrameLayout>

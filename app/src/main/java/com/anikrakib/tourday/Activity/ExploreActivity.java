@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Fragment.OtherUsersGallery;
 import com.anikrakib.tourday.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -123,6 +124,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 showPopup();
                 break;
             case R.id.ecom:
+                startActivity(new Intent(ExploreActivity.this, OthersUserProfile.class));
                 Toast.makeText(getApplicationContext(),"E commerce Comming Soon...",Toast.LENGTH_LONG).show();
                 break;
             case R.id.bdmap:
