@@ -187,8 +187,8 @@ public class MyProfileActivity extends AppCompatActivity{
         profileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
-
+                //startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
+                onBackPressed();
             }
         });
         editNameImageView.setOnClickListener(new View.OnClickListener() {
@@ -308,8 +308,7 @@ public class MyProfileActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
-        MyProfileActivity.this.finish();
+        super.onBackPressed();
     }
 
     public void showSocialMediaPopup(final int id) {

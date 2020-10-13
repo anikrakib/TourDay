@@ -48,12 +48,14 @@ public class OthersUserProfile extends AppCompatActivity {
     TabLayout tabLayoutOtherUsers;
     ViewPager viewPagerOtherUsers;
     ViewOtherUsersProfilePagerAdapter viewOtherUsersProfilePagerAdapter;
-    ImageView facebookLinkImageView,instagramLinkImageView,bangladeshImageView;
+    ImageView facebookLinkImageView,instagramLinkImageView,bangladeshImageView,otherUserProfileBackButton;
     Dialog myDialog;
     TextView userFullName,facebookLink,instagramLink,bio;
     CircleImageView userProfilePic;
     Intent intent;
     public String userName;
+    SharedPreferences userPref ;
+    SharedPreferences.Editor editor ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,11 @@ public class OthersUserProfile extends AppCompatActivity {
         bangladeshImageView = findViewById(R.id.bangladeshImageView);
         facebookLinkImageView = findViewById(R.id.facebookLinkImageView);
         instagramLinkImageView = findViewById(R.id.instagramLinkImageView);
+        otherUserProfileBackButton = findViewById(R.id.otherUserProfileBackButton);
 
         myDialog = new Dialog(this);
+        userPref = OthersUserProfile.this.getSharedPreferences("otherUser",getApplicationContext().MODE_PRIVATE);
+        editor = userPref.edit();
 
         intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -81,9 +86,7 @@ public class OthersUserProfile extends AppCompatActivity {
         userName = extras.getString("userName");
 
 
-        SharedPreferences userPref =getApplicationContext().getSharedPreferences("otherUser",getApplicationContext().MODE_PRIVATE);
-        SharedPreferences.Editor editor = userPref.edit();
-        editor.putString("userName",userName);
+        editor.putString("otherUsersUserName",userName);
         editor.apply();
 
         /////*     initialize view   */////
@@ -106,6 +109,14 @@ public class OthersUserProfile extends AppCompatActivity {
                 showBdMap(userName);
             }
         });
+        otherUserProfileBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.putString("otherUsersUserName","");
+                editor.apply();
+                finish();}
+        });
+
 
         facebookLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +153,13 @@ public class OthersUserProfile extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        editor.putString("otherUsersUserName","");
+        editor.apply();
+        super.onBackPressed();
+    }
+
     public void showUserData(String userName){
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
@@ -162,7 +180,6 @@ public class OthersUserProfile extends AppCompatActivity {
                         instagramLink.setText(profile.getString("insta"));
                         bio.setText(profile.getString("bio"));
                         Picasso.get().load("https://www.tourday.team"+profile.getString("picture")).into(userProfilePic);
-
 
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
@@ -264,10 +281,8 @@ public class OthersUserProfile extends AppCompatActivity {
         }
     }
     public String getInstragamPageURL(Context context) {
-        String fbUsername = facebookLink.getText().toString();
-        String FACEBOOK_URL = "https://www.instagram.com/anik__rakib";
-        String FACEBOOK_PAGE_ID = "YourPageName";
-        Uri uri = Uri.parse("http://instagram.com/_u/anik__rakib");
+        String INSTAGRAM_URL = "https://www.instagram.com/"+instagramLink.getText().toString();
+        Uri uri = Uri.parse("http://instagram.com/_u/"+instagramLink.getText().toString());
         Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
 
         likeIng.setPackage("com.instagram.android");
@@ -276,9 +291,9 @@ public class OthersUserProfile extends AppCompatActivity {
             startActivity(likeIng);
         } catch (ActivityNotFoundException e) {
             startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://instagram.com/anik__rakib")));
+                    Uri.parse(INSTAGRAM_URL)));
         }
-        return FACEBOOK_URL;
+        return INSTAGRAM_URL;
     }
 
     public boolean isFacebookAppInstalled() {

@@ -84,7 +84,7 @@ public class OtherUsersPost extends Fragment {
         myDialog = new Dialog(getContext());
 
         SharedPreferences userPref = getContext().getSharedPreferences("otherUser", Context.MODE_PRIVATE);
-        String userName = userPref.getString("userName","");
+        String userName = userPref.getString("otherUsersUserName","");
 
 
         otherUsersPostRecyclerView.setHasFixedSize(true);

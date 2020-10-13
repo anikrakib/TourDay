@@ -2,7 +2,9 @@ package com.anikrakib.tourday.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -33,7 +35,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
     TextView blogDetailsTitleTextView,blogDetailsDescriptionTextView,blogDetailsDivisionTextView,blogDetailsDateTextView;
     SocialTextView blogAuthorName;
     ImageButton blogDetailsBackButton;
-    public String userName;
+    public String AuthorUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +72,17 @@ public class BlogDetailsActivity extends AppCompatActivity {
         blogAuthorName.setOnLinkClickListener(new SocialTextView.OnLinkClickListener() {
             @Override
             public void onLinkClicked(int i, String s) {
-                Intent intent = new Intent(BlogDetailsActivity.this, OthersUserProfile.class);
-                intent.putExtra("userName",userName);
-                startActivity(intent);
+
+                SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+                String currentUserName = userPref.getString("userName","");
+
+                if(currentUserName.equals(AuthorUserName)){
+                    startActivity(new Intent(BlogDetailsActivity.this, MyProfileActivity.class));
+                } else {
+                    Intent intent = new Intent(BlogDetailsActivity.this, OthersUserProfile.class);
+                    intent.putExtra("userName",AuthorUserName);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -92,7 +102,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
 
                         int id  = jsonObject.getInt("id");
                         String slug  = jsonObject.getString("slug");
-                        userName=slug;
+                        AuthorUserName=slug;
                         String date  = jsonObject.getString("date");
                         String division  = jsonObject.getString("division");
                         String description  = jsonObject.getString("description");

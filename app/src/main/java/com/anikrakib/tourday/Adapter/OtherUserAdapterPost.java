@@ -63,7 +63,17 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         holder.mTextViewLikes.setText(""+likeCount);
         Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
 
-        // check post is self liked or not
+        SharedPreferences userPref = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String userName = userPref.getString("userName","");
+        SharedPreferences userPref2 = mContext.getSharedPreferences("otherUser", Context.MODE_PRIVATE);
+        String userName2 = userPref2.getString("otherUsersUserName","");
+
+
+        if(userName.equals(userName2)){
+            holder.morePostButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.morePostButton.setVisibility(View.GONE);
+        }
 
         holder.blike.setImageResource(
                 currentItem.getSelfLike()?R.drawable.ic_like:R.drawable.ic_unlike
