@@ -37,7 +37,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
-                android:text="@string/logout"
+                android:text="@string/do_you_want_to_delete_this"
                 android:layout_marginBottom="10dp"
                 android:textSize="20sp" />
 

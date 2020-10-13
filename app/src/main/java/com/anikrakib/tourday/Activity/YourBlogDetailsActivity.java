@@ -29,6 +29,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -133,8 +134,7 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
         deleteBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteBlog(yourBlogId);
-                finish();
+                showDeleteBlogPopUp(yourBlogId);
             }
         });
         editBlog.setOnClickListener(new View.OnClickListener() {
@@ -457,4 +457,29 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
         });
     }
 
+    public void showDeleteBlogPopUp(String blogId) {
+        Button yesButton,noButton;
+        myDialog.setContentView(R.layout.custom_delete_blog_pop_up);
+        yesButton = myDialog.findViewById(R.id.yesButton);
+        noButton = myDialog.findViewById(R.id.noButton);
+
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteBlog(blogId);
+                myDialog.dismiss();
+                finish();
+            }
+        });
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.setCancelable(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
+
+    }
 }
