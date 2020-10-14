@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
@@ -64,7 +65,9 @@ public class OtherUsersGallery extends Fragment {
         galleryRecyclerView = view.findViewById(R.id.galleryRecyclerView);
         swipeRefreshLayout = view. findViewById(R.id.gallerySwipeRefreshLayout);
 
-        galleryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        //galleryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        galleryRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

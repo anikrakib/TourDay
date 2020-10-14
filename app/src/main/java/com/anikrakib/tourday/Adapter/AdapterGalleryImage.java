@@ -64,8 +64,7 @@ public class AdapterGalleryImage extends RecyclerView.Adapter<AdapterGalleryImag
         int likeCount = currentItem.getLikeCount();
         postId = currentItem.getmId();
 
-        Picasso.get().load("https://www.tourday.team/"+imageUrl).fit().centerInside().into(holder.galleryImage);
-
+        Picasso.get().load("https://www.tourday.team/"+imageUrl).into(holder.galleryImage);
 
     }
     @Override
