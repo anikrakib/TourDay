@@ -98,7 +98,7 @@ public interface Api {
     @FormUrlEncoded
     @POST("post/like/")
     Call<ResponseBody> selfLike(@Header("Authorization") String authToken,
-                                  @Field("post_id") String postId);
+                                  @Field("post_id") int postId);
 
     @Multipart
     @POST("blog/addpost/")

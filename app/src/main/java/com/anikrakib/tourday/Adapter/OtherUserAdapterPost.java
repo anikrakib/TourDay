@@ -36,7 +36,6 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
     private Context mContext;
     private ArrayList<PostItem> mPostItemList;
     Dialog myDialog;
-    String postId;
 
     public OtherUserAdapterPost(Context context, ArrayList<PostItem> exampleList) {
         mContext = context;
@@ -55,7 +54,7 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         String date = currentItem.getDate();
         String location = currentItem.getLocation();
         int likeCount = currentItem.getLikeCount();
-        postId = currentItem.getmId();
+        String postId = currentItem.getmId();
 //        boolean selfLike = currentItem.getSelfLike();
         holder.txtPost.setLinkText(post);
         holder.txtLocation.setText(location);
@@ -155,7 +154,7 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .selfLike("Token "+token,postId);
+                .selfLike("Token "+token,Integer.parseInt(postId));
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

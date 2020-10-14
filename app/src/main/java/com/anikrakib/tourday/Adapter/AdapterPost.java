@@ -56,7 +56,6 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     private Context mContext;
     private ArrayList<PostItem> mPostItemList;
     Dialog myDialog;
-    String postId;
 
     public AdapterPost(Context context, ArrayList<PostItem> exampleList) {
         mContext = context;
@@ -77,7 +76,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         String date = currentItem.getDate();
         String location = currentItem.getLocation();
         int likeCount = currentItem.getLikeCount();
-        postId = currentItem.getmId();
+        String postId = currentItem.getmId();
 //        boolean selfLike = currentItem.getSelfLike();
         holder.txtPost.setLinkText(post);
         holder.txtLocation.setText(location);
@@ -102,6 +101,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
             );
             selfLike(postId,position,holder,mPostItemList);
         });
+
 
 
         holder.relativeLayoutPostItem.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +176,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .selfLike("Token "+token,postId);
+                .selfLike("Token "+token,Integer.parseInt(postId));
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
