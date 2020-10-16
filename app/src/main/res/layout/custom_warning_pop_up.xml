@@ -6,7 +6,7 @@
     android:layout_width="260dp"
     android:layout_height="260dp"
     android:layout_weight="1"
-    android:background="@drawable/bg_recat"
+    android:background="@drawable/primary_background"
     android:layout_gravity="center"
     android:gravity="center">
 

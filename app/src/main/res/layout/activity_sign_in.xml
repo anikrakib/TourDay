@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".Activity.SignInActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -31,12 +32,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <ImageView
             android:layout_width="165dp"
             android:layout_height="75dp"
             android:layout_gravity="center"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="match_parent"
@@ -44,12 +45,9 @@
             android:gravity="center_horizontal"
             android:text="@string/sign_in"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary_text"
             android:textSize="30sp"
-            android:textStyle="bold">
-
-        </TextView>
-
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,11 +69,12 @@
                     android:hint="@string/hint_username"
                     android:inputType="textNoSuggestions"
                     android:padding="5dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    tools:ignore="Autofill" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,14 +96,14 @@
                     android:hint="@string/hint_password"
                     android:inputType="textPassword"
                     android:padding="5dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    tools:ignore="Autofill" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-
         <include layout="@layout/have_no_account" />
-
 
         <Button
             android:id="@+id/signInButton"
@@ -117,7 +116,6 @@
             android:textAllCaps="false"
             android:textColor="@color/txtWhite"
             android:textStyle="bold" />
-
 
         <LinearLayout
             android:layout_width="230dp"
@@ -132,18 +130,18 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/fb" />
+                android:src="@drawable/fb"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="5dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="5dp"
                 android:text="@string/facebook_Signin"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/color_primary_text"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-
 
         </LinearLayout>
 
@@ -155,29 +153,28 @@
             android:gravity="center"
             android:padding="3dp"
             android:orientation="horizontal"
-            android:background="@drawable/facebook_and_google_background"
-            >
+            android:background="@drawable/facebook_and_google_background">
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/google" />
+                android:src="@drawable/google"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="5dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="5dp"
                 android:text="@string/google_Signin"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/color_primary_text"
                 android:textSize="15sp"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
-
     </LinearLayout>
-
 
     <include
         layout="@layout/gif_view"

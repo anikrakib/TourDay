@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/horizontalScrollView"
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/horizontalScrollView"
     android:layout_width="wrap_content"
     android:layout_height="200dp"
     android:layout_marginEnd="10dp"
-    android:background="@android:color/black"
+    android:background="@color/backgroundColor"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
@@ -19,7 +20,8 @@
             android:background="@android:color/transparent"
             android:maxWidth="20dp"
             android:maxHeight="20dp"
-            android:src="@drawable/ic_bold" />
+            android:src="@drawable/ic_bold"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/action_Italic"
@@ -28,7 +30,8 @@
             android:background="@android:color/transparent"
             android:maxWidth="20dp"
             android:maxHeight="20dp"
-            android:src="@drawable/ic_italic" />
+            android:src="@drawable/ic_italic"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/action_underline"
@@ -37,7 +40,8 @@
             android:background="@android:color/transparent"
             android:maxWidth="20dp"
             android:maxHeight="20dp"
-            android:src="@drawable/ic_underlined" />
+            android:src="@drawable/ic_underlined"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/action_color"
@@ -48,7 +52,8 @@
             android:maxHeight="20dp"
             android:padding="11dp"
             android:scaleType="centerInside"
-            android:src="@drawable/font_color" />
+            android:src="@drawable/font_color"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/action_ordered_numbered"
@@ -57,7 +62,8 @@
             android:background="@android:color/transparent"
             android:maxWidth="20dp"
             android:maxHeight="20dp"
-            android:src="@drawable/ic_numbered" />
+            android:src="@drawable/ic_numbered"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/action_unordered_numbered"
@@ -66,7 +72,8 @@
             android:background="@android:color/transparent"
             android:maxWidth="20dp"
             android:maxHeight="20dp"
-            android:src="@drawable/ic_list_bulleted" />
+            android:src="@drawable/ic_list_bulleted"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/action_subscript"
@@ -76,7 +83,7 @@
             android:maxWidth="20dp"
             android:maxHeight="20dp"
             android:src="@drawable/subscript"
-            />
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/action_superscript"
@@ -85,7 +92,8 @@
             android:background="@android:color/transparent"
             android:maxWidth="20dp"
             android:maxHeight="20dp"
-            android:src="@drawable/superscript" />
+            android:src="@drawable/superscript"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/backgroundColor"
@@ -94,8 +102,10 @@
             android:background="@android:color/transparent"
             android:maxWidth="20dp"
             android:maxHeight="20dp"
-            android:src="@drawable/background_color" />
+            android:src="@drawable/background_color"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
+
 </ScrollView>
 

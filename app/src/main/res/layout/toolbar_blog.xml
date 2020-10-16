@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@android:color/transparent"
+    android:background="@color/backgroundColor"
     android:layout_height="56dp">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
 
         <!--  back  -->
         <ImageButton
             android:id="@+id/backBlogImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
-            android:tint="@color/colorPrimary"
+            android:tint="@color/color_primary_text"
             android:src="@drawable/ic_arrow_back_black_24dp" />
 
-        <!--  Title icon  -->
-        <!--  Title Toolbar  -->
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,23 +26,22 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:orientation="horizontal"
-            >
-
+            tools:ignore="UseCompoundDrawables">
+            <!--  Title icon  -->
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/blog"
-                app:tint="@color/colorPrimary" />
-
+                app:tint="@color/color_primary_text" />
+            <!--  Title Toolbar  -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Blog"
+                android:text="@string/blog"
                 android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18dp" />
+                android:textColor="@color/color_primary_text"
+                android:textSize="18sp" />
         </LinearLayout>
 
-    </RelativeLayout>
 </RelativeLayout>

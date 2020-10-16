@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
@@ -8,16 +9,16 @@
         android:iconTint="@color/colorPrimary"
         android:title="Edit"
         app:showAsAction="ifRoom"
-        />
+        tools:targetApi="o"
+        tools:ignore="HardcodedText" />
+
     <item
         android:id="@+id/delete_post"
         android:icon="@drawable/ic_baseline_delete_24"
         android:iconTint="@color/colorPrimary"
         android:title="Delete"
         app:showAsAction="ifRoom"
-
-        />
-
-
+        tools:targetApi="o"
+        tools:ignore="HardcodedText" />
 
 </menu>

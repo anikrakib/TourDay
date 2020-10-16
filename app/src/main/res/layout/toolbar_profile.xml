@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="56dp">
+    android:layout_height="56dp"
+    android:background="@color/backgroundColor">
 
         <!--  back  -->
         <ImageButton
@@ -16,6 +17,7 @@
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
             android:layout_height="wrap_content"
+            android:tint="@color/colorPrimary"
             tools:ignore="ContentDescription" />
 
         <!--  Title icon  -->
@@ -34,7 +36,7 @@
                 android:layout_height="30dp"
                 android:layout_marginEnd="5dp"
                 android:src="@drawable/profile"
-                app:tint="@color/black"
+                app:tint="@color/color_primary_text"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -42,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/profile"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@color/color_primary_text"
                 android:textSize="18sp" />
 
         </LinearLayout>

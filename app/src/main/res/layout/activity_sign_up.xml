@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/backgroundColor"
     tools:context=".Activity.SignUpActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -16,8 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
-        />
+        app:navigationIcon="@drawable/ic_arrow_back_black_24dp" />
 
     <LinearLayout
         android:id="@+id/signUpBody"
@@ -33,12 +33,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <ImageView
             android:layout_width="165dp"
             android:layout_height="75dp"
             android:layout_gravity="center"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="match_parent"
@@ -48,10 +48,7 @@
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
-            android:textStyle="bold">
-
-        </TextView>
-
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,10 +67,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:hint="Username"
+                    android:hint="@string/hint_username"
                     android:inputType="textNoSuggestions"
                     android:padding="5dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    tools:ignore="Autofill" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -98,7 +97,9 @@
                     android:hint="@string/hint_email"
                     android:inputType="textEmailAddress"
                     android:padding="5dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    tools:ignore="Autofill" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -123,15 +124,14 @@
                     android:hint="@string/hint_password"
                     android:inputType="textPassword"
                     android:padding="5dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    tools:ignore="Autofill" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-        <!--        <include layout="@layout/already_have_account" />-->
-
         <include layout="@layout/already_have_account" />
-
 
         <Button
             android:id="@+id/signUpButton"
@@ -144,7 +144,6 @@
             android:textAllCaps="false"
             android:textColor="@color/txtWhite"
             android:textStyle="bold" />
-
 
         <LinearLayout
             android:layout_width="230dp"
@@ -159,18 +158,18 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/fb" />
+                android:src="@drawable/fb"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="5dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="5dp"
                 android:text="@string/facebook_Signup"
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-
 
         </LinearLayout>
 
@@ -182,40 +181,27 @@
             android:gravity="center"
             android:padding="3dp"
             android:orientation="horizontal"
-            android:background="@drawable/facebook_and_google_background"
-            >
+            android:background="@drawable/facebook_and_google_background">
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/google" />
+                android:src="@drawable/google"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="5dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="5dp"
                 android:text="@string/google_Signup"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
-
     </LinearLayout>
-
-
-    <!--    <include-->
-    <!--        layout="@layout/gif_view"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/signUpBody"-->
-    <!--        app:layout_constraintEnd_toEndOf="@+id/signUpBody"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/signUpBody"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

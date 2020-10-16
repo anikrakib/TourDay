@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".Activity.BDMapViewActivity">
-
 
     <include
         android:id="@+id/id_toolbarBDMap"
         layout="@layout/toolbar_bd_map_layout"
         app:layout_collapseMode="pin" />
+
     <LinearLayout
         android:gravity="center"
         android:id="@+id/linearLayout"
@@ -22,22 +23,22 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="#940808"
-            />
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="#940808" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:paddingLeft="20dp"
-            android:text="Visited Area"
-            android:textColor="@color/colorPrimary"
+            android:paddingStart="15dp"
+            android:text="@string/visited_area"
+            android:textColor="@color/color_primary_text"
             android:textSize="20dp"
             android:textStyle="bold"
-            tools:ignore="SpUsage" />
+            tools:ignore="RtlSymmetry,SpUsage" />
+
     </LinearLayout>
 
     <WebView

@@ -4,18 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fafafa"
-    android:orientation="vertical"
-    >
+    android:background="@color/backgroundColor"
+    android:orientation="vertical">
 
     <com.github.florent37.shapeofview.shapes.DiagonalView
         android:id="@+id/diagonalLayoutEventDetailImage"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:elevation="5dip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,8 +22,7 @@
         <com.flaviofaria.kenburnsview.KenBurnsView
             android:id="@+id/eventDetailsImage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/post1" />
+            android:layout_height="match_parent" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -48,7 +44,7 @@
                 android:adjustViewBounds="true"
                 android:background="@drawable/event_details_title_background"
                 android:gravity="center"
-                android:text="Saintmartin Tour"
+                android:text="@string/google_io_2020"
                 android:textColor="@color/colorPrimary"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -71,7 +67,7 @@
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
                     app:tint="@color/colorPrimary"
-                    tools:ignore="RtlHardcoded" />
+                    tools:ignore="ContentDescription,RtlHardcoded" />
 
                 <TextView
                     android:id="@+id/eventDetailsLocationTextView"
@@ -81,10 +77,10 @@
                     android:text="Saintmartin,CoxBazar"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
-
 
         </FrameLayout>
 
@@ -98,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:padding="5dp"
-        android:background="@drawable/bg_recat"
+        android:background="@drawable/primary_background"
         app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage">
 
         <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
@@ -116,8 +112,8 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="bottom"
-                >
+                android:gravity="bottom">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -126,7 +122,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimary"
                     android:gravity="center"
-                    />
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/eventDetailsTotalGoingTextView"
@@ -136,8 +132,11 @@
                     android:textStyle="bold"
                     android:gravity="center"
                     android:textColor="@color/txtWhite"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/colorPrimary"
+                    tools:ignore="HardcodedText" />
+
             </LinearLayout>
+
         </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
 
         <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
@@ -165,7 +164,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimary"
                     android:gravity="center"
-                    />
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/eventDetailsTotalPendingTextView"
@@ -175,30 +174,32 @@
                     android:textStyle="bold"
                     android:gravity="center"
                     android:textColor="@color/txtWhite"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/colorPrimary"
+                    tools:ignore="HardcodedText" />
+
             </LinearLayout>
+
         </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventGoingRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_recat"
+        android:background="@drawable/primary_background"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
-
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/eventLikeFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/diagonalLayoutEventDetailImage"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginEnd="15dp"
         android:src="@drawable/event_edit"
         android:tint="@color/white"
@@ -229,8 +230,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif"
-                android:text="Event Details"
-                android:textColor="#3A3A3A"
+                android:text="@string/event_details"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -241,7 +242,7 @@
                 android:layout_marginBottom="18dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/bio"
-                android:textColor="#979696"
+                android:textColor="@color/color_primary_text"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -255,7 +256,7 @@
         android:layout_marginStart="20dp"
         android:visibility="gone"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/bg_recat"
+        android:background="@drawable/primary_background"
         app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -301,7 +302,9 @@
                     android:text="Pending Payment"
                     android:textColor="#0B0B0B"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+
             </LinearLayout>
 
 
@@ -330,16 +333,20 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:background="@null"
-                        android:paddingLeft="3dp"
+                        android:paddingStart="3dp"
                         android:paddingTop="1dp"
                         android:text="↑↓"
                         android:textColor="@color/txtWhite"
                         android:textSize="25sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
 
                 </RelativeLayout>
+
             </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.github.florent37.shapeofview.shapes.CutCornerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

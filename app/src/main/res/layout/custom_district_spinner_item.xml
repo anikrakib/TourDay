@@ -15,6 +15,6 @@
         android:layout_marginRight="10dp"
         android:textColor="@color/color_primary_text"
         android:textSize="15sp"
-        tools:text="Chapainawabganj" />
+        tools:text="" />
 
 </RelativeLayout>

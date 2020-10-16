@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     android:paddingBottom="10dp"
-    android:id="@+id/relativeLayoutPostItem">
+    android:id="@+id/relativeLayoutPostItem"
+    android:background="@color/backgroundColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -51,10 +52,12 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:layout_marginStart="2dp"
-                    android:text="anik__rakib"
+                    android:layout_marginStart="3dp"
+                    android:text=""
+                    android:textColor="@color/color_primary_text"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:mentionColor="@color/flamingo.900"/>
 
             </LinearLayout>
 
@@ -62,13 +65,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/ic_baseline_location_on_24" />
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:tint="@color/color_primary_text"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/postLocation"
@@ -76,13 +82,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:text="Dhaka"
+                    android:text=""
+                    android:textColor="@color/color_primary_text"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
         </LinearLayout>
-
 
         <ImageButton
             android:id="@+id/moreButtonPost"
@@ -91,10 +97,12 @@
             android:layout_marginEnd="16dp"
             android:background="@null"
             android:gravity="left"
+            android:tint="@color/colorPrimary"
             android:src="@drawable/ic_baseline_more_vert_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,RtlHardcoded" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -106,9 +114,9 @@
         android:layout_height="300dp"
         android:layout_below="@+id/constraintLayout"
         android:scaleType="centerCrop"
-        android:src="@drawable/post1" />
+        tools:ignore="ContentDescription" />
 
-
+    <!-- post Description -->
     <com.tylersuehr.socialtextview.SocialTextView
         android:id="@+id/postDescriptionTextView"
         android:layout_width="match_parent"
@@ -134,7 +142,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/postDescriptionTextView"
-        android:text="29/07/2020"
+        android:text=""
+        android:textColor="@color/color_primary_text"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="2dp" />
 
@@ -142,9 +151,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/postDescriptionTextView"
-        android:layout_marginRight="16dp"
-        android:layout_alignParentRight="true"
-        >
+        android:layout_marginEnd="16dp"
+        android:layout_alignParentEnd="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -160,7 +168,8 @@
                 android:src="@drawable/ic_unlike"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
             <!-- Like Count Text -->
             <TextView
@@ -169,16 +178,16 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_toEndOf="@id/id_like_ImageButton"
-                android:layout_toRightOf="@+id/id_like_ImageButton"
                 android:textSize="10sp"
+                android:textColor="@color/color_primary_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/id_like_ImageButton"
-                tools:text="102" />
+                tools:text="102"
+                tools:ignore="SmallSp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
-
-
 
 </RelativeLayout>

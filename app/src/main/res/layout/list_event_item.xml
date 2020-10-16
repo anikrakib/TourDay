@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:id="@+id/linearLayOutEventItem"
     android:gravity="center"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundColor">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="225dp"
         android:layout_margin="5dp"
-        android:elevation="10dp"
+        app:cardElevation="10dp"
         app:cardCornerRadius="18dp"
         tools:layout_editor_absoluteX="88dp"
         tools:layout_editor_absoluteY="501dp">
@@ -21,7 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_recat">
+            android:background="@drawable/primary_background">
 
             <!-- Title Text -->
             <TextView
@@ -32,7 +32,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="Google IO 2020 "
+                android:text=""
                 android:textColor="#747e87"
                 android:textSize="20sp"
                 android:gravity="center"
@@ -41,9 +41,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/eventImage"
                 app:layout_constraintTop_toTopOf="parent" />
-            <!-- post Image -->
-
-            <!-- body Text -->
 
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/eventImage"
@@ -56,8 +53,7 @@
                 android:src="@drawable/event_pic2"
                 app:riv_corner_radius="8dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.codesgood.views.JustifiedTextView
                 android:id="@+id/eventDescription"
@@ -77,8 +73,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/listItemEventLocationLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/eventImage"
-                app:layout_constraintTop_toBottomOf="@+id/eventPrice" />
-
+                app:layout_constraintTop_toBottomOf="@+id/eventPrice"
+                tools:ignore="SmallSp" />
 
             <ImageButton
                 android:id="@+id/eventInterestedLikeImage"
@@ -89,8 +85,8 @@
                 android:src="@drawable/ic_like"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventDescription" />
-
+                app:layout_constraintTop_toBottomOf="@+id/eventDescription"
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
                 android:id="@+id/listItemEventLocationLayout"
@@ -101,12 +97,12 @@
                 android:layout_marginTop="2dp"
                 android:background="@android:color/transparent"
                 android:gravity="left"
-                android:onClick="chooseTime"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/eventInterestedLikeImage"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/eventImage">
+                app:layout_constraintTop_toBottomOf="@+id/eventImage"
+                tools:ignore="RtlHardcoded">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -114,14 +110,14 @@
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
                     app:tint="@color/black"
-                    tools:ignore="RtlHardcoded" />
+                    tools:ignore="ContentDescription,RtlHardcoded" />
 
                 <TextView
                     android:id="@+id/eventLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="14/D,Nurjahan Road , Mohammadpur"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -140,14 +136,15 @@
                 android:paddingRight="3dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/eventImage"
-                app:layout_constraintTop_toBottomOf="@+id/titleEvent">
+                app:layout_constraintTop_toBottomOf="@+id/titleEvent"
+                tools:ignore="RtlHardcoded">
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:src="@drawable/ic_date_range_black_24dp"
-                    app:tint="@color/black" />
-
+                    app:tint="@color/black"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/eventStartDate"
@@ -156,10 +153,11 @@
                     android:background="@null"
                     android:paddingLeft="3dp"
                     android:paddingTop="1dp"
-                    android:text="29/07/2020"
+                    android:text=""
                     android:textColor="#FF0000"
                     android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="RtlSymmetry,SmallSp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,7 +167,8 @@
                     android:text="To"
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/eventEndDate"
@@ -178,10 +177,11 @@
                     android:background="@null"
                     android:padding="1dp"
                     android:paddingRight="3dp"
-                    android:text="29/07/2020"
+                    android:text=""
                     android:textColor="#FF0000"
                     android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="RtlSymmetry,SmallSp" />
 
             </LinearLayout>
 
@@ -190,7 +190,7 @@
                 android:layout_width="150dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/bg_recat"
+                android:background="@drawable/primary_background"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="3dp"
@@ -203,8 +203,8 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:src="@drawable/taka"
-                    app:tint="@color/black" />
-
+                    app:tint="@color/black"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/eventStartTime"
@@ -213,15 +213,15 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@null"
-                    android:paddingLeft="3dp"
+                    android:paddingStart="3dp"
                     android:paddingTop="1dp"
                     android:text="1000"
                     android:textColor="#0B0B0B"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
 
             </LinearLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

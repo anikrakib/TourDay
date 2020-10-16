@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="56dp">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_height="56dp"
+    android:background="@color/backgroundColor">
 
         <!--  back  -->
         <ImageButton
             android:id="@+id/bdMapBackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_arrow_back_black_24dp" />
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:tint="@color/color_primary_text"
+            tools:ignore="ContentDescription" />
 
-        <!--  Title icon  -->
-        <!--  Title Toolbar  -->
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,25 +27,23 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:orientation="horizontal"
-            >
-
+            tools:ignore="UseCompoundDrawables">
+            <!--  Title icon Toolbar -->
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/bangladesh" />
-
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/bangladesh"
+                tools:ignore="ContentDescription" />
+            <!--  Title Toolbar  -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="BD Map"
+                android:text="@string/bd_map"
                 android:textStyle="bold"
-                android:textColor="@color/color_third_text"
-                android:textSize="18dp" />
-
+                android:textColor="@color/color_primary_text"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
-
-    </RelativeLayout>
 </RelativeLayout>

@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profileLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/backgroundColor"
     android:orientation="vertical"
-    tools:context=".Activity.MyProfileActivity"
+    tools:context=".Activity.Profile.MyProfileActivity"
     tools:ignore="HardcodedText">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/backgroundColor">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="@color/backgroundColor"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <LinearLayout
@@ -36,15 +37,14 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:context=".Activity.BlogActivity">
+                    android:background="@color/backgroundColor">
 
                     <LinearLayout
                         android:id="@+id/linearLayout8"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@android:color/transparent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -52,7 +52,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Division"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/color_primary_text"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -64,6 +64,7 @@
                         android:layout_height="150dp"
                         android:paddingStart="90dp"
                         android:paddingEnd="90dp"
+                        android:background="@color/backgroundColor"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
@@ -72,6 +73,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
@@ -79,6 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginBottom="10dp"
+            android:background="@color/backgroundColor"
             app:tabBackground="@android:color/transparent"
             app:tabIndicatorColor="#ff9e7f"
             app:tabMode="fixed"
@@ -94,6 +97,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="0dp"
+        android:background="@color/backgroundColor"
         android:layout_marginRight="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
@@ -102,11 +106,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:background="@color/colorPrimary"
         android:layout_margin="16dp"
         android:src="@drawable/ic_baseline_create_24"
-        android:tint="@color/white"
-        />
-
+        android:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

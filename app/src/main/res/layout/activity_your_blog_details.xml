@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fafafa"
-    android:orientation="vertical"
-    >
+    android:background="@color/backgroundColor"
+    android:orientation="vertical">
+
     <com.github.florent37.shapeofview.shapes.DiagonalView
         android:id="@+id/diagonalLayoutYourBlogDetailImage"
         android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
                     app:tint="@color/white"
-                    tools:ignore="RtlHardcoded" />
+                    tools:ignore="ContentDescription,RtlHardcoded" />
 
                 <TextView
                     android:id="@+id/yourBlogDetailsLocationTextView"
@@ -89,14 +89,15 @@
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
                     app:layout_constraintBottom_toTopOf="@+id/blogTitle"
-                    app:layout_constraintStart_toEndOf="@+id/listItemEventLocationLayout">
+                    app:layout_constraintStart_toEndOf="@+id/listItemEventLocationLayout"
+                    tools:ignore="RtlHardcoded">
 
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:src="@drawable/ic_date_range_black_24dp"
                         app:tint="@color/black"
-                        android:contentDescription="Your Blog Date Image Icon" />
+                        tools:ignore="ContentDescription" />
 
 
                     <TextView
@@ -108,7 +109,8 @@
                         android:paddingTop="1dp"
                         android:textColor="#FF0000"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="RtlSymmetry" />
 
                 </LinearLayout>
 
@@ -125,6 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/diagonalLayoutYourBlogDetailImage"
         android:layout_marginEnd="15dp"
+        android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_baseline_delete_24"
         android:tint="@color/white"
         app:elevation="15dp"
@@ -139,6 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/diagonalLayoutYourBlogDetailImage"
         android:layout_marginEnd="15dp"
+        android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_baseline_edit_24"
         android:tint="@color/white"
         app:elevation="15dp"
@@ -146,7 +150,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/diagonalLayoutYourBlogDetailImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutYourBlogDetailImage" />
-
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -177,6 +180,5 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

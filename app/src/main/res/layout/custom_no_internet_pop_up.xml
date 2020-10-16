@@ -9,8 +9,8 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/loadingGif"
-        android:layout_width="309dp"
-        android:layout_height="242dp"
+        android:layout_width="280dp"
+        android:layout_height="230dp"
         android:background="@android:color/transparent"
         android:src="@drawable/no_internet" />
 

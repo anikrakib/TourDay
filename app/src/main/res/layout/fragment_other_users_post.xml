@@ -5,23 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragment.Post">
+    tools:context=".Fragment.Profile.Post">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayoutOthersUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
-        >
+        android:layout_marginBottom="20dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/otherUsersPostRecyclerView"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             tools:listitem="@layout/list_post_item"
-            android:layout_marginBottom="10dp"
-
-            />
+            android:layout_marginBottom="10dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

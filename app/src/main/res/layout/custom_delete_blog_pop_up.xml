@@ -9,17 +9,14 @@
     android:padding="15dp"
     android:layout_gravity="center">
 
-
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         app:cardElevation="2dp"
         app:cardCornerRadius="10dp"
-        android:background="@drawable/bg_recat"
-        app:cardUseCompatPadding="true"
-        >
+        android:background="@drawable/primary_background"
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/color_primary_text"
                 android:textStyle="bold"
                 android:text="@string/do_you_want_to_delete_this"
                 android:layout_marginBottom="10dp"
@@ -56,7 +53,8 @@
                     android:background="@drawable/popup_button_background"
                     android:text="@string/yes"
                     android:textColor="@color/dark_green"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    card_view:ignore="ButtonStyle" />
                 <Button
                     android:id="@+id/noButton"
                     android:text="@string/no"
@@ -65,19 +63,13 @@
                     android:textColor="@color/dark_red"
                     android:background="@drawable/popup_button_background"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"/>
+                    android:layout_height="35dp"
+                    card_view:ignore="ButtonStyle" />
+
             </LinearLayout>
 
-
-
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
-
-
-
-
-
-
-
 
 </LinearLayout>

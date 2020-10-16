@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:contentDescription="For more ui/ux visit www.materialuiux.com"
     android:orientation="vertical"
+    android:background="@color/backgroundColor"
     tools:context=".Activity.LocationActivity"
     tools:ignore="HardcodedText">
 
@@ -17,7 +18,6 @@
         app:layout_collapseMode="pin" />
 
     <!--  Tittle -->
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,11 +25,9 @@
         android:textColor="@color/color_primary_text"
         android:textAlignment="center"
         android:textSize="38sp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
     <!--  Edit Location  -->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +43,9 @@
             android:src="@drawable/ic_baseline_edit_location_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/color_secondary_text"
+            tools:ignore="ContentDescription" />
 
         <EditText
             android:id="@+id/newLocationEditText"
@@ -62,7 +62,7 @@
             app:layout_constraintEnd_toStartOf="@+id/clickOkNewLocationImageButton"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            tools:ignore="Autofill,ContentDescription,TextFields" />
 
         <ImageButton
             android:id="@+id/clickOkNewLocationImageButton"
@@ -75,7 +75,8 @@
             android:tint="@color/color_secondary_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,16 +101,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Current location"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary_text"
             android:textStyle="bold"
             android:textSize="12sp" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -118,7 +117,9 @@
                 android:src="@drawable/ic_baseline_location_on_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/color_primary_text"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/currentLocation"
@@ -142,7 +143,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/color_secondary_text" />
+                app:tint="@color/color_secondary_text"
+                tools:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -160,23 +162,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Recent location"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary_text"
             android:textStyle="bold"
             android:textSize="12sp" />
-
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            >
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_location_on_24"
                 android:layout_marginTop="14dp"
-                />
+                app:tint="@color/color_primary_text"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/recentLocation"
@@ -184,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text=""
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:textColor="@color/color_primary_text"
                 android:textSize="16sp" />
 

@@ -29,7 +29,37 @@
     <string name="enter_blog_title">Enter Blog Title</string>
     <string name="todo">TODO</string>
     <string name="choose_division">Choose Division</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="do_you_want_to_delete_this">Do you Want to delete This</string>
+    <string name="social_text">\@tylersuehr7, you\'re the coolest! #AndriodDev\n\nEmail: tylersuehr@gmail.com\nWebsite: http://www.suehrsolutions.net</string>
+    <string name="visited_area">Visited Area</string>
+    <string name="none">None</string>
+    <string name="username">\@username</string>
+    <string name="event_details">Event Details</string>
+    <string name="google_io_2020">Google IO 2020</string>
+    <string name="join_now">Join Now</string>
+    <string name="home">Home</string>
+    <string name="blog">Blog</string>
+    <string name="event">Event</string>
+    <string name="e_commerce">E-Commerce</string>
+    <string name="bd_map">BD Map</string>
     <string name="profile">Profile</string>
+    <string name="log_out">Log Out</string>
+    <string name="edit_location">Edit Location</string>
+    <string name="my_profile">My Profile</string>
+    <string name="have_no_account">Have no Account!!</string>
+    <string name="already_have_an_account">Already Have an Account?</string>
+    <string name="blog_details">Blog Details</string>
+    <string name="create_blog">Create Blog</string>
+    <string name="enter_event_title">Enter Event Title</string>
+    <string name="enter_event_description">Enter Event Description</string>
+    <string name="event_date">Event Date</string>
+    <string name="transaction_nb">* You can Send the transaction number only once.\nPlease Check Carefully</string>
+    <string name="settings">Settings</string>
+    <string name="enable_dark_color">Enable Dark Color</string>
+    <string name="dark_mood">Dark Mood</string>
+    <string name="upload">Upload</string>
 
     <string-array name="bdDivision">
         <item>Barishal</item>
@@ -177,11 +207,5 @@
         <item>46</item>
         <item>57</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="do_you_want_to_delete_this">Do you Want to delete This</string>
-    <string name="social_text">\@tylersuehr7, you\'re the coolest! #AndriodDev\n\nEmail: tylersuehr@gmail.com\nWebsite: http://www.suehrsolutions.net</string>
 
 </resources>

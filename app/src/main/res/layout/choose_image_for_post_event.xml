@@ -4,29 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@android:color/transparent">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:rowCount="1"
-            android:columnCount="1"
-            android:layout_margin="3dp"
-            android:alignmentMode="alignMargins"
-            android:layout_gravity="center"
-            android:columnOrderPreserved="false">
-
             <androidx.cardview.widget.CardView
-                android:layout_width="96dp"
-                android:layout_height="108dp"
-                android:layout_margin="10dp"
+                android:layout_width="130dp"
+                android:layout_height="120dp"
                 app:cardBackgroundColor="@android:color/darker_gray"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="5dp">
@@ -36,17 +25,17 @@
                     android:layout_height="match_parent"
                     android:gravity="center">
 
-                    <ImageView
+                    <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/postImageView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="5dp"
-                        android:src="@drawable/ic_baseline_add_photo_alternate_24" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                        tools:ignore="ContentDescription" />
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-
-        </GridLayout>
 
     </LinearLayout>
 

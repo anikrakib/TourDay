@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragment.EditProfile">
+    tools:context=".Fragment.Profile.EditProfile">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp">
 
         <!-- body  -->
         <LinearLayout
@@ -30,15 +31,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bio"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:ignore="HardcodedText" />
 
             <com.uncopt.android.widget.text.justify.JustifiedTextView
-                android:background="@drawable/bg_recat"
+                android:background="@drawable/primary_background"
                 android:id="@+id/aboutBio"
-                android:layout_below="@+id/id_titleDescription_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_secondary_text"
@@ -54,11 +55,10 @@
                 android:id="@+id/editBioLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <com.uncopt.android.widget.text.justify.JustifiedEditText
-                    android:background="@drawable/bg_recat_edit"
+                    android:background="@drawable/primary_background_edit"
                     android:id="@+id/aboutBioEdit"
                     android:layout_below="@+id/id_titleDescription_TextView"
                     android:layout_width="match_parent"
@@ -68,9 +68,7 @@
                     android:layout_margin="5dp"
                     android:padding="7dp"
                     android:minHeight="50dp"
-                    android:textSize="16sp"
-                    />
-
+                    android:textSize="16sp" />
 
                 <ImageButton
                     android:id="@+id/clickOkBioImageButton"
@@ -79,8 +77,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
-                    android:tint="@color/color_secondary_text"
-                    />
+                    android:tint="@color/color_secondary_text" />
 
             </LinearLayout>
 
@@ -93,8 +90,7 @@
             android:layout_height="62dp"
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/id_UsernameTitle_TextView"
@@ -103,8 +99,7 @@
                 android:text="Username"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
 
             <TextView
@@ -115,10 +110,7 @@
                 android:textColor="@color/color_secondary_text"
                 android:textSize="16sp" />
 
-
-
         </LinearLayout>
-
 
         <!--  Email   -->
         <LinearLayout
@@ -126,8 +118,7 @@
             android:layout_height="62dp"
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/id_EmailTitle_TextView"
@@ -136,8 +127,7 @@
                 android:text="Email"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -152,8 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/editEmailEditText"
@@ -171,12 +160,11 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
-                    android:tint="@color/color_secondary_text"
-                    />
+                    android:tint="@color/color_secondary_text" />
 
             </LinearLayout>
-        </LinearLayout>
 
+        </LinearLayout>
 
         <!--  Location   -->
         <LinearLayout
@@ -184,8 +172,7 @@
             android:layout_height="62dp"
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/id_LocationTitle_TextView"
@@ -194,9 +181,7 @@
                 android:text="Location"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="12sp"
-                />
-
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"

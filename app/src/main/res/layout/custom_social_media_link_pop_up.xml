@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="320dp"
     android:layout_height="165dp"
     android:background="@drawable/dialog_background"
     android:padding="25dp"
     android:layout_gravity="center">
+
     <ImageView
         android:id="@+id/txtclose"
         android:layout_width="30dp"
@@ -14,9 +16,8 @@
         android:textStyle="bold"
         android:layout_gravity="end"
         android:gravity="center"
-        android:background="@drawable/ic_cancel_black_24dp"/>
-
-
+        android:background="@drawable/ic_cancel_black_24dp"
+        tools:ignore="ContentDescription" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -35,40 +36,14 @@
                 android:id="@+id/socialMediaLinkEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint=""
                 android:background="@color/white"
-                android:textSize="20dp" />
-
+                android:textSize="20sp"
+                tools:ignore="Autofill,LabelFor,TextFields" />
 
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
-
-<!--    <com.marozzi.roundbutton.RoundButton-->
-<!--        android:id="@+id/uploadButton"-->
-<!--        android:layout_width="88dp"-->
-<!--        android:layout_height="35dp"-->
-<!--        android:gravity="center"-->
-<!--        android:enabled="false"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:padding="0dp"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:text="Upload"-->
-<!--        app:rb_animation_alpha="false"-->
-<!--        app:rb_animation_corner_radius="6dp"-->
-<!--        app:rb_animation_duration="500"-->
-<!--        app:rb_animation_progress_color="@color/colorAccent"-->
-<!--        app:rb_animation_progress_padding="8dp"-->
-<!--        app:rb_animation_progress_width="2dp"-->
-<!--        app:rb_background_color="@android:color/transparent"-->
-<!--        app:rb_background_color_pressed="@color/colorPrimary"-->
-<!--        app:rb_corner_color="@color/colorPrimary"-->
-<!--        app:rb_corner_color_pressed="@color/colorPrimary"-->
-<!--        app:rb_corner_radius="6dp"-->
-<!--        app:rb_corner_width="1dp"-->
-<!--        app:rb_text_color="@color/colorPrimary"-->
-<!--        app:rb_text_color_pressed="@android:color/white" />-->
 
     <Button
         android:id="@+id/uploadButton"
@@ -78,13 +53,9 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:background="@drawable/disable_button_background"
-        android:text="Upload"
+        android:text="@string/upload"
         android:textAllCaps="false"
         android:textColor="@color/txtWhite"
         android:textStyle="bold" />
-
-
-
-
 
 </LinearLayout>

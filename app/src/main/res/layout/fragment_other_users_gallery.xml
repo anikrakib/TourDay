@@ -3,25 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.OtherUsersGallery">
+    android:background="@color/backgroundColor"
+    android:layout_marginRight="16dp"
+    android:layout_marginLeft="16dp"
+    tools:context=".Fragment.Profile.OtherUsersGallery">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/gallerySwipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
-        >
+        android:layout_marginBottom="20dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/galleryRecyclerView"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             tools:listitem="@layout/gallery_image_item"
-            android:layout_marginBottom="10dp"
-
-            />
+            android:layout_marginBottom="10dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 </FrameLayout>

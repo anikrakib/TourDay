@@ -5,14 +5,15 @@
     android:layout_width="match_parent"
     android:id="@+id/blogItemLayout"
     android:gravity="center"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundColor">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewBlog"
         android:layout_width="match_parent"
         android:layout_height="225dp"
         android:layout_margin="5dp"
-        android:elevation="10dp"
+        app:cardElevation="10dp"
         app:cardCornerRadius="18dp"
         tools:layout_editor_absoluteX="88dp"
         tools:layout_editor_absoluteY="501dp">
@@ -26,8 +27,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="fitXY"
-                android:background="@drawable/bg_recat"
-                android:src="@drawable/chattogram"
+                android:background="@drawable/primary_background"
                 app:riv_corner_radius="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -44,14 +44,15 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="left"
-                android:text="Google IO 2020 "
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:maxLines="2"
                 app:layout_constraintBottom_toBottomOf="@+id/blogImage"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="RtlHardcoded" />
 
             <LinearLayout
                 android:id="@+id/listItemEventLocationLayout"
@@ -61,10 +62,10 @@
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/horizontal_calender_background"
                 android:gravity="left"
-                android:onClick="chooseTime"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/blogTitle"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="RtlHardcoded">
 
                 <ImageView
                     android:layout_width="15dp"
@@ -72,7 +73,7 @@
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
                     app:tint="@color/black"
-                    tools:ignore="RtlHardcoded" />
+                    tools:ignore="ContentDescription,RtlHardcoded" />
 
                 <TextView
                     android:id="@+id/blogLocation"
@@ -80,10 +81,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingEnd="5dp"
-                    android:text="Dhaka"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="RtlSymmetry" />
 
             </LinearLayout>
 
@@ -100,13 +102,15 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 app:layout_constraintBottom_toTopOf="@+id/blogTitle"
-                app:layout_constraintStart_toEndOf="@+id/listItemEventLocationLayout">
+                app:layout_constraintStart_toEndOf="@+id/listItemEventLocationLayout"
+                tools:ignore="RtlHardcoded">
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:src="@drawable/ic_date_range_black_24dp"
-                    app:tint="@color/black" />
+                    app:tint="@color/black"
+                    tools:ignore="ContentDescription" />
 
 
                 <TextView
@@ -116,10 +120,11 @@
                     android:background="@null"
                     android:paddingLeft="3dp"
                     android:paddingTop="1dp"
-                    android:text="29/07/2020"
+                    android:text=""
                     android:textColor="#FF0000"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="RtlSymmetry" />
 
             </LinearLayout>
 
@@ -134,7 +139,8 @@
                 android:src="@drawable/ic_baseline_more_vert_24"
                 android:tint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription,RtlHardcoded" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
