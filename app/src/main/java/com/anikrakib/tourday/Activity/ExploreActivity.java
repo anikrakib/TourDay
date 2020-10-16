@@ -22,7 +22,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.anikrakib.tourday.Fragment.OtherUsersGallery;
+import com.anikrakib.tourday.Activity.Blog.BlogActivity;
+import com.anikrakib.tourday.Activity.Event.EventActivity;
+import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -34,8 +36,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     ActionBarDrawerToggle toggle;
     Dialog myDialog;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,20 +43,16 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         myDialog = new Dialog(this);
 
 
-
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.nav_view);
         toolbarMenu = findViewById(R.id.toolbar);
 
         setTitle("");
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
-
         setSupportActionBar(toolbarMenu);
-
 
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         boolean isLoggedIn = userPref.getBoolean("isLoggedIn",false);
@@ -98,7 +94,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
 
-
     }
 
 
@@ -124,7 +119,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 showPopup();
                 break;
             case R.id.ecom:
-                startActivity(new Intent(ExploreActivity.this, OthersUserProfile.class));
                 Toast.makeText(getApplicationContext(),"E commerce Comming Soon...",Toast.LENGTH_LONG).show();
                 break;
             case R.id.bdmap:

@@ -1,10 +1,9 @@
 package com.anikrakib.tourday.WebService;
 
 
-import com.anikrakib.tourday.Models.BlogDetailsResponse;
-import com.anikrakib.tourday.Models.DeleteBlogResponse;
-import com.anikrakib.tourday.Models.Token;
-import com.anikrakib.tourday.Models.UpdateBlogRequest;
+import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
+import com.anikrakib.tourday.Models.Profile.Token;
+import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
 
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -24,7 +22,6 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface Api {
 
