@@ -4,15 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/editPost"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:iconTint="@color/colorPrimary"
-        android:title="Edit"
-        app:showAsAction="ifRoom"
-        tools:targetApi="o"
-        tools:ignore="HardcodedText" />
-
-    <item
         android:id="@+id/delete_post"
         android:icon="@drawable/ic_baseline_delete_24"
         android:iconTint="@color/colorPrimary"

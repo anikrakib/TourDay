@@ -99,20 +99,14 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
 
         holder.morePostButton.setOnClickListener(v->{
             PopupMenu popupMenu = new PopupMenu(mContext,holder.morePostButton);
-            popupMenu.inflate(R.menu.edit_delete_post_menu);
+            popupMenu.inflate(R.menu.delete_post_or_blog_menu);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
 
-                    switch (item.getItemId()){
-                        case R.id.editPost: {
-
-                            return true;
-                        }
-                        case R.id.delete_post: {
-                            deletePost(currentItem.getmId(),position);
-                            return true;
-                        }
+                    if (item.getItemId() == R.id.delete_post) {
+                        deletePost(currentItem.getmId(), position);
+                        return true;
                     }
 
                     return false;
@@ -125,7 +119,8 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     public int getItemCount() {
         return mPostItemList.size();
     }
-    public class ExampleViewHolder extends RecyclerView.ViewHolder{
+
+    public static class ExampleViewHolder extends RecyclerView.ViewHolder{
         public ImageView postImage,morePostButton,blike;
         public TextView txtLocation,txtDate;
         public TextView mTextViewLikes;
@@ -233,7 +228,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
 
 
         postDetailDateView.setText(item.getDate());
-        Picasso.get().load("https://tourday.team/"+item.getImageUrl()).fit().centerInside().into(postDetailImage);
+        Picasso.get().load("https://www.tourday.team/"+item.getImageUrl()).fit().centerInside().into(postDetailImage);
         postDetailDescriptionTextView.setLinkText(item.getPost());
         postDetailsLocation.setText(item.getLocation());
         postDetailsLikeCount.setText(String.valueOf(item.getLikeCount()));

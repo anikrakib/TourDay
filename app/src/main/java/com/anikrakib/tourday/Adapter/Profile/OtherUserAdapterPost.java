@@ -96,20 +96,14 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
 
         holder.morePostButton.setOnClickListener(v->{
             PopupMenu popupMenu = new PopupMenu(mContext,holder.morePostButton);
-            popupMenu.inflate(R.menu.edit_delete_post_menu);
+            popupMenu.inflate(R.menu.delete_post_or_blog_menu);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
 
-                    switch (item.getItemId()){
-                        case R.id.editPost: {
-
-                            return true;
-                        }
-                        case R.id.delete_post: {
-                            deletePost(currentItem.getmId(),position);
-                            return true;
-                        }
+                    if (item.getItemId() == R.id.delete_post) {
+                        deletePost(currentItem.getmId(), position);
+                        return true;
                     }
 
                     return false;

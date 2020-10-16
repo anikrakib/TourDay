@@ -94,7 +94,7 @@ public class Post extends Fragment {
         String userName = userPref.getString("userName","");
         swipeRefreshLayout.setRefreshing(true);
 
-        String url = "https://tourday.team/api/get_posts/"+userName;
+        String url = "https://www.tourday.team/api/get_posts/"+userName;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
