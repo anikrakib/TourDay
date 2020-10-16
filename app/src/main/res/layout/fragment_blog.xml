@@ -16,23 +16,20 @@
         android:padding="5dp"
         android:background="@drawable/primary_background"
         app:mt_maxSuggestionsCount="10"
-        app:mt_speechMode="true"
-        />
+        app:mt_speechMode="true" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/blogRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
-        >
+        android:background="@color/backgroundColor">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/blogRecyclerView"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             tools:listitem="@layout/list_blog_item"
-            android:layout_marginBottom="10dp"
-            />
+            android:layout_marginBottom="10dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

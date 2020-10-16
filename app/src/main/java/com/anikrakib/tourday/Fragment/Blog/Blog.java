@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,16 +21,23 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.anikrakib.tourday.Adapter.Blog.AdapterBlog;
+import com.anikrakib.tourday.Adapter.Blog.AdapterDivisionBlog;
 import com.anikrakib.tourday.Models.Blog.BlogItem;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class Blog extends Fragment {
 
@@ -43,6 +51,7 @@ public class Blog extends Fragment {
     private List<String> lastSearches;
     private MaterialSearchBar searchBar;
     boolean search = false;
+    int page = 1;
 
     public Blog() {
     }
@@ -87,72 +96,100 @@ public class Blog extends Fragment {
 
         });
 
+        mBlogItem = new ArrayList<>();
+
         layoutManager = new LinearLayoutManager(getContext());
         blogRecyclerView.setFocusable(false);
-
 
         blogRecyclerView.setHasFixedSize(true);
         blogRecyclerView.setLayoutManager(layoutManager);
         blogRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBlogItem = new ArrayList<>();
         mRequestQueue = Volley.newRequestQueue(getContext());
 
         blogRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                url = "https://tourday.team/api/blog/allpost/";
+
                 mBlogItem = new ArrayList<>();
-                parseJSON(url);
+                page = 1;
+                getAllPost(page);
             }
         });
 
-        url = "https://tourday.team/api/blog/allpost/";
-        parseJSON(url);
-
+        getAllPost(page);
 
         return v;
     }
 
-    private void parseJSON(String url) {
+
+    private void getAllPost(int page) {
         blogRefreshLayout.setRefreshing(true);
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("results");
-                            String nextPage = response.getString("next");
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject hit = jsonArray.getJSONObject(i);
-                                String id = hit.getString("id");
-                                String authorName = hit.getString("slug");
-                                String blogTitle = hit.getString("title");
-                                String date = hit.getString("date");
-                                String blogDescription = hit.getString("description");
-                                String imageUrl = hit.getString("image");
-                                String blogDivision = hit.getString("division");
-
-                                mBlogItem.add(new BlogItem(imageUrl,blogTitle,blogDescription,blogDivision,date,authorName,id));
-                            }
-                            if(!nextPage.isEmpty()){
-                                parseJSON(nextPage);
-                            }
-                            mAdapterBlog = new AdapterBlog(getContext(), mBlogItem);
-                            blogRecyclerView.setAdapter(mAdapterBlog);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        blogRefreshLayout.setRefreshing(false);
-                    }
-                }, new Response.ErrorListener() {
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getAllPost(page);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if(response.isSuccessful()) {
+
+                    try {
+                        assert response.body() != null;
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+                        String nextPage = jsonObject.getString("next");
+
+                        result(jsonArray,nextPage);
+
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+
         });
-        mRequestQueue.add(request);
+
+    }
+
+    private void result(JSONArray jsonArray, String nextPage) {
+
+        try {
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject hit = jsonArray.getJSONObject(i);
+                String id = hit.getString("id");
+                String authorName = hit.getString("slug");
+                String blogTitle = hit.getString("title");
+                String date = hit.getString("date");
+                String blogDescription = hit.getString("description");
+                String imageUrl = hit.getString("image");
+                String blogDivision = hit.getString("division");
+
+                mBlogItem.add(new BlogItem(imageUrl,blogTitle,blogDescription,blogDivision,date,authorName,id));
+            }
+
+            if(!nextPage.isEmpty()){
+                page++;
+                getAllPost(page);
+            }
+
+            mAdapterBlog = new AdapterBlog(getContext(), mBlogItem);
+            blogRecyclerView.setAdapter(mAdapterBlog);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        blogRefreshLayout.setRefreshing(false);
+
     }
 
     private void searchBlog(String url) {

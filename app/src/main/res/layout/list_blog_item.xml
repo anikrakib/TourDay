@@ -13,14 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="225dp"
         android:layout_margin="5dp"
-        app:cardElevation="10dp"
         app:cardCornerRadius="18dp"
         tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="501dp">
+        tools:layout_editor_absoluteY="501dp"
+        android:background="@android:color/transparent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/backgroundColor">
 
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/blogImage"

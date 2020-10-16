@@ -22,6 +22,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface Api {
 
@@ -48,75 +49,104 @@ public interface Api {
     );
 
     @GET("profile/")
-    Call<ResponseBody> userProfile(@Header("Authorization") String authToken);
+    Call<ResponseBody> userProfile(
+            @Header("Authorization") String authToken);
 
     @GET("get_posts/{username}")
-    Call<ResponseBody> getPhoto(@Path("username") String userName);
+    Call<ResponseBody> getPhoto(
+            @Path("username") String userName);
 
-
-    @FormUrlEncoded
-    @POST("profile/")
-    Call<ResponseBody> updateProfileName(@Header("Authorization") String authToken,
-                                         @Field("name") String name);
-
-    @FormUrlEncoded
-    @POST("profile/")
-    Call<ResponseBody> updateEmail(@Header("Authorization") String authToken,
-                                   @Field("email") String email);
+    @GET("get_posts/asif")
+    Call<ResponseBody> getPhotoNext(
+            @Query("limit") int limit,
+            @Query("offset") int offSet);
 
     @FormUrlEncoded
     @POST("profile/")
-    Call<ResponseBody> updateLocation(@Header("Authorization") String authToken,
-                                      @Field("city") String location);
+    Call<ResponseBody> updateProfileName(
+            @Header("Authorization") String authToken,
+            @Field("name") String name);
 
     @FormUrlEncoded
     @POST("profile/")
-    Call<ResponseBody> updateBio(@Header("Authorization") String authToken,
-                                 @Field("bio") String location);
+    Call<ResponseBody> updateEmail(
+            @Header("Authorization") String authToken,
+            @Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("profile/")
+    Call<ResponseBody> updateLocation(
+            @Header("Authorization") String authToken,
+            @Field("city") String location);
+
+    @FormUrlEncoded
+    @POST("profile/")
+    Call<ResponseBody> updateBio(
+            @Header("Authorization") String authToken,
+            @Field("bio") String location);
 
     @Multipart
     @POST("profile/")
-    Call<ResponseBody> updateImage(@Header("Authorization") String authToken,
-                                   @Part MultipartBody.Part image);
+    Call<ResponseBody> updateImage(
+            @Header("Authorization") String authToken,
+            @Part MultipartBody.Part image);
 
     @Multipart
     @POST("post/")
-    Call<ResponseBody> createPost(@Header("Authorization") String authToken,
-                                  @Part("post") RequestBody postDescription,
-                                  @Part("location") RequestBody postLocation,
-                                  @Part("date") RequestBody postDate,
-                                  @Part MultipartBody.Part postImage);
+    Call<ResponseBody> createPost(
+            @Header("Authorization") String authToken,
+            @Part("post") RequestBody postDescription,
+            @Part("location") RequestBody postLocation,
+            @Part("date") RequestBody postDate,
+            @Part MultipartBody.Part postImage);
 
     @FormUrlEncoded
     @POST("post_delete/")
-    Call<ResponseBody> deletePost(@Header("Authorization") String authToken,
-                                 @Field("id") String postId);
+    Call<ResponseBody> deletePost(
+            @Header("Authorization") String authToken,
+            @Field("id") String postId);
 
     @FormUrlEncoded
     @POST("post/like/")
-    Call<ResponseBody> selfLike(@Header("Authorization") String authToken,
-                                  @Field("post_id") int postId);
+    Call<ResponseBody> selfLike(
+            @Header("Authorization") String authToken,
+            @Field("post_id") int postId);
+
+    @GET("blog/division/{Division_Name}")
+    Call<ResponseBody> getDivisionBlog(
+            @Path("Division_Name") String divisionName);
+
+    @GET("blog/allpost/")
+    Call<ResponseBody> getAllPost(
+            @Query("page") int pageNumber);
 
     @Multipart
     @POST("blog/addpost/")
-    Call<ResponseBody> createBlog(@Header("Authorization") String authToken,
-                                  @Part("title") RequestBody blogTitle,
-                                  @Part("description") RequestBody blogDescription,
-                                  @Part MultipartBody.Part blogImage,
-                                  @Part("division") RequestBody blogDivision);
+    Call<ResponseBody> createBlog(
+            @Header("Authorization") String authToken,
+            @Part("title") RequestBody blogTitle,
+            @Part("description") RequestBody blogDescription,
+            @Part MultipartBody.Part blogImage,
+            @Part("division") RequestBody blogDivision);
 
     @DELETE("blog/delete/{post_id}")
-    Call<DeleteBlogResponse> deleteBlog(@Header("Authorization") String authToken,
-                                        @Path("post_id") String postId);
+    Call<DeleteBlogResponse> deleteBlog(
+            @Header("Authorization") String authToken,
+            @Path("post_id") String postId);
 
     @Multipart
     @PUT("blog/edit/{post_id}")
-    Call<UpdateBlogRequest> updateBlog(@Header("Authorization") String authToken,
-                                       @Path("post_id") String postId, @PartMap Map<String, RequestBody> map, @Part MultipartBody.Part image);
+    Call<UpdateBlogRequest> updateBlog(
+            @Header("Authorization") String authToken,
+            @Path("post_id") String postId,
+            @PartMap Map<String, RequestBody> map,
+            @Part MultipartBody.Part image);
 
     @GET("blog/details/{post_id}")
     Call<ResponseBody> getPostDetails(@Path("post_id") int postId);
 
     @GET("user/{username}")
-    Call<ResponseBody> otherUserProfileInformation(@Header("Authorization") String authToken,@Path("username") String userName);
+    Call<ResponseBody> otherUserProfileInformation(
+            @Header("Authorization") String authToken,
+            @Path("username") String userName);
 }

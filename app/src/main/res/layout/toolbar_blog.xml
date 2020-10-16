@@ -44,4 +44,18 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
+
+    <!-- Check Done   -->
+    <ImageButton
+        android:id="@+id/favouriteBlogIcon"
+        android:src="@drawable/ic_like"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:tint="@color/colorPrimary"
+        android:layout_height="wrap_content"
+        tools:ignore="ContentDescription" />
+
 </RelativeLayout>
