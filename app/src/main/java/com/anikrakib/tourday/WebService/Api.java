@@ -56,10 +56,11 @@ public interface Api {
     Call<ResponseBody> getPhoto(
             @Path("username") String userName);
 
-    @GET("get_posts/asif")
+    @GET("get_posts/{username}")
     Call<ResponseBody> getPhotoNext(
-            @Query("limit") int limit,
-            @Query("offset") int offSet);
+            @Path("username") String userName,
+            @Query("limit") String limit,
+            @Query("offset") String offSet);
 
     @FormUrlEncoded
     @POST("profile/")
