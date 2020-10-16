@@ -1,13 +1,19 @@
 package com.anikrakib.tourday.Adapter.Blog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.anikrakib.tourday.Activity.Blog.BlogDetailsActivity;
+import com.anikrakib.tourday.Activity.Blog.DivisionBlogActivity;
+import com.anikrakib.tourday.Models.Blog.BlogItem;
 import com.anikrakib.tourday.Models.Blog.DivisionModelItem;
 import com.anikrakib.tourday.R;
 import com.flaviofaria.kenburnsview.KenBurnsView;
@@ -40,8 +46,21 @@ public class DivisionAdapter extends RecyclerView.Adapter<DivisionAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull DivisionAdapter.ViewHolder viewHolder, int position) {
-        viewHolder.setData(mData.get(position));
+        final DivisionModelItem currentItem = mData.get(position);
 
+
+        Picasso.get().load(currentItem.getImageUrl()).into(viewHolder.kenBurnsView);
+        viewHolder.textView.setText(currentItem.getDistrictName());
+
+        viewHolder.divisionBlogItemCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent;
+                intent =  new Intent(mContext, DivisionBlogActivity.class);
+                intent.putExtra("divisionName",currentItem.getDistrictName());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -53,74 +72,17 @@ public class DivisionAdapter extends RecyclerView.Adapter<DivisionAdapter.ViewHo
 
         KenBurnsView kenBurnsView;
         TextView textView;
+        CardView divisionBlogItemCardView;
 
         public ViewHolder(View v) {
             super(v);
 
             kenBurnsView = v.findViewById(R.id.kbvDistrict);
             textView=v.findViewById(R.id.txtDistrict);
+            divisionBlogItemCardView = v.findViewById(R.id.divisionBlogItemCardView);
         }
 
-        public void setData(DivisionModelItem divisionModelItem){
-            Picasso.get().load(divisionModelItem.getImageUrl()).into(kenBurnsView);
-            textView.setText(divisionModelItem.getDistrictName());
-        }
+
+
     }
 }
-
-//public class DistrictAdapter extends PagerAdapter {
-//
-//    private List<DistrictModelItem> models;
-//    private LayoutInflater layoutInflater;
-//    private Context context;
-//
-//    public DistrictAdapter(List<DistrictModelItem> models, Context context) {
-//        this.models = models;
-//        this.context = context;
-//    }
-//
-//    @Override
-//    public int getCount() {
-//        return models.size();
-//    }
-//
-//    @Override
-//    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-//        return view.equals(object);
-//    }
-//
-//    @NonNull
-//    @Override
-//    public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-//        layoutInflater = LayoutInflater.from(context);
-//        View view = layoutInflater.inflate(R.layout.district_blog_item, container, false);
-//
-//        ImageView imageView;
-//        TextView title;
-//
-//        imageView = view.findViewById(R.id.image);
-//        title = view.findViewById(R.id.title);
-//
-//        imageView.setImageResource(models.get(position).getImageUrl());
-//        title.setText(models.get(position).getDistrictName());
-//
-//
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Intent intent = new Intent(context, DetailActivity.class);
-////                intent.putExtra("param", models.get(position).getTitle());
-////                context.startActivity(intent);
-//                // finish();
-//            }
-//        });
-//
-//        container.addView(view, 0);
-//        return view;
-//    }
-//
-//    @Override
-//    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-//        container.removeView((View)object);
-//    }
-//}
