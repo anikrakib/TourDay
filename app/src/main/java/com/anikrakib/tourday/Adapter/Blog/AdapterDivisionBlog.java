@@ -22,7 +22,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anikrakib.tourday.Activity.Blog.BlogActivity;
 import com.anikrakib.tourday.Activity.Blog.BlogDetailsActivity;
+import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.Models.Blog.BlogItem;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.R;
@@ -63,7 +65,7 @@ public class AdapterDivisionBlog extends RecyclerView.Adapter<AdapterDivisionBlo
         String description = currentItem.getBlogDescription();
         String division = currentItem.getBlogDivision();
         String date = currentItem.getBlogDate();
-        String id = currentItem.getBlogId();
+        int id = Integer.parseInt(currentItem.getBlogId());
         String author = currentItem.getBlogAuthorName();
 
         myDialog = new Dialog(mContext);
@@ -90,9 +92,9 @@ public class AdapterDivisionBlog extends RecyclerView.Adapter<AdapterDivisionBlo
         holder.cardViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent;
+                Intent intent;
                 intent =  new Intent(mContext, BlogDetailsActivity.class);
-                intent.putExtra("blogId",Integer.parseInt(id));
+                intent.putExtra("blogId",id);
                 mContext.startActivity(intent);
             }
         });

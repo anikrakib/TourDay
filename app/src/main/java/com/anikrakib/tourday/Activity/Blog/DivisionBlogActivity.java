@@ -109,17 +109,6 @@ public class DivisionBlogActivity extends AppCompatActivity {
             }
         });
 
-//        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                if(scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
-//                    page++;
-//                    getAllPost(page,limit);
-//
-//                }
-//            }
-//        });
-
         getDivisionBlog(division);
 
         //getAllPost(page,limit);
@@ -156,11 +145,10 @@ public class DivisionBlogActivity extends AppCompatActivity {
 
                             mBlogItem.add(new BlogItem(imageUrl,blogTitle,blogDescription,blogDivision,date,authorName,id));
                         }
-                        if(!nextPage.isEmpty()){
 
-                        }
-                        adapterDivisionBlog = new AdapterDivisionBlog(getApplicationContext(), mBlogItem);
+                        adapterDivisionBlog = new AdapterDivisionBlog(DivisionBlogActivity.this, mBlogItem);
                         divisionBlogRecyclerView.setAdapter(adapterDivisionBlog);
+
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
@@ -168,7 +156,7 @@ public class DivisionBlogActivity extends AppCompatActivity {
                     divisionBlogSwipeRefreshLayout.setRefreshing(false);
 
                 }
-//
+
             }
 
             @Override
