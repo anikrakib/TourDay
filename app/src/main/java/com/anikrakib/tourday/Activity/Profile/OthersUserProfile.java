@@ -112,6 +112,7 @@ public class OthersUserProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editor.putString("otherUsersUserName","");
+                editor.putString("otherUsersProfilePic","");
                 editor.apply();
                 finish();}
         });
@@ -155,6 +156,7 @@ public class OthersUserProfile extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         editor.putString("otherUsersUserName","");
+        editor.putString("otherUsersProfilePic","");
         editor.apply();
         super.onBackPressed();
     }
@@ -179,6 +181,9 @@ public class OthersUserProfile extends AppCompatActivity {
                         instagramLink.setText(profile.getString("insta"));
                         bio.setText(profile.getString("bio"));
                         Picasso.get().load("https://www.tourday.team"+profile.getString("picture")).into(userProfilePic);
+
+                        editor.putString("otherUsersProfilePic",profile.getString("picture"));
+                        editor.apply();
 
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();

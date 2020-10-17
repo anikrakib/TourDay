@@ -27,6 +27,7 @@ import com.tylersuehr.socialtextview.SocialTextView;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,17 +56,22 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         String location = currentItem.getLocation();
         int likeCount = currentItem.getLikeCount();
         String postId = currentItem.getmId();
-//        boolean selfLike = currentItem.getSelfLike();
-        holder.txtPost.setLinkText(post);
-        holder.txtLocation.setText(location);
-        holder.txtDate.setText(date);
-        holder.mTextViewLikes.setText(""+likeCount);
-        Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
 
         SharedPreferences userPref = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
         String userName = userPref.getString("userName","");
         SharedPreferences userPref2 = mContext.getSharedPreferences("otherUser", Context.MODE_PRIVATE);
         String userName2 = userPref2.getString("otherUsersUserName","");
+        String otherUsersProfilePic = userPref2.getString("otherUsersProfilePic","");
+
+
+//        boolean selfLike = currentItem.getSelfLike();
+        holder.txtPost.setLinkText(post);
+        holder.txtLocation.setText(location);
+        holder.txtDate.setText(date);
+        holder.userNameListItem.setText(userName2);
+        holder.mTextViewLikes.setText(""+likeCount);
+        Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
+        Picasso.get().load("https://tourday.team/"+otherUsersProfilePic).fit().centerInside().into(holder.userProfilePic);
 
 
         if(userName.equals(userName2)){
@@ -75,7 +81,7 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         }
 
         holder.blike.setImageResource(
-                currentItem.getSelfLike()?R.drawable.ic_like:R.drawable.ic_unlike
+                currentItem.getSelfLike()?R.drawable.ic_unlike:R.drawable.ic_like
         );
 
         holder.blike.setOnClickListener(v->{
@@ -116,12 +122,14 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
     public int getItemCount() {
         return mPostItemList.size();
     }
+
     public class ExampleViewHolder extends RecyclerView.ViewHolder{
         public ImageView postImage,morePostButton,blike;
         public TextView txtLocation,txtDate;
-        public TextView mTextViewLikes;
+        public TextView mTextViewLikes,userNameListItem;
         RelativeLayout relativeLayoutPostItem;
         SocialTextView txtPost;
+        CircleImageView userProfilePic;
 
         public ExampleViewHolder(View itemView) {
             super(itemView);
@@ -134,6 +142,8 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
             relativeLayoutPostItem = itemView.findViewById(R.id.relativeLayoutPostItem);
             morePostButton = itemView.findViewById(R.id.moreButtonPost);
             blike = itemView.findViewById(R.id.id_like_ImageButton);
+            userProfilePic = itemView.findViewById(R.id.userProfilePicListItem);
+            userNameListItem = itemView.findViewById(R.id.userNameListItem);
 
 
         }
