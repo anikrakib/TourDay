@@ -5,22 +5,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Event.AdapterPendingPayment;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class YourEventDetailsActivity extends AppCompatActivity {
     RelativeLayout pendingPaymentLinearLayout;
@@ -30,6 +43,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
     TextView eventDetailsTitleTextView,eventLocationTextView,eventTotalGoingTextView,eventTotalPendingTextView,eventTotalCapacityTextView;
     SocialTextView eventDetailsTextView;
     KenBurnsView eventDetailsImage;
+    ArrayList<PendingPayment> pendingPayments;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -94,15 +108,52 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        List<PendingPayment> pendingPayments = new ArrayList<>();
+        pendingPayments = new ArrayList<>();
 
         assert list != null;
         for (int i : list) {
-            pendingPayments.add(new PendingPayment(i));
+            //pendingPayments.add(new PendingPayment(i));
+            showUserData(i);
         }
 
         adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayments);
         pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         pendingUserRecyclerView.setAdapter(adapterPendingPayment);
+    }
+
+    public void showUserData(int userId){
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getUserInfoByUserId(userId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    JSONObject jsonObject = null;
+                    try {
+                        assert response.body() != null;
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+
+                        pendingPayments.add(new PendingPayment(profile.getString("picture"),profile.getString("name"),profile.getString("email")));
+
+
+
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 }

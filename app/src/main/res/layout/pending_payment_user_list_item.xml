@@ -7,11 +7,11 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="horizontal"
-    android:background="@color/backgroundColor"
+    android:background="@android:color/transparent"
     android:padding="5dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/goingUserProfilePic"
+        android:id="@+id/pendingUserProfilePic"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
@@ -29,18 +29,19 @@
         android:layout_marginStart="5dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/goingUserProfilePic"
+        app:layout_constraintStart_toEndOf="@+id/pendingUserProfilePic"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/pendingUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:text="username"
             android:textColor="@color/colorPrimary"
             android:textSize="10sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,SmallSp" />
 
         <TextView
             android:id="@+id/pendingUserEmail"
@@ -50,7 +51,8 @@
             android:text="example@gmail.com"
             android:textColor="@color/colorPrimary"
             android:textSize="10sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,RtlHardcoded,SmallSp" />
 
     </LinearLayout>
 
@@ -66,7 +68,8 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/noButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/noButton"
@@ -79,6 +82,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

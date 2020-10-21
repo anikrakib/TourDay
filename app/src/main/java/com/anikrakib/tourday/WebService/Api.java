@@ -52,6 +52,10 @@ public interface Api {
     Call<ResponseBody> userProfile(
             @Header("Authorization") String authToken);
 
+    @GET("user/{user_id}")
+    Call<ResponseBody> getUserInfoByUserId(
+            @Path("user_id") int userId);
+
     @GET("get_posts/{username}")
     Call<ResponseBody> getPhoto(
             @Path("username") String userName);
@@ -154,4 +158,5 @@ public interface Api {
     Call<ResponseBody> getYourEvent(
             @Header("Authorization") String authToken,
             @Path("username") String userName);
+
 }
