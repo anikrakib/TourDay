@@ -87,6 +87,7 @@ public class BlogActivity extends AppCompatActivity {
     InputStream blogPostInputStream;
     RoundedImageView blogImageView;
     private static final int INTENT_REQUEST_CODE = 100;
+    ImageView blogBackButton;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -99,6 +100,7 @@ public class BlogActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         createBlog = findViewById(R.id.fabButtonCreateBlog);
         viewPagerBlog = (ViewPager) findViewById(R.id.viewPagerBlog);
+        blogBackButton = findViewById(R.id.backBlogImageButton);
 
 
         resources= getResources();
@@ -158,6 +160,13 @@ public class BlogActivity extends AppCompatActivity {
                 if (0 != (getApplication().getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE)) {
                     WebView.setWebContentsDebuggingEnabled(true);
                 }
+            }
+        });
+
+        blogBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

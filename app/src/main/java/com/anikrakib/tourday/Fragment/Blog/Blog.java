@@ -127,7 +127,7 @@ public class Blog extends Fragment {
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .getAllPost(page);
+                .getAllBlogPost(page);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
