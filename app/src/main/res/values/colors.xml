@@ -21,12 +21,14 @@
     <color name="color_fourd_text">#ffa689</color>
     <color name="switch_color">#ff7346</color>
     <color name="dividerColor">#ff7346</color>
+    <color name="grayColor">#ff7346</color>
     <color name="txt" tool:override="true">#992f31</color>
     <color name="instagram_color">#C13584</color>
     <color name="inCharge_blue">#017FB8</color>
     <color name="primary_background_shape_color">#E6FFFFFF</color>
 
     <color name="flamingo.900">#2196F3</color>
+    <color name="flamingo.phoneColor">#898F9C</color>
 
 <!--    search bar color-->
     <color name="searchBarIconColor">#3a3a3a</color>

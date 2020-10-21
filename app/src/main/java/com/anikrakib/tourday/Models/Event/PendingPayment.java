@@ -4,6 +4,7 @@ public class PendingPayment {
     private String imageUrl;
     private String userName;
     private String email;
+    private int id;
 
     public String getImageUrl() {
         return imageUrl;
@@ -12,6 +13,14 @@ public class PendingPayment {
     public PendingPayment(String userName, String email) {
         this.userName = userName;
         this.email = email;
+    }
+
+    public PendingPayment(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUserName() {

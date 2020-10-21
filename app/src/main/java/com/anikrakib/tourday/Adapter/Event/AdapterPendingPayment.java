@@ -37,7 +37,7 @@ public class AdapterPendingPayment extends RecyclerView.Adapter<AdapterPendingPa
     public void onBindViewHolder( MyViewHolder myViewHolder, int i) {
 
 
-        myViewHolder.pendingUserName.setText(mData.get(i).getUserName());
+        myViewHolder.pendingUserName.setText(String.valueOf(mData.get(i).getId()));
         myViewHolder.pendingEmail.setText(mData.get(i).getEmail());
 
 

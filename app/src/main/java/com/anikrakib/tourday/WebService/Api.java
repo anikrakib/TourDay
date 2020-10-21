@@ -150,4 +150,8 @@ public interface Api {
     Call<ResponseBody> otherUserProfileInformation(
             @Path("username") String userName);
 
+    @GET("get_events/{username}")
+    Call<ResponseBody> getYourEvent(
+            @Header("Authorization") String authToken,
+            @Path("username") String userName);
 }

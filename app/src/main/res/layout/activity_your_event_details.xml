@@ -21,6 +21,7 @@
 
         <com.flaviofaria.kenburnsview.KenBurnsView
             android:id="@+id/eventDetailsImage"
+            android:src="@drawable/chattogram"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -37,8 +38,8 @@
 
             <TextView
                 android:id="@+id/eventDetailsTitleTextView"
-                android:layout_width="290dp"
-                android:layout_height="70dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginBottom="40dp"
                 android:adjustViewBounds="true"
@@ -62,8 +63,8 @@
                 android:adjustViewBounds="true">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="15dp"
+                    android:layout_height="15sp"
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
                     app:tint="@color/colorPrimary"
@@ -154,8 +155,8 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="bottom"
-                >
+                android:gravity="bottom">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,6 +169,48 @@
 
                 <TextView
                     android:id="@+id/eventDetailsTotalPendingTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:text="10"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="@color/txtWhite"
+                    android:background="@color/colorPrimary"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+        </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+
+        <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:shape_dot_radius="4dp"
+            app:shape_dot_spacing="3dp"
+            app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
+            app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
+            app:shape_edge_position="left">
+
+            <LinearLayout
+                android:id="@+id/capacityYourEventLinearLayout"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Capacity"
+                    android:layout_marginBottom="10dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/eventDetailsTotalCapacityTextView"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
                     android:text="10"
@@ -200,7 +243,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/diagonalLayoutEventDetailImage"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="5dp"
         android:src="@drawable/event_edit"
         android:tint="@color/white"
         app:elevation="15dp"
@@ -235,15 +278,21 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/eventDetailsDescriptionTextView1"
+            <com.tylersuehr.socialtextview.SocialTextView
+                android:id="@+id/eventDetailsDescriptionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/bio"
                 android:textColor="@color/color_primary_text"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                app:hashtagColor="@color/flamingo.900"
+                app:mentionColor="@color/flamingo.900"
+                app:phoneColor="@color/flamingo.phoneColor"
+                app:emailColor="@color/flamingo.900"
+                app:urlColor="@color/flamingo.900"
+                app:linkModes="mention|hashtag|email|url"/>
 
         </LinearLayout>
 
