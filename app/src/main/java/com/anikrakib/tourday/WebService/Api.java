@@ -118,7 +118,7 @@ public interface Api {
             @Path("Division_Name") String divisionName);
 
     @GET("blog/allpost/")
-    Call<ResponseBody> getAllPost(
+    Call<ResponseBody> getAllBlogPost(
             @Query("page") int pageNumber);
 
     @Multipart
@@ -148,6 +148,6 @@ public interface Api {
 
     @GET("user/{username}")
     Call<ResponseBody> otherUserProfileInformation(
-            @Header("Authorization") String authToken,
             @Path("username") String userName);
+
 }

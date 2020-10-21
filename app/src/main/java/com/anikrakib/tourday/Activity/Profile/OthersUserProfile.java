@@ -162,12 +162,11 @@ public class OthersUserProfile extends AppCompatActivity {
     }
 
     public void showUserData(String userName){
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
+
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .otherUserProfileInformation("Token "+token,userName);
+                .otherUserProfileInformation(userName);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
