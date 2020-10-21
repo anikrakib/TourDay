@@ -1,6 +1,7 @@
 package com.anikrakib.tourday.Activity.Profile;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.anikrakib.tourday.Adapter.Profile.ViewOtherUsersProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
@@ -55,6 +57,7 @@ public class OthersUserProfile extends AppCompatActivity {
     public String userName;
     SharedPreferences userPref ;
     SharedPreferences.Editor editor ;
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public class OthersUserProfile extends AppCompatActivity {
         facebookLinkImageView = findViewById(R.id.facebookLinkImageView);
         instagramLinkImageView = findViewById(R.id.instagramLinkImageView);
         otherUserProfileBackButton = findViewById(R.id.otherUserProfileBackButton);
+        coordinatorLayout = findViewById(R.id.otherUserProfileLayout);
 
         myDialog = new Dialog(this);
         userPref = OthersUserProfile.this.getSharedPreferences("otherUser",getApplicationContext().MODE_PRIVATE);
@@ -108,6 +112,7 @@ public class OthersUserProfile extends AppCompatActivity {
                 showBdMap(userName);
             }
         });
+
         otherUserProfileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,19 +122,40 @@ public class OthersUserProfile extends AppCompatActivity {
                 finish();}
         });
 
-
         facebookLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isFacebookAppInstalled()) {
-                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
-                    String facebookUrl = getFacebookPageURL(getApplicationContext());
-                    facebookIntent.setData(Uri.parse(facebookUrl));
-                    startActivity(facebookIntent);
+                if(facebookLink.getText().toString().isEmpty()){
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, userName+" has no Facebook Account!!", Snackbar.LENGTH_LONG)
+                            .setAction("Ok", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                }
+                            });
+                    snackbar.setActionTextColor(Color.GREEN);
+                    snackbar.show();
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "facebook app not installing", Toast.LENGTH_SHORT).show();
-                    showUserSocialMediaAccount("https://www.facebook.com/"+facebookLink.getText().toString());
+                }else {
+                    if (isFacebookAppInstalled()) {
+                        Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                        String facebookUrl = getFacebookPageURL(getApplicationContext());
+                        facebookIntent.setData(Uri.parse(facebookUrl));
+                        startActivity(facebookIntent);
+
+                    } else {
+                        Snackbar snackbar = Snackbar
+                                .make(coordinatorLayout, "Facebook not installed!!", Snackbar.LENGTH_LONG)
+                                .setAction("Download", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                });
+                        snackbar.setActionTextColor(Color.MAGENTA);
+                        snackbar.show();
+                        showUserSocialMediaAccount("https://www.facebook.com/" + facebookLink.getText().toString());
+                    }
                 }
             }
         });
@@ -137,17 +163,38 @@ public class OthersUserProfile extends AppCompatActivity {
         instagramLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isInstagramInstalled()) {
-                    Intent instagramIntent = new Intent(Intent.ACTION_VIEW);
-                    String facebookUrl = getInstragamPageURL(getApplicationContext());
-                    instagramIntent.setData(Uri.parse(facebookUrl));
-                    startActivity(instagramIntent);
+                if(instagramLink.getText().toString().isEmpty()){
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, userName+" has no Instagram Account!!", Snackbar.LENGTH_LONG)
+                            .setAction("Ok", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                }
+                            });
+                    snackbar.setActionTextColor(Color.GREEN);
+                    snackbar.show();
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "Instagram app not installed", Toast.LENGTH_SHORT).show();
-                    showUserSocialMediaAccount("https://www.instagram.com/"+instagramLink.getText().toString());
+                }else {
+                    if (isInstagramInstalled()) {
+                        Intent instagramIntent = new Intent(Intent.ACTION_VIEW);
+                        String facebookUrl = getInstragamPageURL(getApplicationContext());
+                        instagramIntent.setData(Uri.parse(facebookUrl));
+                        startActivity(instagramIntent);
+
+                    } else {
+                        Snackbar snackbar = Snackbar
+                                .make(coordinatorLayout, "Instagram not installed!!", Snackbar.LENGTH_LONG)
+                                .setAction("Download", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                });
+                        snackbar.setActionTextColor(Color.MAGENTA);
+                        snackbar.show();
+                        showUserSocialMediaAccount("https://www.instagram.com/" + instagramLink.getText().toString());
+                    }
                 }
-
             }
         });
 
