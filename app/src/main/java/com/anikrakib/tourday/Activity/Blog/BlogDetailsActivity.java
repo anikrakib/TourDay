@@ -1,15 +1,30 @@
 package com.anikrakib.tourday.Activity.Blog;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +33,7 @@ import com.anikrakib.tourday.Activity.Profile.OthersUserProfile;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
@@ -26,6 +42,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,10 +53,14 @@ public class BlogDetailsActivity extends AppCompatActivity {
     /* Initialize variable */
     Intent intent;
     KenBurnsView blogImageKenBurnsView;
-    TextView blogDetailsTitleTextView,blogDetailsDescriptionTextView,blogDetailsDivisionTextView,blogDetailsDateTextView;
+    TextView blogDetailsTitleTextView,blogDetailsDescriptionTextView,blogDetailsDivisionTextView,blogDetailsDateTextView,authorFullName,authorBio,authorFaceBookLink,authorInstagramLink,authorBangladeshLink;
     SocialTextView blogAuthorName;
     ImageButton blogDetailsBackButton;
+    ImageView authorFacebookProfile,authorInstagramProfile,authorBdProfile;
     public String AuthorUserName;
+    CircleImageView authorImage;
+    Dialog myDialog;
+    ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +75,19 @@ public class BlogDetailsActivity extends AppCompatActivity {
         blogDetailsDescriptionTextView = findViewById(R.id.blogDetailsDescriptionTextView);
         blogDetailsDateTextView = findViewById(R.id.blogDetailsDate);
         blogDetailsBackButton = findViewById(R.id.backButtonBlogDetails);
+        authorFullName = findViewById(R.id.authorFullName);
+        authorBio = findViewById(R.id.authorBio);
+        authorFaceBookLink = findViewById(R.id.authorFacebookLinkTextView);
+        authorInstagramLink = findViewById(R.id.authorInstagramLinkTextView);
+        authorBangladeshLink = findViewById(R.id.authorBangladeshTextView);
+        authorImage = findViewById(R.id.authorImage);
+        authorFacebookProfile = findViewById(R.id.authorFacebookLinkImageView);
+        authorInstagramProfile = findViewById(R.id.authorInstagramLinkImageView);
+        authorBdProfile = findViewById(R.id.authorBangladeshImageView);
+        constraintLayout = findViewById(R.id.constraintLayout);
 
 
+        myDialog = new Dialog(this);
         intent = getIntent();
         Bundle extras = intent.getExtras();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -76,6 +108,91 @@ public class BlogDetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        authorBdProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBdMap(AuthorUserName);
+            }
+        });
+
+        authorFacebookProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(authorFaceBookLink.getText().toString().isEmpty()){
+                    Snackbar snackbar = Snackbar
+                            .make(constraintLayout, AuthorUserName+" has no Facebook Account!!", Snackbar.LENGTH_LONG)
+                            .setAction("Ok", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                }
+                            });
+                    snackbar.setActionTextColor(Color.GREEN);
+                    snackbar.show();
+
+                }else{
+                    if (isFacebookAppInstalled()) {
+                        Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                        String facebookUrl = getFacebookPageURL(getApplicationContext());
+                        facebookIntent.setData(Uri.parse(facebookUrl));
+                        startActivity(facebookIntent);
+
+                    } else {
+                        Snackbar snackbar = Snackbar
+                                .make(constraintLayout, "Facebook not installed!!", Snackbar.LENGTH_LONG)
+                                .setAction("Download", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                });
+                        snackbar.setActionTextColor(Color.MAGENTA);
+                        snackbar.show();
+                        showUserSocialMediaAccount("https://www.facebook.com/"+authorFaceBookLink.getText().toString());
+                    }
+                }
+            }
+        });
+
+        authorInstagramProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(authorInstagramLink.getText().toString().isEmpty()){
+                    Snackbar snackbar = Snackbar
+                            .make(constraintLayout, AuthorUserName+" has no Instagram Account!!", Snackbar.LENGTH_LONG)
+                            .setAction("Ok", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                }
+                            });
+                    snackbar.setActionTextColor(Color.GREEN);
+                    snackbar.show();
+
+                }else {
+                    if (isInstagramInstalled()) {
+                        Intent instagramIntent = new Intent(Intent.ACTION_VIEW);
+                        String facebookUrl = getInstragamPageURL(getApplicationContext());
+                        instagramIntent.setData(Uri.parse(facebookUrl));
+                        startActivity(instagramIntent);
+
+                    } else {
+                        Snackbar snackbar = Snackbar
+                                .make(constraintLayout, "Instagram not installed!!", Snackbar.LENGTH_LONG)
+                                .setAction("Download", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                });
+                        snackbar.setActionTextColor(Color.MAGENTA);
+                        snackbar.show();
+                        showUserSocialMediaAccount("https://www.instagram.com/" + authorInstagramLink.getText().toString());
+                    }
+                }
+
+            }
+        });
+
         blogAuthorName.setOnLinkClickListener(new SocialTextView.OnLinkClickListener() {
             @Override
             public void onLinkClicked(int i, String s) {
@@ -134,6 +251,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
                         blogDetailsTitleTextView.setText(title);
                         blogDetailsDivisionTextView.setText(division);
                         blogDetailsDateTextView.setText(date);
+                        showAuthorData(slug);
 
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -158,5 +276,157 @@ public class BlogDetailsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void showAuthorData(String userName){
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .otherUserProfileInformation(userName);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+                        authorFullName.setText(profile.getString("name"));
+                        authorFaceBookLink.setText(profile.getString("fb"));
+                        authorInstagramLink.setText(profile.getString("insta"));
+                        authorBio.setText(profile.getString("bio"));
+                        Picasso.get().load("https://www.tourday.team"+profile.getString("picture")).into(authorImage);
+
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    public void showBdMap(String userName) {
+        ImageView close;
+        myDialog.setContentView(R.layout.custom_bd_map_pop_up);
+        close = myDialog.findViewById(R.id.socialMediaClose);
+
+        final WebView webView = myDialog.findViewById(R.id.webViewSocialMedia);
+
+
+        WebSettings webSettings = webView.getSettings();
+        webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        WebViewClient webViewClient = new WebViewClient();
+        webView.setWebViewClient(webViewClient);
+
+        webView.loadUrl("https://www.tourday.team/api/map/"+userName);
+        // set image scale to fit screen if larger than screen width
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) BlogDetailsActivity.this.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.setCancelable(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    public void showUserSocialMediaAccount(String url) {
+        ImageView close;
+        myDialog.setContentView(R.layout.custom_bd_map_pop_up);
+        close = myDialog.findViewById(R.id.socialMediaClose);
+
+        final WebView webView = myDialog.findViewById(R.id.webViewSocialMedia);
+
+        WebSettings webSettings = webView.getSettings();
+        webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        WebViewClient webViewClient = new WebViewClient();
+        webView.setWebViewClient(webViewClient);
+
+        webView.loadUrl(url);
+        // set image scale to fit screen if larger than screen width
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) BlogDetailsActivity.this.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.setCancelable(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
+    }
+
+    public String getFacebookPageURL(Context context) {
+        String fbUsername = authorFaceBookLink.getText().toString();
+        String FACEBOOK_URL = "https://www.facebook.com/"+fbUsername;
+        String FACEBOOK_PAGE_ID = "YourPageName";
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.orca", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } else { //older versions of fb app
+                return "fb://page/" + FACEBOOK_PAGE_ID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return FACEBOOK_URL; //normal web url
+        }
+    }
+    public String getInstragamPageURL(Context context) {
+        String INSTAGRAM_URL = "https://www.instagram.com/"+authorInstagramLink.getText().toString();
+        Uri uri = Uri.parse("http://instagram.com/_u/"+authorInstagramLink.getText().toString());
+        Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
+
+        likeIng.setPackage("com.instagram.android");
+
+        try {
+            startActivity(likeIng);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(INSTAGRAM_URL)));
+        }
+        return INSTAGRAM_URL;
+    }
+
+    public boolean isFacebookAppInstalled() {
+        try {
+            getApplicationContext().getPackageManager().getApplicationInfo("com.facebook.katana", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+    public boolean isInstagramInstalled() {
+        try {
+            getApplicationContext().getPackageManager().getApplicationInfo("com.instagram.android", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }
