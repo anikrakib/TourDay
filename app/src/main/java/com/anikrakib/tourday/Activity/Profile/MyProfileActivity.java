@@ -1,4 +1,5 @@
 package com.anikrakib.tourday.Activity.Profile;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -41,6 +43,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Activity.ExploreActivity;
 import com.anikrakib.tourday.Adapter.Profile.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
@@ -83,9 +86,8 @@ public class MyProfileActivity extends AppCompatActivity{
     Dialog myDialog;
     FloatingActionButton floatingActionButtonCreatePost;
     Button uploadButton,saveButton;
-    EditText socialMediaLinkEditText,postPopUpTitle,postPopUpDescription,nameEditTest;
+    EditText socialMediaLinkEditText,postPopUpDescription,nameEditTest;
     TextView userFullName,facebookLink,instagramLink,createPostDate;
-    private static MyProfileActivity instance;
     CircleImageView userProfilePic;
     private static final int INTENT_REQUEST_CODE = 100;
     Resources resources;
@@ -95,6 +97,7 @@ public class MyProfileActivity extends AppCompatActivity{
     ImageView postImageView;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +122,6 @@ public class MyProfileActivity extends AppCompatActivity{
         districtKeys = resources.getStringArray(R.array.bdDistrict);
 
         myDialog = new Dialog(this);
-        instance = this;
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
@@ -136,8 +138,6 @@ public class MyProfileActivity extends AppCompatActivity{
         tabLayout.setTabRippleColor(null);
 
         /////*     Check SocialMediaLink is null or not   */////
-
-
 
 
         /*    On Click Listener     */
@@ -186,8 +186,8 @@ public class MyProfileActivity extends AppCompatActivity{
         profileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
-                onBackPressed();
+                startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
+                //onBackPressed();
             }
         });
         editNameImageView.setOnClickListener(new View.OnClickListener() {
