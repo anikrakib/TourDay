@@ -13,16 +13,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
+import com.anikrakib.tourday.Activity.Authentication.SignInActivity;
 import com.anikrakib.tourday.R;
 
 public class BDMapViewActivity extends AppCompatActivity {

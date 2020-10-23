@@ -29,8 +29,8 @@
         <activity android:name=".Activity.BDMapViewActivity" />
         <activity android:name=".Activity.Profile.MyProfileActivity" />
         <activity android:name=".Activity.ExploreActivity" />
-        <activity android:name=".Activity.SignInActivity" />
-        <activity android:name=".Activity.SignUpActivity" />
+        <activity android:name=".Activity.Authentication.SignInActivity" />
+        <activity android:name=".Activity.Authentication.SignUpActivity" />
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

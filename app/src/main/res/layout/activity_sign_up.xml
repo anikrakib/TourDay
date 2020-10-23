@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/backgroundColor"
-    tools:context=".Activity.SignUpActivity">
+    tools:context=".Activity.Authentication.SignUpActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarBack"

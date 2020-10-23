@@ -1,4 +1,4 @@
-package com.anikrakib.tourday.Activity;
+package com.anikrakib.tourday.Activity.Authentication;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;

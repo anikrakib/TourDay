@@ -1,5 +1,4 @@
 package com.anikrakib.tourday.Fragment.Profile;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,9 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anikrakib.tourday.Activity.ExploreActivity;
 import com.anikrakib.tourday.Activity.LocationActivity;
-import com.anikrakib.tourday.Activity.SignInActivity;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
@@ -32,7 +29,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import devs.mulham.horizontalcalendar.utils.Utils;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -1,4 +1,4 @@
-package com.anikrakib.tourday.Activity;
+package com.anikrakib.tourday.Activity.Authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
