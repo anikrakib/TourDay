@@ -2,7 +2,6 @@ package com.anikrakib.tourday.Activity.Authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,30 +20,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.textfield.TextInputLayout;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
-
 import org.json.JSONObject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
 public class SignInActivity extends AppCompatActivity {
 
     Toolbar toolbarBack;
-    TextView signUp;
+    TextView signUp,forgetPassword;
     private EditText inputUsername, inputPassword;
     private TextInputLayout inputLayoutUsername, inputLayoutPassword;
     Dialog postDialog ;
     Button signInButton;
     private static String token;
-
 
 
     @Override
@@ -64,21 +60,27 @@ public class SignInActivity extends AppCompatActivity {
         inputUsername = findViewById(R.id.userNameSignIn);
         inputPassword = findViewById(R.id.passwordSignIn);
         signInButton = findViewById(R.id.signInButton);
-
-
+        forgetPassword = findViewById(R.id.forgetPasswordTextView);
 
         postDialog = new Dialog(this);
+
 
         setSupportActionBar(toolbarBack);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
                 finish();
+            }
+        });
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this,ForgetPassword.class));
             }
         });
 

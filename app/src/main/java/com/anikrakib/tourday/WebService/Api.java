@@ -4,6 +4,7 @@ package com.anikrakib.tourday.WebService;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
+import com.github.florent37.shapeofview.shapes.BubbleView;
 
 import java.util.Map;
 
@@ -51,6 +52,19 @@ public interface Api {
     @GET("profile/")
     Call<ResponseBody> userProfile(
             @Header("Authorization") String authToken);
+
+    @FormUrlEncoded
+    @POST("forget_password/")
+    Call<ResponseBody> forgetPassword(
+            @Field("username_email") String userOrEmail);
+
+    @FormUrlEncoded
+    @POST("reset_password/{username}/")
+    Call<ResponseBody> resetPassword(
+            @Path("username") String slug,
+            @Field("code") String code,
+            @Field("password1") String newPassword,
+            @Field("password2") String confirmNewPassword);
 
     @GET("user/{user_id}")
     Call<ResponseBody> getUserInfoByUserId(
