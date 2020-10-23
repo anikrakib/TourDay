@@ -3,10 +3,15 @@
     <string name="sring1">With You Wherever You</string>
     <string name="sring2"> Go</string>
     <string name="hint_username">Username Or Email</string>
+    <string name="hintCode">Enter 8 digit Reset Password Code</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_confirmPassword">Confirm Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
+    <string name="saveOrGetCodeText">Get Code</string>
+    <string name="forgetPassword">Forget Password</string>
+    <string name="forgetPassword2">Forget Password ?</string>
     <string name="err_msg_userName1">Enter your username</string>
     <string name="err_msg_userName2">Enter valid username</string>
     <string name="err_msg_email">Enter valid email address</string>
@@ -60,6 +65,7 @@
     <string name="enable_dark_color">Enable Dark Color</string>
     <string name="dark_mood">Dark Mood</string>
     <string name="upload">Upload</string>
+    <string name="resend_code">Resend Code</string>
 
     <string-array name="bdDivision">
         <item>Barishal</item>

@@ -25,7 +25,7 @@
         android:padding="2dp"
         android:background="@drawable/explore_box_design"
         android:text="@string/sign_up"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/color_primary_text"
         android:textSize="15sp"
         android:textStyle="bold" />
 

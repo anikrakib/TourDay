@@ -103,6 +103,20 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/forgetPasswordTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgetPassword2"
+            android:textStyle="bold"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/color_primary_text"
+            android:textSize="13sp"/>
+
+
         <include layout="@layout/have_no_account" />
 
         <Button
