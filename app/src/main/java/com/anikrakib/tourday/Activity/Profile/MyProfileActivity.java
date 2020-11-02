@@ -204,12 +204,67 @@ public class MyProfileActivity extends AppCompatActivity{
         profileMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showProfileEditPopUp();
+                showProfileEditPopUp();
             }
         });
 
     }
 
+    private void showProfileEditPopUp() {
+        View touch;
+        Animation rightToLeft,leftToRight;
+        LinearLayout linearLayout,manageMyAccountLayout,manageMyAccountPart;
+        ImageView backButton;
+
+
+        myDialog.setContentView(R.layout.profile_more_option_pop_up);
+        touch = myDialog.findViewById(R.id.touchView);
+        linearLayout = myDialog.findViewById(R.id.moreOptionLayout);
+        backButton = myDialog.findViewById(R.id.backButton);
+        manageMyAccountLayout = myDialog.findViewById(R.id.manageMyAccountLayout);
+        manageMyAccountPart = myDialog.findViewById(R.id.manageMyAccountPartLayout);
+
+        rightToLeft = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
+        leftToRight = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
+
+
+        manageMyAccountLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(manageMyAccountPart.getVisibility() == View.VISIBLE){
+                    manageMyAccountPart.setVisibility(View.GONE);
+                }else {
+                    manageMyAccountPart.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        touch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                linearLayout.startAnimation(leftToRight);
+                handler();
+                return true;
+            }
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.startAnimation(leftToRight);
+                handler();
+
+            }
+        });
+
+
+        linearLayout.startAnimation(rightToLeft);
+
+        myDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,Toolbar.LayoutParams.WRAP_CONTENT);
+        myDialog.getWindow().getAttributes().gravity = Gravity.TOP;
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.setCancelable(true);
+        myDialog.show();
+
+    }
     public void handler(){
         new Handler().postDelayed(new Runnable() {
             @Override

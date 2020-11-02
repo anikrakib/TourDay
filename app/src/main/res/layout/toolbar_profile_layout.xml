@@ -55,8 +55,8 @@
 
         <!-- Check Done   -->
         <ImageButton
-            android:id="@+id/updateImage"
-            android:src="@drawable/ic_baseline_check_24"
+            android:id="@+id/profileMoreIcon"
+            android:src="@drawable/ic_baseline_more_vert_24"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_marginEnd="20dp"
