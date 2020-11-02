@@ -21,12 +21,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -39,6 +41,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,7 +82,7 @@ import retrofit2.Response;
 public class MyProfileActivity extends AppCompatActivity{
 
     /*     initialize variable   */
-    ImageButton profileBackButton;
+    ImageButton profileBackButton,profileMoreButton;
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewProfilePagerAdapter viewProfilePagerAdapter;
@@ -116,6 +120,7 @@ public class MyProfileActivity extends AppCompatActivity{
         editNameImageView = findViewById(R.id.editNameImageView);
         chooseImage_ImageView = findViewById(R.id.chooseImage_ImageView);
         viewPager = findViewById(R.id.viewPager);
+        profileMoreButton = findViewById(R.id.profileMoreIcon);
 
 
         resources= getResources();
@@ -196,7 +201,22 @@ public class MyProfileActivity extends AppCompatActivity{
                 showEditNamePopUp(userFullName.getText().toString());
             }
         });
+        profileMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //showProfileEditPopUp();
+            }
+        });
 
+    }
+
+    public void handler(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                myDialog.dismiss();
+            }
+        },500);
     }
 
     //this method show pop to edit user name
@@ -368,7 +388,7 @@ public class MyProfileActivity extends AppCompatActivity{
     public void createPostPopUp() {
         ImageButton postCloseButton;
         RoundButton createPostButton;
-        Animation top_to_bottom;
+        Animation top_to_bottom,bottom_to_top;
         CircleImageView userProfilePictureCircleImageView;
         final ConstraintLayout createPostLayout;
         Spinner districtSpinner;
@@ -389,6 +409,7 @@ public class MyProfileActivity extends AppCompatActivity{
 
         // set animation in create post pop up
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
+        bottom_to_top = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top);
 
 
         //set user profile pic and draft description using Shared Preference
@@ -448,10 +469,13 @@ public class MyProfileActivity extends AppCompatActivity{
             public void onClick(View v) {
                 // Save Post Title and Description in SharedPreferences when close Post PopUp
 
+                createPostLayout.startAnimation(bottom_to_top);
+
                 editor.putString("postDescription",postPopUpDescription.getText().toString());
                 editor.apply();
 
-                myDialog.dismiss();
+                //myDialog.dismiss();
+                handler();
             }
         });
 
