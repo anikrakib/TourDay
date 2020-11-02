@@ -51,7 +51,7 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/authorImage"
+                android:id="@+id/userImageInPopUp"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:src="@color/black_overlay" />
@@ -64,7 +64,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/authorFullName"
+                    android:id="@+id/userFullNameInPopUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_bold"
@@ -73,7 +73,7 @@
                     android:textSize="18sp" />
 
                 <com.tylersuehr.socialtextview.SocialTextView
-                    android:id="@+id/authorUserName"
+                    android:id="@+id/userUserNameInPopUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/username"
@@ -86,7 +86,7 @@
         </LinearLayout>
 
         <com.uncopt.android.widget.text.justify.JustifiedTextView
-            android:id="@+id/otherUsersBio"
+            android:id="@+id/userBioInPopUp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -111,7 +111,7 @@
             android:background="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/otherUsersBio" />
+            app:layout_constraintTop_toBottomOf="@+id/userBioInPopUp" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"

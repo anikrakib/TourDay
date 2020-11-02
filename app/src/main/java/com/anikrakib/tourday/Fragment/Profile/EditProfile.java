@@ -3,6 +3,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.text.Editable;
@@ -28,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -103,10 +106,10 @@ public class EditProfile extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(!aboutBioEdit.getText().toString().isEmpty()){
-                    saveBioImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.black));
+                    saveBioImageButton.setColorFilter(ContextCompat.getColor(Objects.requireNonNull(getContext()),R.color.black));
                     saveBioImageButton.setEnabled(true);
                 }else{
-                    saveBioImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.color_secondary_text));
+                    saveBioImageButton.setColorFilter(ContextCompat.getColor(Objects.requireNonNull(getContext()),R.color.color_secondary_text));
                     saveBioImageButton.setEnabled(false);
 
                 }
@@ -145,9 +148,9 @@ public class EditProfile extends Fragment {
                     userEmailTextView.setVisibility(View.VISIBLE);
                     userEmailLayout.setVisibility(View.GONE);
                     saveEmailImageButton.setEnabled(false);
-                    saveEmailImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.color_secondary_text));
+                    saveEmailImageButton.setColorFilter(ContextCompat.getColor(Objects.requireNonNull(getContext()),R.color.color_secondary_text));
                 }else{
-                    DynamicToast.makeError(getContext(), "Enter Valid Email").show();
+                    DynamicToast.makeError(Objects.requireNonNull(getContext()), "Enter Valid Email").show();
                 }
             }
         });
@@ -157,7 +160,7 @@ public class EditProfile extends Fragment {
             public boolean onLongClick(View v) {
                 intent = new Intent(getActivity(),LocationActivity.class);
                 intent.putExtra("recentLocation",userLocationTextView.getText());
-                getActivity().startActivity(intent);
+                Objects.requireNonNull(getActivity()).startActivity(intent);
                 return true;
             }
         });
@@ -172,25 +175,25 @@ public class EditProfile extends Fragment {
         userEmailTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DynamicToast.makeWarning(getContext(), "Press Long Click To Edit Email").show();
+                DynamicToast.makeWarning(Objects.requireNonNull(getContext()), "Press Long Click To Edit Email").show();
             }
         });
         userLocationTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DynamicToast.makeWarning(getContext(), "Press Long Click To Edit Location").show();
+                DynamicToast.makeWarning(Objects.requireNonNull(getContext()), "Press Long Click To Edit Location").show();
             }
         });
         userNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DynamicToast.makeWarning(getContext(), "Username Can't be Changed").show();
+                DynamicToast.makeWarning(Objects.requireNonNull(getContext()), "Username Can't be Changed").show();
             }
         });
         aboutBio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DynamicToast.makeWarning(getContext(), "Press Long Click To Edit Bio").show();
+                DynamicToast.makeWarning(Objects.requireNonNull(getContext()), "Press Long Click To Edit Bio").show();
             }
         });
 
@@ -199,7 +202,7 @@ public class EditProfile extends Fragment {
     }
 
     public void showUserData(){
-        SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
@@ -207,20 +210,18 @@ public class EditProfile extends Fragment {
                 .userProfile("Token "+ token);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if(response.isSuccessful()){
                     JSONObject jsonObject = null;
                     try {
-                        jsonObject = new JSONObject(response.body().string());
+                        jsonObject = new JSONObject(Objects.requireNonNull(response.body()).string());
                         JSONObject profile = jsonObject.getJSONObject("profile");
                         userEmailTextView.setText(profile.getString("email"));
                         userLocationTextView.setText(profile.getString("city"));
                         aboutBio.setText(profile.getString("bio"));
                         userNameTextView.setText(jsonObject.getString("username"));
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
                 }else{
@@ -229,7 +230,7 @@ public class EditProfile extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
 
             }
@@ -237,7 +238,7 @@ public class EditProfile extends Fragment {
     }
 
     private void updateEmail() {
-        SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
@@ -245,17 +246,17 @@ public class EditProfile extends Fragment {
                 .updateEmail("Token "+token,userEmailEditText.getText().toString().trim());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    DynamicToast.makeSuccess(getContext(), "Email Update Successfully").show();
+                    DynamicToast.makeSuccess(Objects.requireNonNull(getContext()), "Email Update Successfully").show();
                     userEmailTextView.setText(userEmailEditText.getText().toString());
                 }else{
-                    DynamicToast.makeError(getContext(), "Email Already Exists!").show();
+                    DynamicToast.makeError(Objects.requireNonNull(getContext()), "Email Already Exists!").show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -266,11 +267,11 @@ public class EditProfile extends Fragment {
 
         if (email.isEmpty() || !isValidEmail(email)) {
             saveEmailImageButton.setEnabled(false);
-            saveEmailImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.color_secondary_text));
+            saveEmailImageButton.setColorFilter(ContextCompat.getColor(Objects.requireNonNull(getContext()),R.color.color_secondary_text));
             return false;
         } else {
             saveEmailImageButton.setEnabled(true);
-            saveEmailImageButton.setColorFilter(ContextCompat.getColor(getContext(),R.color.black));
+            saveEmailImageButton.setColorFilter(ContextCompat.getColor(Objects.requireNonNull(getContext()),R.color.black));
         }
         return true;
     }
@@ -280,7 +281,7 @@ public class EditProfile extends Fragment {
     }
 
     private void updateBio() {
-        SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
@@ -288,17 +289,17 @@ public class EditProfile extends Fragment {
                 .updateBio("Token "+token,aboutBioEdit.getText().toString().trim());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    DynamicToast.makeSuccess(getContext(), "Bio Update Successfully").show();
+                    DynamicToast.makeSuccess(Objects.requireNonNull(getContext()), "Bio Update Successfully").show();
                     aboutBio.setText(aboutBioEdit.getText().toString());
                 }else{
-                    DynamicToast.makeError(getContext(), "Something Wrong!").show();
+                    DynamicToast.makeError(Objects.requireNonNull(getContext()), "Something Wrong!").show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

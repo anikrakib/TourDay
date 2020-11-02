@@ -48,6 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anikrakib.tourday.Activity.ExploreActivity;
+import com.anikrakib.tourday.Activity.LocationActivity;
 import com.anikrakib.tourday.Adapter.Profile.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
@@ -56,6 +57,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.marozzi.roundbutton.RoundButton;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
+import com.tylersuehr.socialtextview.SocialTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,6 +70,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -87,7 +90,7 @@ public class MyProfileActivity extends AppCompatActivity{
     ViewPager viewPager;
     ViewProfilePagerAdapter viewProfilePagerAdapter;
     ImageView chooseImage_ImageView,facebookLinkImageView,instagramLinkImageView,bangladeshImageView,editNameImageView;
-    Dialog myDialog;
+    Dialog myDialog,myDialog2;
     FloatingActionButton floatingActionButtonCreatePost;
     Button uploadButton,saveButton;
     EditText socialMediaLinkEditText,postPopUpDescription,nameEditTest;
@@ -99,6 +102,9 @@ public class MyProfileActivity extends AppCompatActivity{
     InputStream postInputStream;
     Boolean createPostImageClick = false;
     ImageView postImageView;
+    public static String location = "";
+    public static String userFacebookLink = "";
+    public static String userInstagramLink = "";
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -127,10 +133,11 @@ public class MyProfileActivity extends AppCompatActivity{
         districtKeys = resources.getStringArray(R.array.bdDistrict);
 
         myDialog = new Dialog(this);
+        myDialog2 = new Dialog(this);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-
+        // show current login user all data
         showUserData();
 
         /////*     initialize ViewPager   */////
@@ -141,8 +148,6 @@ public class MyProfileActivity extends AppCompatActivity{
         tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabRippleColor(null);
-
-        /////*     Check SocialMediaLink is null or not   */////
 
 
         /*    On Click Listener     */
@@ -213,8 +218,11 @@ public class MyProfileActivity extends AppCompatActivity{
     private void showProfileEditPopUp() {
         View touch;
         Animation rightToLeft,leftToRight;
-        LinearLayout linearLayout,manageMyAccountLayout,manageMyAccountPart;
+        LinearLayout linearLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
         ImageView backButton;
+        SocialTextView userNameInPopUp;
+        CircleImageView userImageInPopUp;
+        TextView userBioInPopUp,userFullNameInPopUp;
 
 
         myDialog.setContentView(R.layout.profile_more_option_pop_up);
@@ -223,10 +231,73 @@ public class MyProfileActivity extends AppCompatActivity{
         backButton = myDialog.findViewById(R.id.backButton);
         manageMyAccountLayout = myDialog.findViewById(R.id.manageMyAccountLayout);
         manageMyAccountPart = myDialog.findViewById(R.id.manageMyAccountPartLayout);
+        userFullNameInPopUp = myDialog.findViewById(R.id.userFullNameInPopUp);
+        userNameInPopUp = myDialog.findViewById(R.id.userUserNameInPopUp);
+        userImageInPopUp = myDialog.findViewById(R.id.userImageInPopUp);
+        userBioInPopUp = myDialog.findViewById(R.id.userBioInPopUp);
+        locationLayout = myDialog.findViewById(R.id.locationLayout);
+        facebookIdLayout = myDialog.findViewById(R.id.facebookLinkEdit);
+        instagramIdLayout = myDialog.findViewById(R.id.instagramLinkEdit);
+
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .userProfile("Token "+token);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+                        userFullNameInPopUp.setText(profile.getString("name"));
+                        userNameInPopUp.setLinkText("@"+jsonObject.getString("username"));
+                        userBioInPopUp.setText(profile.getString("bio"));
+                        location = profile.getString("city");
+                        Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userImageInPopUp);
+
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+            }
+        });
 
         rightToLeft = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
         leftToRight = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
 
+
+        locationLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MyProfileActivity.this, LocationActivity.class)
+                        .putExtra("recentLocation",location));
+            }
+        });
+
+        facebookIdLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSocialMediaPopup(v.getId());
+            }
+        });
+
+        instagramIdLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSocialMediaPopup(v.getId());
+            }
+        });
 
         manageMyAccountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,7 +313,7 @@ public class MyProfileActivity extends AppCompatActivity{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 linearLayout.startAnimation(leftToRight);
-                handler();
+                handlerForCustomDialog1();
                 return true;
             }
         });
@@ -250,7 +321,7 @@ public class MyProfileActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 linearLayout.startAnimation(leftToRight);
-                handler();
+                handlerForCustomDialog1();
 
             }
         });
@@ -265,28 +336,20 @@ public class MyProfileActivity extends AppCompatActivity{
         myDialog.show();
 
     }
-    public void handler(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                myDialog.dismiss();
-            }
-        },500);
-    }
 
     //this method show pop to edit user name
     private void showEditNamePopUp(String name) {
         ImageView close;
 
-        myDialog.setContentView(R.layout.custom_edit_name_pop_up);
-        nameEditTest = myDialog.findViewById(R.id.nameEditText);
-        close = myDialog.findViewById(R.id.closeButtonEditNamePopUp);
-        saveButton = myDialog.findViewById(R.id.saveButton);
+        myDialog2.setContentView(R.layout.custom_edit_name_pop_up);
+        nameEditTest = myDialog2.findViewById(R.id.nameEditText);
+        close = myDialog2.findViewById(R.id.closeButtonEditNamePopUp);
+        saveButton = myDialog2.findViewById(R.id.saveButton);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog.dismiss();
+                myDialog2.dismiss();
             }
         });
 
@@ -317,7 +380,7 @@ public class MyProfileActivity extends AppCompatActivity{
                 //rest of the work here about edit name
                 if(!TextUtils.isEmpty(nameEditTest.getText().toString())){
                     updateName();
-                    myDialog.dismiss();
+                    myDialog2.dismiss();
                     userFullName.setText(nameEditTest.getText().toString());
                 }else{
                     DynamicToast.makeError(getApplicationContext(), "Name Can't Empty!").show();
@@ -326,9 +389,9 @@ public class MyProfileActivity extends AppCompatActivity{
         });
 
 
-        myDialog.setCancelable(false);
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        myDialog.show();
+        myDialog2.setCancelable(false);
+        Objects.requireNonNull(myDialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog2.show();
     }
 
     /*
@@ -383,15 +446,15 @@ public class MyProfileActivity extends AppCompatActivity{
     public void showSocialMediaPopup(final int id) {
         ImageView close;
 
-        myDialog.setContentView(R.layout.custom_social_media_link_pop_up);
-        socialMediaLinkEditText = myDialog.findViewById(R.id.socialMediaLinkEditText);
-        close = myDialog.findViewById(R.id.txtclose);
-        uploadButton = myDialog.findViewById(R.id.uploadButton);
+        myDialog2.setContentView(R.layout.custom_social_media_link_pop_up);
+        socialMediaLinkEditText = myDialog2.findViewById(R.id.socialMediaLinkEditText);
+        close = myDialog2.findViewById(R.id.txtclose);
+        uploadButton = myDialog2.findViewById(R.id.uploadButton);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog.dismiss();
+                myDialog2.dismiss();
             }
         });
 
@@ -418,25 +481,27 @@ public class MyProfileActivity extends AppCompatActivity{
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                myDialog.dismiss();
-                if(id == R.id.facebookLinkImageView){
-                    facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
-                }else if(id == R.id.instagramLinkImageView){
-                    instagramLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),  R.color.instagram_color));
-                }
-
+                myDialog2.dismiss();
             }
         });
 
-        if(id == R.id.facebookLinkImageView){
-            socialMediaLinkEditText.setHint("Enter Your Facebook URl");
-        }else if(id == R.id.instagramLinkImageView){
-            socialMediaLinkEditText.setHint("Enter Your Instagram URl");
+        if(id == R.id.facebookLinkImageView || id == R.id.facebookLinkEdit ){
+            if(facebookLink.getText().toString().isEmpty()){
+                socialMediaLinkEditText.setHint("Enter Your Facebook URL");
+            }else{
+                socialMediaLinkEditText.setText(facebookLink.getText().toString());
+            }
+        }else if(id == R.id.instagramLinkImageView || id == R.id.instagramLinkEdit ){
+            if(instagramLink.getText().toString().isEmpty()) {
+                socialMediaLinkEditText.setHint("Enter Your Instagram URL");
+            }else{
+                socialMediaLinkEditText.setText(instagramLink.getText().toString());
+            }
         }
 
-        myDialog.setCancelable(false);
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        myDialog.show();
+        myDialog2.setCancelable(false);
+        Objects.requireNonNull(myDialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog2.show();
     }
 
     //this method show pop to create post
@@ -452,15 +517,15 @@ public class MyProfileActivity extends AppCompatActivity{
 
 
 
-        myDialog.setContentView(R.layout.create_post);
-        postCloseButton= myDialog.findViewById(R.id.postCloseButton);
-        createPostLayout = myDialog.findViewById(R.id.createPostLayout);
-        postPopUpDescription = myDialog.findViewById(R.id.popup_description);
-        userProfilePictureCircleImageView = myDialog.findViewById(R.id.userProfilePicture);
-        districtSpinner = myDialog.findViewById(R.id.districtSpinner);
-        createPostButton = myDialog.findViewById(R.id.createPostButton);
-        createPostDate = myDialog.findViewById(R.id.createPostDate);
-        postImageView = myDialog.findViewById(R.id.postImageView);
+        myDialog2.setContentView(R.layout.create_post);
+        postCloseButton= myDialog2.findViewById(R.id.postCloseButton);
+        createPostLayout = myDialog2.findViewById(R.id.createPostLayout);
+        postPopUpDescription = myDialog2.findViewById(R.id.popup_description);
+        userProfilePictureCircleImageView = myDialog2.findViewById(R.id.userProfilePicture);
+        districtSpinner = myDialog2.findViewById(R.id.districtSpinner);
+        createPostButton = myDialog2.findViewById(R.id.createPostButton);
+        createPostDate = myDialog2.findViewById(R.id.createPostDate);
+        postImageView = myDialog2.findViewById(R.id.postImageView);
 
         // set animation in create post pop up
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
@@ -530,18 +595,18 @@ public class MyProfileActivity extends AppCompatActivity{
                 editor.apply();
 
                 //myDialog.dismiss();
-                handler();
+                handlerForCustomDialog2();
             }
         });
 
 
         createPostLayout.startAnimation(top_to_bottom);
 
-        myDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,Toolbar.LayoutParams.WRAP_CONTENT);
-        myDialog.getWindow().getAttributes().gravity = Gravity.TOP;
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        myDialog.setCancelable(false);
-        myDialog.show();
+        myDialog2.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT,Toolbar.LayoutParams.WRAP_CONTENT);
+        myDialog2.getWindow().getAttributes().gravity = Gravity.TOP;
+        myDialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog2.setCancelable(false);
+        myDialog2.show();
 
     }
 
@@ -588,7 +653,7 @@ public class MyProfileActivity extends AppCompatActivity{
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     DynamicToast.makeSuccess(getApplicationContext(), "Post Created").show();
-                    myDialog.dismiss();
+                    myDialog2.dismiss();
                     // post description shared pref removed
                     SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
                     @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = userPref.edit();
@@ -691,10 +756,21 @@ public class MyProfileActivity extends AppCompatActivity{
                         editor.apply();
                         Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
 
+                        /////*     Check SocialMediaLink is null or not   */////
+                        if(!facebookLink.getText().toString().equals("null")){
+                            facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
+                        }else{
+                            facebookLink.setText("");
+                            facebookLinkImageView.setVisibility(View.GONE);
+                        }
+                        if(!instagramLink.getText().toString().equals("null")){
+                            instagramLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),  R.color.instagram_color));
+                        }else{
+                            instagramLink.setText("");
+                            instagramLinkImageView.setVisibility(View.GONE);
+                        }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
                 }else{
@@ -714,10 +790,10 @@ public class MyProfileActivity extends AppCompatActivity{
     @SuppressLint("SetJavaScriptEnabled")
     public void showBdMap() {
         ImageView close;
-        myDialog.setContentView(R.layout.custom_bd_map_pop_up);
-        close = myDialog.findViewById(R.id.socialMediaClose);
+        myDialog2.setContentView(R.layout.custom_bd_map_pop_up);
+        close = myDialog2.findViewById(R.id.socialMediaClose);
 
-        final WebView webView = myDialog.findViewById(R.id.webViewSocialMedia);
+        final WebView webView = myDialog2.findViewById(R.id.webViewSocialMedia);
 
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String username = userPref.getString("userName","");
@@ -739,12 +815,12 @@ public class MyProfileActivity extends AppCompatActivity{
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog.dismiss();
+                myDialog2.dismiss();
             }
         });
-        myDialog.setCancelable(false);
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        myDialog.show();
+        myDialog2.setCancelable(false);
+        Objects.requireNonNull(myDialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog2.show();
     }
 
     /*
@@ -826,6 +902,25 @@ public class MyProfileActivity extends AppCompatActivity{
         }
 
         return byteBuff.toByteArray();
+    }
+
+    // handler for popUp animation
+    public void handlerForCustomDialog1(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                myDialog.dismiss();
+            }
+        },500);
+    }
+
+    public void handlerForCustomDialog2(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                myDialog2.dismiss();
+            }
+        },500);
     }
 
 }
