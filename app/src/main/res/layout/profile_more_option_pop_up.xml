@@ -125,7 +125,10 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp">
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="20dp">
 
                 <TextView
                     android:id="@+id/textView"
@@ -383,7 +386,7 @@
                     android:textColor="@color/color_fourd_text"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/view3" />
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
 
                 <LinearLayout
                     android:id="@+id/termOfUse"
@@ -424,6 +427,100 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/termOfUse" />
 
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Profile Settings"
+                    android:textColor="@color/color_fourd_text"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+                <TextView
+                    android:id="@+id/socialMediaCustomized"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Show Social Media Link"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="2dp"
+                    android:layout_height="58dp"
+                    android:layout_marginStart="25dp"
+                    android:background="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/socialMediaCustomized" />
+
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_width="24dp"
+                    android:layout_height="26dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/ic_baseline_arrow_forward_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/socialMediaCustomized"
+                    app:tint="@color/colorPrimary" />
+
+                <Switch
+                    android:id="@+id/facebookLinkHide"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="Facebook"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/image1"
+                    app:layout_constraintStart_toEndOf="@+id/image1"
+                    app:layout_constraintTop_toTopOf="@+id/image1"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="24dp"
+                    android:layout_height="26dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/ic_baseline_arrow_forward_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/image1"
+                    app:tint="@color/colorPrimary" />
+
+                <Switch
+                    android:id="@+id/instagramLinkHide"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="Instagram"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/image2"
+                    app:layout_constraintStart_toEndOf="@+id/image2"
+                    app:layout_constraintTop_toTopOf="@+id/image2"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/colorPrimaryDark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/instagramLinkHide" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
@@ -431,4 +528,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
-
