@@ -1,12 +1,14 @@
 package com.anikrakib.tourday.Adapter.Profile;
 
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.anikrakib.tourday.Fragment.Profile.About;
 import com.anikrakib.tourday.Fragment.Profile.EditProfile;
+import com.anikrakib.tourday.Fragment.Profile.OtherUsersGallery;
 import com.anikrakib.tourday.Fragment.Profile.Post;
 
 
@@ -16,15 +18,16 @@ public class ViewProfilePagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new About();
+                return new Post();
             case 1:
                 return new EditProfile();
             case 2:
-                return new Post();
+                return new About();
             default:
                 return null;
         }
@@ -39,11 +42,11 @@ public class ViewProfilePagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "About";
+                return "Post";
             case 1:
                 return "Edit Profile";
             case 2:
-                return "Post";
+                return "About";
             default:
                 return null;
         }
