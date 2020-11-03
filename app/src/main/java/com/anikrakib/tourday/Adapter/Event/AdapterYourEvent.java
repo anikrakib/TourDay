@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Activity.Event.YourEventDetailsActivity;
-import com.anikrakib.tourday.Models.Event.PostEvent;
 import com.anikrakib.tourday.Models.Event.YourEventModel;
 import com.anikrakib.tourday.R;
 import com.makeramen.roundedimageview.RoundedImageView;

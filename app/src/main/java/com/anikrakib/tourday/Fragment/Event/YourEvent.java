@@ -14,17 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.anikrakib.tourday.Adapter.Blog.AdapterBlog;
 import com.anikrakib.tourday.Adapter.Event.AdapterYourEvent;
-import com.anikrakib.tourday.Models.Blog.BlogItem;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
-import com.anikrakib.tourday.Models.Event.PostEvent;
 import com.anikrakib.tourday.Models.Event.YourEventModel;
-import com.anikrakib.tourday.Models.Profile.PostItem;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +26,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import okhttp3.ResponseBody;
