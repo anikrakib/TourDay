@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Fragment.Profile;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -67,7 +68,7 @@ public class OtherUsersPost extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         otherUsersPostRecyclerView.setFocusable(false);
 
-        myDialog = new Dialog(getContext());
+        myDialog = new Dialog(Objects.requireNonNull(getContext()));
 
         SharedPreferences userPref = getContext().getSharedPreferences("otherUser", Context.MODE_PRIVATE);
         String userName = userPref.getString("otherUsersUserName","");
@@ -106,6 +107,8 @@ public class OtherUsersPost extends Fragment {
                         try {
                             JSONArray jsonArray = response.getJSONArray("results");
                             String nextPage = response.getString("next");
+                            SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+                            String id = userPref.getString("id","");
 
                             for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -116,16 +119,15 @@ public class OtherUsersPost extends Fragment {
                                 String imageUrl = hit.getString("image");
                                 JSONArray likeArray = hit.getJSONArray("likes");
                                 int likeCount = likeArray.length();
-                                int user = hit.getInt("user");
-                                String id = hit.getString("id");
+                                String postId = hit.getString("id");
                                 boolean selfLike = false;
                                 for (int j = 0; j < likeArray.length(); j++)
-                                    if (likeArray.getInt(j) == user) {
+                                    if (likeArray.getInt(j) == Integer.parseInt(id)) {
                                         selfLike = true;
                                         break;
                                     }
 
-                                mPostItem.add(new PostItem(imageUrl, post, location, date, likeCount, id, selfLike));
+                                mPostItem.add(new PostItem(imageUrl, post, location, date, likeCount, postId, selfLike));
                             }
                             if(!nextPage.isEmpty()){
                                 getOtherUserPost(nextPage);

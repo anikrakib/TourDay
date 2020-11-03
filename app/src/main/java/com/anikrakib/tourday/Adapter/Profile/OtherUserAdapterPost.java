@@ -1,5 +1,6 @@
 package com.anikrakib.tourday.Adapter.Profile;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -47,6 +48,7 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item_update, parent, false);
         return new ExampleViewHolder(v);
     }
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
         final PostItem currentItem = mPostItemList.get(position);
@@ -69,11 +71,21 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         holder.txtLocation.setText(location);
         holder.txtDate.setText(date);
         holder.userNameListItem.setText(userName2);
-        holder.mTextViewLikes.setText(""+likeCount);
+        //holder.mTextViewLikes.setText(likeCount+" Likes");
+        if(currentItem.getSelfLike()){
+            if((likeCount-1) == 0 ){
+                holder.mTextViewLikes.setText("You Liked");
+            }else{
+                holder.mTextViewLikes.setText("You and "+(likeCount-1)+" Other Likes");
+            }
+        }else{
+            holder.mTextViewLikes.setText(likeCount+" Likes");
+        }
         Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
         Picasso.get().load("https://tourday.team/"+otherUsersProfilePic).fit().centerInside().into(holder.userProfilePic);
 
 
+        assert userName != null;
         if(userName.equals(userName2)){
             holder.morePostButton.setVisibility(View.VISIBLE);
         } else {
@@ -81,7 +93,7 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         }
 
         holder.blike.setImageResource(
-                currentItem.getSelfLike()?R.drawable.ic_unlike:R.drawable.ic_like
+                currentItem.getSelfLike()?R.drawable.ic_like:R.drawable.ic_unlike
         );
 
         holder.blike.setOnClickListener(v->{
@@ -100,23 +112,6 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
             }
         });
 
-        holder.morePostButton.setOnClickListener(v->{
-            PopupMenu popupMenu = new PopupMenu(mContext,holder.morePostButton);
-            popupMenu.inflate(R.menu.delete_post_or_blog_menu);
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-
-                    if (item.getItemId() == R.id.delete_post) {
-                        deletePost(currentItem.getmId(), position);
-                        return true;
-                    }
-
-                    return false;
-                }
-            });
-            popupMenu.show();
-        });
     }
     @Override
     public int getItemCount() {
@@ -183,33 +178,6 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         });
     }
 
-    public void deletePost(String getId,int position){
-        SharedPreferences userPref = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
-
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .deletePost("Token "+token,getId);
-
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    mPostItemList.remove(position);
-                    notifyItemRemoved(position);
-                    DynamicToast.makeError(mContext, "Post Deleted !!").show();
-                }else{
-                    DynamicToast.makeError(mContext, "Something Wrong !!").show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
     public void showDialog(PostItem item){
 
