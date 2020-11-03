@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,16 +31,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class Post extends Fragment {
 
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
     private AdapterPost mPostAdapter;
     private ArrayList<PostItem> mPostItem;
     private RequestQueue mRequestQueue;
     SwipeRefreshLayout swipeRefreshLayout;
+    Boolean isScrolling = false;
+    int currentItems, totalItems, scrollOutItems;
+    LinearLayoutManager layoutManager;
 
 
     public Post() {
@@ -67,30 +73,25 @@ public class Post extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPostItem = new ArrayList<>();
-        mRequestQueue = Volley.newRequestQueue(getContext());
+        mRequestQueue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                     parseJSON();
-
             }
-
-
         });
 
-
         parseJSON();
-
 
         return v;
     }
 
     private void parseJSON() {
         mPostItem = new ArrayList<>();
-        SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         String userName = userPref.getString("userName","");
         swipeRefreshLayout.setRefreshing(true);
 

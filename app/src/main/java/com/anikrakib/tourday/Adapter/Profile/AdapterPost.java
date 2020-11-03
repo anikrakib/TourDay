@@ -51,6 +51,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item_update, parent, false);
         return new ExampleViewHolder(v);
     }
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
         SharedPreferences userPref =mContext.getSharedPreferences("user", MODE_PRIVATE);
@@ -66,7 +67,15 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         holder.txtPost.setLinkText(post);
         holder.txtLocation.setText(location);
         holder.txtDate.setText(date);
-        holder.mTextViewLikes.setText(""+likeCount);
+        if(currentItem.getSelfLike()){
+            if((likeCount-1) == 0 ){
+                holder.mTextViewLikes.setText("You Liked");
+            }else{
+                holder.mTextViewLikes.setText("You and "+(likeCount-1)+" Other Likes");
+            }
+        }else{
+            holder.mTextViewLikes.setText(likeCount+" Likes");
+        }
         Picasso.get().load("https://www.tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
 
         String userProfilePicture = userPref.getString("userProfilePicture","");
