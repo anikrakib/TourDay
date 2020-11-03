@@ -11,9 +11,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="225dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:cardElevation="10dp"
         app:cardCornerRadius="18dp"
         tools:layout_editor_absoluteX="88dp"
         tools:layout_editor_absoluteY="501dp">
@@ -37,7 +36,7 @@
                 android:textSize="20sp"
                 android:gravity="center"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/eventDate"
+                app:layout_constraintBottom_toTopOf="@+id/eventDateLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/eventImage"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -78,11 +77,11 @@
 
             <ImageButton
                 android:id="@+id/eventInterestedLikeImage"
-                android:layout_width="29dp"
-                android:layout_height="21dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:background="@null"
-                android:src="@drawable/ic_like"
+                android:src="@drawable/ic_unlike"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/eventDescription"
@@ -125,12 +124,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/eventDate"
-                android:layout_width="155dp"
+                android:id="@+id/eventDateLayout"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/horizontal_calender_background"
-                android:gravity="left|center"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
@@ -146,8 +145,9 @@
                     app:tint="@color/black"
                     tools:ignore="ContentDescription" />
 
+
                 <TextView
-                    android:id="@+id/eventStartDate"
+                    android:id="@+id/eventDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -159,29 +159,6 @@
                     android:textStyle="bold"
                     tools:ignore="RtlSymmetry,SmallSp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
-                    android:text="To"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:id="@+id/eventEndDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:padding="1dp"
-                    android:paddingRight="3dp"
-                    android:text=""
-                    android:textColor="#FF0000"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    tools:ignore="RtlSymmetry,SmallSp" />
 
             </LinearLayout>
 
@@ -197,7 +174,7 @@
                 android:paddingRight="3dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/eventImage"
-                app:layout_constraintTop_toBottomOf="@+id/eventDate">
+                app:layout_constraintTop_toBottomOf="@+id/eventDateLayout">
 
                 <ImageView
                     android:layout_width="15dp"
@@ -207,7 +184,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/eventStartTime"
+                    android:id="@+id/eventCost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"

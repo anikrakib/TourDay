@@ -2,6 +2,7 @@ package com.anikrakib.tourday.WebService;
 
 
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
+import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
 import com.github.florent37.shapeofview.shapes.BubbleView;
@@ -172,5 +173,10 @@ public interface Api {
     Call<ResponseBody> getYourEvent(
             @Header("Authorization") String authToken,
             @Path("username") String userName);
+
+    @GET("all-events/")
+    Call<AllEventResponse> getAllEvent(
+            @Query("limit") int limit,
+            @Query("offset") int offSet);
 
 }

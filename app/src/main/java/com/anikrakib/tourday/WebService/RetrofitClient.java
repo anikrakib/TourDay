@@ -3,9 +3,10 @@ package com.anikrakib.tourday.WebService;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.anikrakib.tourday.Utils.ApiURL.BASE_URL;
+
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://www.tourday.team/api/";
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
 
