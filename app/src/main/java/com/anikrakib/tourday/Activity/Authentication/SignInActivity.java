@@ -1,5 +1,6 @@
 package com.anikrakib.tourday.Activity.Authentication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.app.Dialog;
@@ -27,6 +28,9 @@ import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.textfield.TextInputLayout;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import org.json.JSONObject;
+
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,7 +70,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
         setSupportActionBar(toolbarBack);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         signUp.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +153,7 @@ public class SignInActivity extends AppCompatActivity {
     public void loader(){
         postDialog.setContentView(R.layout.gif_view);
         postDialog.setCancelable(false);
-        postDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setTimeForRunLoder();
         postDialog.show();
         if(validateEmail()){
@@ -168,13 +172,15 @@ public class SignInActivity extends AppCompatActivity {
                 .logInUsingEmail(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
         call.enqueue(new Callback<Token>() {
             @Override
-            public void onResponse(Call<Token> call, Response<Token> response) {
+            public void onResponse(@NonNull Call<Token> call, @NonNull Response<Token> response) {
                 if(response.isSuccessful()){
                     //make shared preference user
-                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
+                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
                     SharedPreferences.Editor editor = userPref.edit();
+                    assert response.body() != null;
                     editor.putString("token",response.body().getKey());
                     editor.putBoolean("isLoggedIn",true);
+                    editor.putBoolean("firstTime",true);
                     editor.apply();
                     startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
                     DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
@@ -182,6 +188,7 @@ public class SignInActivity extends AppCompatActivity {
                     finish();
                 }else{
                     try {
+                        assert response.errorBody() != null;
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
                     } catch (Exception e) {
@@ -195,7 +202,7 @@ public class SignInActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Token> call, Throwable t) {
+            public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -208,20 +215,23 @@ public class SignInActivity extends AppCompatActivity {
                 .logInUsingUserName(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
         call.enqueue(new Callback<Token>() {
             @Override
-            public void onResponse(Call<Token> call, Response<Token> response) {
+            public void onResponse(@NonNull Call<Token> call, @NonNull Response<Token> response) {
                 if(response.isSuccessful()){
                     DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
                     //make shared preference user
-                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
+                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
                     SharedPreferences.Editor editor = userPref.edit();
+                    assert response.body() != null;
                     editor.putString("token",response.body().getKey());
                     editor.putBoolean("isLoggedIn",true);
+                    editor.putBoolean("firstTime",true);
                     editor.apply();
                     startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
                     token=response.body().getKey();
                     finish();
                 }else{
                     try {
+                        assert response.errorBody() != null;
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
                     } catch (Exception e) {
@@ -235,7 +245,7 @@ public class SignInActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Token> call, Throwable t) {
+            public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -249,11 +259,7 @@ public class SignInActivity extends AppCompatActivity {
     private boolean validateEmail() {
         String email = inputUsername.getText().toString().trim();
 
-        if (email.isEmpty() || !isValidEmail(email)) {
-            return false;
-        } else {
-            return true;
-        }
+        return !email.isEmpty() && isValidEmail(email);
 
     }
 
@@ -266,16 +272,12 @@ public class SignInActivity extends AppCompatActivity {
         NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mobileData = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-        if((wifi != null && wifi.isConnected()) || (mobileData != null && mobileData.isConnected())){
-            return true;
-        }else {
-            return false;
-        }
+        return (wifi != null && wifi.isConnected()) || (mobileData != null && mobileData.isConnected());
     }
     private void showNoInternetPopUp(){
         postDialog.setContentView(R.layout.custom_no_internet_pop_up);
         postDialog.setCancelable(false);
-        postDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setTimeForRunLoder();
         postDialog.show();
     }

@@ -1,4 +1,5 @@
 package com.anikrakib.tourday.Activity.Profile;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -196,8 +197,7 @@ public class MyProfileActivity extends AppCompatActivity{
         profileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
-                //onBackPressed();
+                onBackPressed();
             }
         });
         editNameImageView.setOnClickListener(new View.OnClickListener() {
@@ -412,17 +412,16 @@ public class MyProfileActivity extends AppCompatActivity{
                 .updateProfileName("Token "+token,nameEditTest.getText().toString().trim());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if(response.isSuccessful()){
                     DynamicToast.makeSuccess(getApplicationContext(), "Name Update Successfully").show();
                     JSONObject jsonObject = null;
                     try {
+                        assert response.body() != null;
                         jsonObject = new JSONObject(response.body().string());
                         JSONObject profile = jsonObject.getJSONObject("profile");
                         userFullName.setText(profile.getString("name"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
                 }else{
@@ -431,7 +430,7 @@ public class MyProfileActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -440,6 +439,7 @@ public class MyProfileActivity extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        startActivity(new Intent(MyProfileActivity.this, ExploreActivity.class));
     }
 
     //this method show pop to edit socialMedia Link
@@ -650,7 +650,7 @@ public class MyProfileActivity extends AppCompatActivity{
                 .createPost("Token "+token,description,location,date,postImage);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     DynamicToast.makeSuccess(getApplicationContext(), "Post Created").show();
                     myDialog2.dismiss();
@@ -664,7 +664,7 @@ public class MyProfileActivity extends AppCompatActivity{
                 }
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -753,6 +753,8 @@ public class MyProfileActivity extends AppCompatActivity{
                         facebookLink.setText(profile.getString("fb"));
                         instagramLink.setText(profile.getString("insta"));
                         editor.putString("userProfilePicture",profile.getString("picture"));
+                        editor.putString("userName",jsonObject.getString("username"));
+                        editor.putString("id",jsonObject.getString("id"));
                         editor.apply();
                         Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
 
@@ -845,7 +847,7 @@ public class MyProfileActivity extends AppCompatActivity{
                 .updateImage("Token "+token,body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
 
                 if (response.isSuccessful()) {
                     DynamicToast.makeSuccess(getApplicationContext(), "Image Updated").show();
@@ -854,7 +856,7 @@ public class MyProfileActivity extends AppCompatActivity{
                 }
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -870,7 +872,7 @@ public class MyProfileActivity extends AppCompatActivity{
                 if(createPostImageClick){
                     Uri selectedImage = data.getData();
                     try {
-                        postInputStream = getContentResolver().openInputStream(data.getData());
+                        postInputStream = getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
                         postImageView.setImageURI(selectedImage);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -878,8 +880,9 @@ public class MyProfileActivity extends AppCompatActivity{
                 }else{
                     Uri selectedImage = data.getData();
                     try {
-                        InputStream is = getContentResolver().openInputStream(data.getData());
+                        InputStream is = getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
                         userProfilePic.setImageURI(selectedImage);
+                        assert is != null;
                         updatePhoto(getBytes(is));
                     } catch (IOException e) {
                         e.printStackTrace();

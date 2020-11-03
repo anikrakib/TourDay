@@ -160,9 +160,11 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
                 SharedPreferences.Editor editor = userPref.edit();
                 editor.putBoolean("isLoggedIn",false);
+                editor.putBoolean("firstTime",false);
                 editor.putString("token","");
                 editor.putString("userName","");
                 editor.putString("userProfilePicture","");
+                editor.putString("id","");
                 editor.apply();
                 startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
                 myDialog.dismiss();

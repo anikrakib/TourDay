@@ -77,16 +77,11 @@ public class About extends Fragment {
                     try {
                         jsonObject = new JSONObject(response.body().string());
                         JSONObject profile = jsonObject.getJSONObject("profile");
-                        //save Username for changing menu item profile name
-                        SharedPreferences userPref =getContext().getSharedPreferences("user",getContext().MODE_PRIVATE);
-                        SharedPreferences.Editor editor = userPref.edit();
-                        editor.putString("userName",jsonObject.getString("username"));
-                        editor.apply();
+
                         userEmail.setText(profile.getString("email"));
                         userLocation.setText(profile.getString("city"));
                         userBio.setText(profile.getString("bio"));
                         userUserName.setText(jsonObject.getString("username"));
-
 
                     } catch (JSONException e) {
                         e.printStackTrace();
