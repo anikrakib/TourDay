@@ -5,7 +5,7 @@
     <color name="colorAccent">#00284e</color>
     <color name="secondaryColor">#992f31</color>
     <color name="backgroundColor">#FFFFFF</color>
-
+    <color name="shimmerBackgroundColor">#898F9C</color>
     <color name="black_overlay">#66000000</color>
     <color name="dark_red">#D32F2F</color>
     <color name="dark_green">#388E3C</color>
