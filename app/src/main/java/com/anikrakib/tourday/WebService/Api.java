@@ -95,6 +95,18 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("profile/")
+    Call<ResponseBody> updateFacebookLink(
+            @Header("Authorization") String authToken,
+            @Field("fb") String facebookLink);
+
+    @FormUrlEncoded
+    @POST("profile/")
+    Call<ResponseBody> updateInstagramLink(
+            @Header("Authorization") String authToken,
+            @Field("insta") String instagramLink);
+
+    @FormUrlEncoded
+    @POST("profile/")
     Call<ResponseBody> updateLocation(
             @Header("Authorization") String authToken,
             @Field("city") String location);

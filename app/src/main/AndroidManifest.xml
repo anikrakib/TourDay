@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+        <activity android:name=".Activity.Profile.EditEmailActivity"></activity>
         <activity android:name=".Activity.Authentication.ForgetPassword" />
         <activity android:name=".Activity.Blog.DivisionBlogActivity" />
         <activity android:name=".Activity.Profile.OthersUserProfile" />

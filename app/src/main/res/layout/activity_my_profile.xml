@@ -121,7 +121,8 @@
                         android:layout_height="25dp"
                         android:layout_marginEnd="20dp"
                         android:src="@drawable/facebook"
-                        app:tint="@color/color_secondary_text"
+                        app:tint="@color/facebookColor"
+                        android:visibility="gone"
                         tools:ignore="ContentDescription" />
                     <TextView
                         android:id="@+id/facebookLinkTextView"
@@ -134,8 +135,8 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@drawable/instagram"
+                        android:visibility="gone"
                         android:layout_marginEnd="20dp"
-                        app:tint="@color/color_secondary_text"
                         tools:ignore="ContentDescription" />
 
                     <TextView

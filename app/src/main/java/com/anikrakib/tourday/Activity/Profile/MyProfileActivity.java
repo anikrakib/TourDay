@@ -72,6 +72,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -106,6 +108,7 @@ public class MyProfileActivity extends AppCompatActivity{
     public static String location = "";
     public static String userFacebookLink = "";
     public static String userInstagramLink = "";
+    public static final Pattern USER_NAME = Pattern.compile("^([a-z])+([\\w.]{2,})+$");
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -218,7 +221,7 @@ public class MyProfileActivity extends AppCompatActivity{
     private void showProfileEditPopUp() {
         View touch;
         Animation rightToLeft,leftToRight;
-        LinearLayout linearLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
+        LinearLayout linearLayout,emailLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
         ImageView backButton;
         SocialTextView userNameInPopUp;
         CircleImageView userImageInPopUp;
@@ -230,6 +233,7 @@ public class MyProfileActivity extends AppCompatActivity{
         linearLayout = myDialog.findViewById(R.id.moreOptionLayout);
         backButton = myDialog.findViewById(R.id.backButton);
         manageMyAccountLayout = myDialog.findViewById(R.id.manageMyAccountLayout);
+        emailLayout = myDialog.findViewById(R.id.editEmailLayout);
         manageMyAccountPart = myDialog.findViewById(R.id.manageMyAccountPartLayout);
         userFullNameInPopUp = myDialog.findViewById(R.id.userFullNameInPopUp);
         userNameInPopUp = myDialog.findViewById(R.id.userUserNameInPopUp);
@@ -298,7 +302,12 @@ public class MyProfileActivity extends AppCompatActivity{
                 showSocialMediaPopup(v.getId());
             }
         });
-
+        emailLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MyProfileActivity.this, EditEmailActivity.class));
+            }
+        });
         manageMyAccountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -310,6 +319,7 @@ public class MyProfileActivity extends AppCompatActivity{
             }
         });
         touch.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 linearLayout.startAnimation(leftToRight);
@@ -436,6 +446,107 @@ public class MyProfileActivity extends AppCompatActivity{
         });
     }
 
+    private void updateInstagramLink(String link) {
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .updateInstagramLink("Token "+token,link);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    showSocialmediaLink("insta");
+                    socialMediaLinkEditText.setText(instagramLink.getText().toString());
+                    DynamicToast.makeSuccess(getApplicationContext(), "Updated").show();
+                }else{
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void updateFacebookLink(String link) {
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .updateFacebookLink("Token "+token,link);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    showSocialmediaLink("fb");
+                    socialMediaLinkEditText.setText(facebookLink.getText().toString());
+                    DynamicToast.makeSuccess(getApplicationContext(), "Updated").show();
+                }else{
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    public void showSocialmediaLink(String linkType){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .userProfile("Token "+token);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    JSONObject jsonObject = null;
+                    try {
+                        assert response.body() != null;
+                        jsonObject = new JSONObject(Objects.requireNonNull(response.body()).string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+                        if(linkType.equals("fb")) {
+                            facebookLink.setText(profile.getString("fb"));
+                            if(!(facebookLink.getText().toString().equals("null") || facebookLink.getText().toString().isEmpty())){
+                                facebookLinkImageView.setVisibility(View.VISIBLE);
+                            }else{
+                                facebookLink.setText("");
+                                facebookLinkImageView.setVisibility(View.GONE);
+                            }
+                        }
+                        else {
+                            instagramLink.setText(profile.getString("insta"));
+                            if(!(instagramLink.getText().toString().equals("null") || instagramLink.getText().toString().isEmpty())){
+                                instagramLinkImageView.setVisibility(View.VISIBLE);
+                            }else{
+                                instagramLink.setText("");
+                                instagramLinkImageView.setVisibility(View.GONE);
+                            }
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -457,7 +568,6 @@ public class MyProfileActivity extends AppCompatActivity{
                 myDialog2.dismiss();
             }
         });
-
 
         socialMediaLinkEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -481,20 +591,28 @@ public class MyProfileActivity extends AppCompatActivity{
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                myDialog2.dismiss();
+                if(id == R.id.facebookLinkEdit ){
+                    updateFacebookLink(socialMediaLinkEditText.getText().toString().trim());
+                    myDialog2.dismiss();
+                }else if(id == R.id.instagramLinkEdit ){
+                    updateInstagramLink(socialMediaLinkEditText.getText().toString().trim());
+                    myDialog2.dismiss();
+                }
             }
         });
 
         if(id == R.id.facebookLinkImageView || id == R.id.facebookLinkEdit ){
             if(facebookLink.getText().toString().isEmpty()){
-                socialMediaLinkEditText.setHint("Enter Your Facebook URL");
+                socialMediaLinkEditText.setHint("Only facebook username");
             }else{
+                showSocialmediaLink("fb");
                 socialMediaLinkEditText.setText(facebookLink.getText().toString());
             }
         }else if(id == R.id.instagramLinkImageView || id == R.id.instagramLinkEdit ){
             if(instagramLink.getText().toString().isEmpty()) {
-                socialMediaLinkEditText.setHint("Enter Your Instagram URL");
+                socialMediaLinkEditText.setHint("Only instagram username");
             }else{
+                showSocialmediaLink("insta");
                 socialMediaLinkEditText.setText(instagramLink.getText().toString());
             }
         }
@@ -692,14 +810,24 @@ public class MyProfileActivity extends AppCompatActivity{
     }
 
     private void checkInputsSocialMediaLink() {
-        if (!TextUtils.isEmpty(socialMediaLinkEditText.getText())) {
+        if(TextUtils.isEmpty(socialMediaLinkEditText.getText())){
             uploadButton.setEnabled(true);
             uploadButton.setBackgroundResource(R.drawable.button_background);
-        } else {
-            uploadButton.setEnabled(false);
-            uploadButton.setBackgroundResource(R.drawable.disable_button_background);
+        }else{
+            if (isValidUserName(socialMediaLinkEditText.getText().toString())) {
+                uploadButton.setEnabled(true);
+                uploadButton.setBackgroundResource(R.drawable.button_background);
+            } else {
+                uploadButton.setEnabled(false);
+                uploadButton.setBackgroundResource(R.drawable.disable_button_background);
+            }
         }
     }
+    public static boolean isValidUserName(String mobileNo){
+        Matcher matcher = USER_NAME.matcher(mobileNo);
+        return matcher.matches();
+    }
+
 
     private void checkInputsEditName() {
         if (!TextUtils.isEmpty(userFullName.getText())) {
@@ -759,14 +887,14 @@ public class MyProfileActivity extends AppCompatActivity{
                         Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
 
                         /////*     Check SocialMediaLink is null or not   */////
-                        if(!facebookLink.getText().toString().equals("null")){
-                            facebookLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.dark_blue));
+                        if(!(facebookLink.getText().toString().equals("null") || facebookLink.getText().toString().isEmpty())){
+                            facebookLinkImageView.setVisibility(View.VISIBLE);
                         }else{
                             facebookLink.setText("");
                             facebookLinkImageView.setVisibility(View.GONE);
                         }
-                        if(!instagramLink.getText().toString().equals("null")){
-                            instagramLinkImageView.setColorFilter(ContextCompat.getColor(getApplicationContext(),  R.color.instagram_color));
+                        if(!(instagramLink.getText().toString().equals("null") || instagramLink.getText().toString().isEmpty())){
+                            instagramLinkImageView.setVisibility(View.VISIBLE);
                         }else{
                             instagramLink.setText("");
                             instagramLinkImageView.setVisibility(View.GONE);

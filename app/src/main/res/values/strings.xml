@@ -2,7 +2,8 @@
     <string name="app_name">TourdaY</string>
     <string name="sring1">With You Wherever You</string>
     <string name="sring2"> Go</string>
-    <string name="hint_username">Username Or Email</string>
+    <string name="hint_username_or_email">Username Or Email</string>
+    <string name="hint_username">Username</string>
     <string name="hintCode">Enter 8 digit Reset Password Code</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
@@ -13,7 +14,7 @@
     <string name="saveOrGetCodeText">Get Code</string>
     <string name="forgetPassword">Forget Password</string>
     <string name="forgetPassword2">Forget Password ?</string>
-    <string name="err_msg_userName1">Enter your username</string>
+    <string name="err_msg_userName1">Enter your username or Email</string>
     <string name="err_msg_userName2">Enter valid username</string>
     <string name="err_msg_email">Enter valid email address</string>
     <string name="err_msg_password">Password Must be 8 Character</string>
@@ -214,5 +215,7 @@
         <item>46</item>
         <item>57</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -81,9 +81,11 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:layout_width="275dp"
+        android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp"
         android:layout_gravity="center"
         android:background="@color/dividerColor" />
 
