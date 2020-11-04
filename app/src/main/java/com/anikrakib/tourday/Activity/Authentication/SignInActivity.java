@@ -30,6 +30,8 @@ import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import org.json.JSONObject;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,6 +47,8 @@ public class SignInActivity extends AppCompatActivity {
     Dialog postDialog ;
     Button signInButton;
     private static String token;
+    public static final Pattern USER_NAME = Pattern.compile("^([a-z])+([\\w.]{2,})+$");
+
 
 
     @Override
@@ -91,11 +95,12 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isConnected(SignInActivity.this)){
-                    submitForm();
-                }else{
-                    showNoInternetPopUp();
-                }
+//                if(isConnected(SignInActivity.this)){
+//                    submitForm();
+//                }else{
+//                    showNoInternetPopUp();
+//                }
+                submitForm();
             }
         });
 
@@ -106,7 +111,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void submitForm() {
-        if (!validateUsername()) {
+        if (!validateUsernameorEmail()) {
             return;
         }
         if (!validatePassword()) {
@@ -137,17 +142,21 @@ public class SignInActivity extends AppCompatActivity {
         }, 1500);
     }
 
-    private boolean validateUsername() {
-        if (inputUsername.getText().toString().trim().isEmpty()) {
+    private boolean validateUsernameorEmail() {
+        if (!(isValidUserName() || validateEmail())) {
             inputLayoutUsername.setError(getString(R.string.err_msg_userName1));
             requestFocus(inputUsername);
-            return false;
+            return true;
         }
         else {
             inputLayoutUsername.setErrorEnabled(false);
         }
 
         return true;
+    }
+    public boolean isValidUserName(){
+        Matcher matcher = USER_NAME.matcher(inputUsername.getText().toString());
+        return matcher.matches();
     }
 
     public void loader(){
@@ -156,16 +165,18 @@ public class SignInActivity extends AppCompatActivity {
         Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setTimeForRunLoder();
         postDialog.show();
-        if(validateEmail()){
-            accessDataUsingEmail();
-        }else {
-            accessDataUserName();
-        }
 
+        if(validateEmail()) accessDataUsingEmail();
+        else accessDataUserName();
     }
 
     private void accessDataUsingEmail() {
-        setTimeForRunLoder();
+        if(!isConnected(SignInActivity.this)){
+            showNoInternetPopUp();
+            return;
+        }else{
+            setTimeForRunLoder();
+        }
         Call<Token> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -207,8 +218,14 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
+
     private void accessDataUserName() {
-        setTimeForRunLoder();
+        if(!isConnected(SignInActivity.this)){
+            showNoInternetPopUp();
+            return;
+        }else{
+            setTimeForRunLoder();
+        }
         Call<Token> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -276,7 +293,7 @@ public class SignInActivity extends AppCompatActivity {
     }
     private void showNoInternetPopUp(){
         postDialog.setContentView(R.layout.custom_no_internet_pop_up);
-        postDialog.setCancelable(false);
+        postDialog.setCancelable(true);
         Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setTimeForRunLoder();
         postDialog.show();

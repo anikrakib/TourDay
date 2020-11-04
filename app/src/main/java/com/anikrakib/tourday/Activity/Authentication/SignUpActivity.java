@@ -1,14 +1,18 @@
 package com.anikrakib.tourday.Activity.Authentication;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +37,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import pl.droidsonroids.gif.GifDrawable;
@@ -52,6 +58,8 @@ public class SignUpActivity extends AppCompatActivity {
     Dialog postDialog ;
     Toolbar toolbarBack;
     TextView signIn;
+    public static final Pattern USER_NAME = Pattern.compile("^([a-z])+([\\w.]{2,})+$");
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -142,22 +150,28 @@ public class SignUpActivity extends AppCompatActivity {
         sendData();
         postDialog.setContentView(R.layout.gif_view);
         postDialog.setCancelable(false);
-        postDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         postDialog.show();
     }
 
     private void sendData(){
-        setTimeForRunLoder();
+        if(!isConnected(SignUpActivity.this)){
+            showNoInternetPopUp();
+            return;
+        }else{
+            setTimeForRunLoder();
+        }
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
                 .createUser(inputUsername.getText().toString().trim(),inputEmail.getText().toString().trim(),inputPassword.getText().toString().trim());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if(response.isSuccessful()){
                     JSONObject jsonObject = null;
                     try {
+                        assert response.body() != null;
                         jsonObject = new JSONObject(response.body().string());
                         String token = jsonObject.getString("token");
                         //make shared preference user
@@ -169,14 +183,13 @@ public class SignUpActivity extends AppCompatActivity {
                         DynamicToast.makeSuccess(getApplicationContext(), "Registration Success").show();
                         startActivity(new Intent(SignUpActivity.this, MyProfileActivity.class));
                         finish();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
 
                 }else {
                     try {
+                        assert response.errorBody() != null;
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                         DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("username").getString(0)).show();
                         inputUsername.setText("");
@@ -189,7 +202,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
 
             }
         });
@@ -208,8 +221,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean validateUsername() {
-        if (inputUsername.getText().toString().trim().isEmpty()) {
-            inputLayoutUsername.setError(getString(R.string.err_msg_userName1));
+        if (!isValidUserName()) {
+            inputLayoutUsername.setError(getString(R.string.err_msg_userName2));
             requestFocus(inputUsername);
             return false;
         }
@@ -218,6 +231,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    public boolean isValidUserName(){
+        Matcher matcher = USER_NAME.matcher(inputUsername.getText().toString());
+        return matcher.matches();
     }
 
     private boolean validateEmail() {
@@ -287,5 +305,21 @@ public class SignUpActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private boolean isConnected(SignUpActivity signUpActivity){
+        ConnectivityManager connectivityManager = (ConnectivityManager) signUpActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobileData = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        return (wifi != null && wifi.isConnected()) || (mobileData != null && mobileData.isConnected());
+    }
+
+    private void showNoInternetPopUp(){
+        postDialog.setContentView(R.layout.custom_no_internet_pop_up);
+        postDialog.setCancelable(true);
+        Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        setTimeForRunLoder();
+        postDialog.show();
     }
 }
