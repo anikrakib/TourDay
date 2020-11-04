@@ -7,8 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.anikrakib.tourday.Fragment.Profile.About;
-import com.anikrakib.tourday.Fragment.Profile.EditProfile;
-import com.anikrakib.tourday.Fragment.Profile.OtherUsersGallery;
+import com.anikrakib.tourday.Fragment.Profile.Photos;
 import com.anikrakib.tourday.Fragment.Profile.Post;
 
 
@@ -25,7 +24,7 @@ public class ViewProfilePagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new Post();
             case 1:
-                return new EditProfile();
+                return new Photos();
             case 2:
                 return new About();
             default:
@@ -44,7 +43,7 @@ public class ViewProfilePagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Post";
             case 1:
-                return "Edit Profile";
+                return "Photo";
             case 2:
                 return "About";
             default:
