@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editLocationBody"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:contentDescription="For more ui/ux visit www.materialuiux.com"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor"
+    tools:context=".Activity.LocationActivity"
+    tools:ignore="HardcodedText">
+
+    <!--  include  Toolbar -->
+    <include
+        android:id="@+id/id_toolbar_profile"
+        layout="@layout/toolbar_edit_bio"
+        app:layout_collapseMode="pin" />
+
+    <!--  Tittle -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lets Edit Your Bio"
+        android:textColor="@color/color_primary_text"
+        android:textAlignment="center"
+        android:textSize="38sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recommended Hobbies"
+            android:textColor="@color/color_primary_text"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hobbyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_margin="10dp"
+            android:clipToPadding="false" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/characterCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your bio must be between 100 characters"
+        android:layout_marginStart="25dp"
+        android:textStyle="bold"
+        />
+
+    <com.uncopt.android.widget.text.justify.JustifiedEditText
+        android:background="@drawable/primary_background"
+        android:id="@+id/aboutBio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_primary_text"
+        android:gravity="start"
+        android:layout_margin="15dp"
+        android:padding="15dp"
+        android:minHeight="70dp"
+        android:textSize="16sp" />
+
+</LinearLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <!--  Skills Button  -->
+    <TextView
+        android:id="@+id/hobbyItemTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/color_primary_text"
+        android:text="🎶 Music Lover"
+        android:background="@drawable/hobby_item_background"
+        tools:ignore="HardcodedText" />
+
+</LinearLayout>
