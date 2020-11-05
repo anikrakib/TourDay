@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Models.Profile.PostItem;
@@ -41,10 +42,12 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     private Context mContext;
     private ArrayList<PostItem> mPostItemList;
     Dialog myDialog;
+    private CardView cardView;
 
-    public AdapterPost(Context context, ArrayList<PostItem> exampleList) {
-        mContext = context;
-        mPostItemList = exampleList;
+    public AdapterPost(Context context, ArrayList<PostItem> exampleList,CardView cardView) {
+        this.mContext = context;
+        this.mPostItemList = exampleList;
+        this.cardView = cardView;
     }
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -205,6 +208,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
                 if(response.isSuccessful()){
                     mPostItemList.remove(position);
                     notifyItemRemoved(position);
+                    checkPostEmptyOrNot();
                     DynamicToast.makeError(mContext, "Post Deleted !!").show();
                 }else{
                     DynamicToast.makeError(mContext, "Something Wrong !!").show();
@@ -258,4 +262,12 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         myDialog.show();
 
     };
+    public void checkPostEmptyOrNot(){
+        if(mPostItemList.isEmpty()){
+            cardView.setVisibility(View.VISIBLE);
+        }else{
+            cardView.setVisibility(View.GONE);
+        }
+
+    }
 }

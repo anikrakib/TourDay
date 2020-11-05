@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,6 +56,7 @@ public class Post extends Fragment {
     String token,userName;
     LinearLayoutManager layoutManager;
     boolean firstTime;
+    CardView cardView;
 
 
     public Post() {
@@ -77,6 +79,7 @@ public class Post extends Fragment {
         /////*     initialize view   */////
         recyclerView = v. findViewById(R.id.postRecyclerView);
         swipeRefreshLayout = v. findViewById(R.id.swipeRefreshLayout);
+        cardView = v. findViewById(R.id.emptyCardView);
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setFocusable(false);
@@ -146,12 +149,12 @@ public class Post extends Fragment {
 
                                 mPostItem.add(new PostItem(imageUrl, post, location, date, likeCount, id, selfLike));
                             }
-                            mPostAdapter = new AdapterPost(getContext(), mPostItem);
+                            mPostAdapter = new AdapterPost(getContext(), mPostItem,cardView);
                             recyclerView.setAdapter(mPostAdapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        swipeRefreshLayout.setRefreshing(false);
+                        checkPostEmptyOrNot();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -199,12 +202,12 @@ public class Post extends Fragment {
                             SharedPreferences.Editor editor = userPref.edit();
                             editor.putBoolean("firstTime",false);
                             editor.apply();
-                            mPostAdapter = new AdapterPost(getContext(), mPostItem);
+                            mPostAdapter = new AdapterPost(getContext(), mPostItem,cardView);
                             recyclerView.setAdapter(mPostAdapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        swipeRefreshLayout.setRefreshing(false);
+                        checkPostEmptyOrNot();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -248,6 +251,17 @@ public class Post extends Fragment {
 
             }
         });
+    }
+
+    public void checkPostEmptyOrNot(){
+        if(mPostItem.isEmpty()){
+            cardView.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setRefreshing(false);
+        }else{
+            cardView.setVisibility(View.GONE);
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
     }
 
 }

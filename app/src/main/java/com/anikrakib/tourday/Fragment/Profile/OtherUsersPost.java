@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -41,6 +43,10 @@ public class OtherUsersPost extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     String url = "https://www.tourday.team/api/get_posts/";
     Dialog myDialog;
+    CardView cardView;
+    String otherUsersUserName;
+    TextView emptyPostTextView;
+
 
 
     public OtherUsersPost() {
@@ -64,6 +70,10 @@ public class OtherUsersPost extends Fragment {
         /////*     initialize view   */////
         otherUsersPostRecyclerView = view. findViewById(R.id.otherUsersPostRecyclerView);
         swipeRefreshLayout = view. findViewById(R.id.swipeRefreshLayoutOthersUsers);
+        cardView = view. findViewById(R.id.emptyCardView);
+        emptyPostTextView = view. findViewById(R.id.emptyPostTextView);
+
+
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         otherUsersPostRecyclerView.setFocusable(false);
@@ -71,7 +81,7 @@ public class OtherUsersPost extends Fragment {
         myDialog = new Dialog(requireContext());
 
         SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
-        String userName = userPref.getString("otherUsersUserName","");
+        otherUsersUserName = userPref.getString("otherUsersUserName","");
 
 
         otherUsersPostRecyclerView.setHasFixedSize(true);
@@ -84,7 +94,7 @@ public class OtherUsersPost extends Fragment {
             @Override
             public void onRefresh() {
                 mPostItem = new ArrayList<>();
-                getOtherUserPost(url+userName);
+                getOtherUserPost(url+otherUsersUserName);
             }
 
 
@@ -92,7 +102,7 @@ public class OtherUsersPost extends Fragment {
 
 
 
-        getOtherUserPost(url+userName);
+        getOtherUserPost(url+otherUsersUserName);
 
 
         return view;
@@ -137,7 +147,7 @@ public class OtherUsersPost extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        swipeRefreshLayout.setRefreshing(false);
+                        checkPostEmptyOrNot();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -148,5 +158,16 @@ public class OtherUsersPost extends Fragment {
         mRequestQueue.add(request);
     }
 
+    public void checkPostEmptyOrNot(){
+        if(mPostItem.isEmpty()){
+            cardView.setVisibility(View.VISIBLE);
+            emptyPostTextView.setText(otherUsersUserName+" Have No Post Yet!!");
+            swipeRefreshLayout.setRefreshing(false);
+        }else{
+            cardView.setVisibility(View.GONE);
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
+    }
 
 }

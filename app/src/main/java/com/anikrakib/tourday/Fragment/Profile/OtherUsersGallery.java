@@ -1,9 +1,11 @@
 package com.anikrakib.tourday.Fragment.Profile;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Profile.AdapterGalleryImage;
@@ -41,6 +44,11 @@ public class OtherUsersGallery extends Fragment {
     AdapterGalleryImage adapterGalleryImage;
     SwipeRefreshLayout swipeRefreshLayout;
     int limit = 0, offSet = 0;
+    CardView cardView;
+    TextView emptyPostTextView;
+    String otherUsersUserName;
+
+
 
 
     public OtherUsersGallery() {
@@ -63,6 +71,12 @@ public class OtherUsersGallery extends Fragment {
 
         galleryRecyclerView = view.findViewById(R.id.galleryRecyclerView);
         swipeRefreshLayout = view. findViewById(R.id.gallerySwipeRefreshLayout);
+        cardView = view. findViewById(R.id.emptyCardView);
+        emptyPostTextView = view. findViewById(R.id.emptyPostTextView);
+
+        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
+        otherUsersUserName = userPref.getString("otherUsersUserName","");
+
 
         galleryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
         //galleryRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
@@ -84,14 +98,11 @@ public class OtherUsersGallery extends Fragment {
     }
 
     private void getData() {
-
-        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
-        String userName = userPref.getString("otherUsersUserName","");
         swipeRefreshLayout.setRefreshing(true);
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .getPhoto(userName);
+                .getPhoto(otherUsersUserName);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -134,10 +145,10 @@ public class OtherUsersGallery extends Fragment {
                         e.printStackTrace();
                     }
 
-                    swipeRefreshLayout.setRefreshing(false);
+                    checkPostEmptyOrNot();
 
                 }else{
-                    swipeRefreshLayout.setRefreshing(false);
+                    checkPostEmptyOrNot();
                 }
 
             }
@@ -151,12 +162,10 @@ public class OtherUsersGallery extends Fragment {
     }
 
     private void getDataNext(int l,int o) {
-        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
-        String userName = userPref.getString("otherUsersUserName","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .getPhotoNext(userName,String.valueOf(l),String.valueOf(o));
+                .getPhotoNext(otherUsersUserName,String.valueOf(l),String.valueOf(o));
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -206,5 +215,17 @@ public class OtherUsersGallery extends Fragment {
 
             }
         });
+    }
+    @SuppressLint("SetTextI18n")
+    public void checkPostEmptyOrNot(){
+        if(postItems.isEmpty()){
+            cardView.setVisibility(View.VISIBLE);
+            emptyPostTextView.setText(otherUsersUserName+" Have No Photo !!");
+            swipeRefreshLayout.setRefreshing(false);
+        }else{
+            cardView.setVisibility(View.GONE);
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
     }
 }

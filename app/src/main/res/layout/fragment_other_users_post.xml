@@ -12,13 +12,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="20dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/otherUsersPostRecyclerView"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            tools:listitem="@layout/list_post_item"
-            android:layout_marginBottom="10dp" />
+            <include
+                layout="@layout/empty_post"
+                android:layout_marginTop="25dp"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/otherUsersPostRecyclerView"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                tools:listitem="@layout/list_post_item_update" />
+
+
+        </LinearLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

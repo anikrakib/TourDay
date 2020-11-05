@@ -94,6 +94,8 @@ public class Photos extends Fragment {
     }
 
     private void getData() {
+        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+        String userName = userPref.getString("userName","");
         swipeRefreshLayout.setRefreshing(true);
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
@@ -131,7 +133,7 @@ public class Photos extends Fragment {
                         if(!next.isEmpty()){
                             limit = 10;
                             offSet = 10;
-                            getDataNext(limit,offSet);
+                            getDataNext(limit,offSet,userName);
                         }
 
                         adapterGalleryImage = new AdapterGalleryImage(getContext(),postItems);
@@ -195,7 +197,7 @@ public class Photos extends Fragment {
                         if(!next.isEmpty()){
                             limit = 10;
                             offSet = 10;
-                            getDataNext(limit,offSet);
+                            getDataNext(limit,offSet,userName);
                         }
 
                         adapterGalleryImage = new AdapterGalleryImage(getContext(),postItems);
@@ -221,9 +223,7 @@ public class Photos extends Fragment {
         });
     }
 
-    private void getDataNext(int l,int o) {
-        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
-        String userName = userPref.getString("otherUsersUserName","");
+    private void getDataNext(int l,int o,String userName) {
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -260,7 +260,7 @@ public class Photos extends Fragment {
                         if(!next.isEmpty()){
                             limit+=10;
                             offSet+=10;
-                            getDataNext(limit,offSet);
+                            getDataNext(limit,offSet,userName);
                         }
 
                     } catch (JSONException | IOException e) {
