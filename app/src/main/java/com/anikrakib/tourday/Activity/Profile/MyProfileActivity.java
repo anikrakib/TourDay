@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
@@ -109,6 +110,13 @@ public class MyProfileActivity extends AppCompatActivity{
     public static String userFacebookLink = "";
     public static String userInstagramLink = "";
     public static final Pattern USER_NAME = Pattern.compile("^([a-z])+([\\w.]{2,})+$");
+
+    // moreOptionPopUp variable
+    SocialTextView userNameInPopUp;
+    CircleImageView userImageInPopUp;
+    TextView userBioInPopUp,userFullNameInPopUp;
+    SwipeRefreshLayout swipeRefreshLayout;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -223,10 +231,6 @@ public class MyProfileActivity extends AppCompatActivity{
         Animation rightToLeft,leftToRight;
         LinearLayout linearLayout,emailLayout,changePasswordLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
         ImageView backButton;
-        SocialTextView userNameInPopUp;
-        CircleImageView userImageInPopUp;
-        TextView userBioInPopUp,userFullNameInPopUp;
-
 
         myDialog.setContentView(R.layout.profile_more_option_pop_up);
         touch = myDialog.findViewById(R.id.touchView);
@@ -243,43 +247,13 @@ public class MyProfileActivity extends AppCompatActivity{
         locationLayout = myDialog.findViewById(R.id.locationLayout);
         facebookIdLayout = myDialog.findViewById(R.id.facebookLinkEdit);
         instagramIdLayout = myDialog.findViewById(R.id.instagramLinkEdit);
+        swipeRefreshLayout = myDialog.findViewById(R.id.moreOptionSwifRefreshLayout);
 
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .userProfile("Token "+token);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(response.body().string());
-                        JSONObject profile = jsonObject.getJSONObject("profile");
-                        userFullNameInPopUp.setText(profile.getString("name"));
-                        userNameInPopUp.setLinkText("@"+jsonObject.getString("username"));
-                        userBioInPopUp.setText(profile.getString("bio"));
-                        location = profile.getString("city");
-                        Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userImageInPopUp);
-
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
-            }
-        });
 
         rightToLeft = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
         leftToRight = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
+
+        showUserDataInMoreOptionPopUp();
 
 
         locationLayout.setOnClickListener(new View.OnClickListener() {
@@ -289,7 +263,18 @@ public class MyProfileActivity extends AppCompatActivity{
                         .putExtra("recentLocation",location));
             }
         });
-
+        userBioInPopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MyProfileActivity.this, EditBioActivity.class));
+            }
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showUserDataInMoreOptionPopUp();
+            }
+        });
         facebookIdLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -352,6 +337,43 @@ public class MyProfileActivity extends AppCompatActivity{
         myDialog.setCancelable(true);
         myDialog.show();
 
+    }
+
+    public void showUserDataInMoreOptionPopUp(){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .userProfile("Token "+token);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+                        userFullNameInPopUp.setText(profile.getString("name"));
+                        userNameInPopUp.setLinkText("@"+jsonObject.getString("username"));
+                        userBioInPopUp.setText(profile.getString("bio"));
+                        location = profile.getString("city");
+                        swipeRefreshLayout.setRefreshing(false);
+                        Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userImageInPopUp);
+
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     //this method show pop to edit user name
