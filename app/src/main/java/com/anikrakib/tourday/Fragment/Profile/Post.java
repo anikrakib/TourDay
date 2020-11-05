@@ -81,7 +81,7 @@ public class Post extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setFocusable(false);
 
-        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         token = userPref.getString("token","");
         firstTime = userPref.getBoolean("firstTime",false);
 
@@ -90,7 +90,8 @@ public class Post extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPostItem = new ArrayList<>();
-        mRequestQueue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
+        mRequestQueue = Volley.newRequestQueue(Objects.requireNonNull(requireContext()));
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -111,7 +112,7 @@ public class Post extends Fragment {
 
     private void parseJSON() {
         mPostItem = new ArrayList<>();
-        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         String userName = userPref.getString("userName","");
         swipeRefreshLayout.setRefreshing(true);
 
@@ -194,7 +195,7 @@ public class Post extends Fragment {
 
                                 mPostItem.add(new PostItem(imageUrl, post, location, date, likeCount, id, selfLike));
                             }
-                            SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+                            SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = userPref.edit();
                             editor.putBoolean("firstTime",false);
                             editor.apply();
@@ -215,7 +216,7 @@ public class Post extends Fragment {
     }
 
     public void setUserName(){
-        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()

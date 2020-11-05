@@ -68,9 +68,9 @@ public class OtherUsersPost extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         otherUsersPostRecyclerView.setFocusable(false);
 
-        myDialog = new Dialog(Objects.requireNonNull(getContext()));
+        myDialog = new Dialog(requireContext());
 
-        SharedPreferences userPref = getContext().getSharedPreferences("otherUser", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
         String userName = userPref.getString("otherUsersUserName","");
 
 
@@ -78,7 +78,7 @@ public class OtherUsersPost extends Fragment {
         otherUsersPostRecyclerView.setLayoutManager(layoutManager);
         otherUsersPostRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPostItem = new ArrayList<>();
-        mRequestQueue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
+        mRequestQueue = Volley.newRequestQueue(Objects.requireNonNull(requireContext()));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -107,7 +107,7 @@ public class OtherUsersPost extends Fragment {
                         try {
                             JSONArray jsonArray = response.getJSONArray("results");
                             String nextPage = response.getString("next");
-                            SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+                            SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
                             String id = userPref.getString("id","");
 
                             for (int i = 0; i < jsonArray.length(); i++) {

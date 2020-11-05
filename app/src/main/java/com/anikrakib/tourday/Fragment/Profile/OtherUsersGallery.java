@@ -85,7 +85,7 @@ public class OtherUsersGallery extends Fragment {
 
     private void getData() {
 
-        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
         String userName = userPref.getString("otherUsersUserName","");
         swipeRefreshLayout.setRefreshing(true);
         Call<ResponseBody> call = RetrofitClient
@@ -151,7 +151,7 @@ public class OtherUsersGallery extends Fragment {
     }
 
     private void getDataNext(int l,int o) {
-        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
+        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
         String userName = userPref.getString("otherUsersUserName","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
