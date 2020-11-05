@@ -9,6 +9,7 @@
     <string name="hint_password">Password</string>
     <string name="hint_new_password">New Password</string>
     <string name="hint_new_confirmPassword">Confirm New Password</string>
+    <string name="hint_old_password">Confirm Old Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
     <string name="saveOrGetCodeText">Get Code</string>
@@ -53,6 +54,7 @@
     <string name="bd_map">BD Map</string>
     <string name="profile">Profile</string>
     <string name="log_out">Log Out</string>
+    <string name="changePasswordLogOutHints">Stay Logged In?</string>
     <string name="edit_location">Edit Location</string>
     <string name="my_profile">My Profile</string>
     <string name="have_no_account">Have no Account!!</string>
@@ -68,6 +70,9 @@
     <string name="dark_mood">Dark Mood</string>
     <string name="upload">Upload</string>
     <string name="resend_code">Resend Code</string>
+    <string name="change_password">Change Password</string>
+    <string name="changePasswordHints">Before Change Password Confirm Old Password</string>
+    <string name="changePasswordHints2">Check Your Email !!</string>
 
     <string-array name="bdDivision">
         <item>Barishal</item>

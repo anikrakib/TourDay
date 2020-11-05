@@ -21,7 +21,9 @@
     <color name="color_fourd_text">#EC6539</color>
     <color name="switch_color">#ff7346</color>
     <color name="dividerColor">#ff7346</color>
-    <color name="grayColor">#ff7346</color>
+    <color name="light_grayColor">#D3D3D3</color>
+    <color name="grayColor">#808080</color>
+    <color name="dark_grayColor">#A9A9A9</color>
     <color name="txt" tool:override="true">#992f31</color>
     <color name="instagram_color">#C13584</color>
     <color name="facebookColor">#4267B2</color>

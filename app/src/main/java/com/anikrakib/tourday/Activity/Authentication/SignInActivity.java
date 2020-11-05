@@ -192,6 +192,7 @@ public class SignInActivity extends AppCompatActivity {
                     editor.putString("token",response.body().getKey());
                     editor.putBoolean("isLoggedIn",true);
                     editor.putBoolean("firstTime",true);
+                    editor.putString("password",inputPassword.getText().toString());
                     editor.apply();
                     startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
                     DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
@@ -242,6 +243,7 @@ public class SignInActivity extends AppCompatActivity {
                     editor.putString("token",response.body().getKey());
                     editor.putBoolean("isLoggedIn",true);
                     editor.putBoolean("firstTime",true);
+                    editor.putString("password",inputPassword.getText().toString());
                     editor.apply();
                     startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
                     token=response.body().getKey();

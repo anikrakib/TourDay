@@ -221,7 +221,7 @@ public class MyProfileActivity extends AppCompatActivity{
     private void showProfileEditPopUp() {
         View touch;
         Animation rightToLeft,leftToRight;
-        LinearLayout linearLayout,emailLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
+        LinearLayout linearLayout,emailLayout,changePasswordLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
         ImageView backButton;
         SocialTextView userNameInPopUp;
         CircleImageView userImageInPopUp;
@@ -234,6 +234,7 @@ public class MyProfileActivity extends AppCompatActivity{
         backButton = myDialog.findViewById(R.id.backButton);
         manageMyAccountLayout = myDialog.findViewById(R.id.manageMyAccountLayout);
         emailLayout = myDialog.findViewById(R.id.editEmailLayout);
+        changePasswordLayout = myDialog.findViewById(R.id.passwordChangeLayout);
         manageMyAccountPart = myDialog.findViewById(R.id.manageMyAccountPartLayout);
         userFullNameInPopUp = myDialog.findViewById(R.id.userFullNameInPopUp);
         userNameInPopUp = myDialog.findViewById(R.id.userUserNameInPopUp);
@@ -306,6 +307,12 @@ public class MyProfileActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MyProfileActivity.this, EditEmailActivity.class));
+            }
+        });
+        changePasswordLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MyProfileActivity.this, ChangePasswordActivity.class));
             }
         });
         manageMyAccountLayout.setOnClickListener(new View.OnClickListener() {

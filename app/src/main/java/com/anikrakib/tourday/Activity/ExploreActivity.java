@@ -165,6 +165,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 editor.putString("userName","");
                 editor.putString("userProfilePicture","");
                 editor.putString("id","");
+                editor.putString("password","");
                 editor.apply();
                 startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
                 myDialog.dismiss();
