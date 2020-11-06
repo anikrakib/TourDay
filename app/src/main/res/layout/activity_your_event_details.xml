@@ -10,7 +10,7 @@
     <com.github.florent37.shapeofview.shapes.DiagonalView
         android:id="@+id/diagonalLayoutEventDetailImage"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="220dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,8 +45,9 @@
                 android:adjustViewBounds="true"
                 android:background="@drawable/event_details_title_background"
                 android:gravity="center"
+                android:padding="10dp"
                 android:text="@string/google_io_2020"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -67,7 +68,7 @@
                     android:layout_height="15sp"
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
-                    app:tint="@color/colorPrimary"
+                    app:tint="@color/white"
                     tools:ignore="ContentDescription,RtlHardcoded" />
 
                 <TextView
@@ -76,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Saintmartin,CoxBazar"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -247,10 +248,10 @@
         android:src="@drawable/event_edit"
         android:tint="@color/white"
         app:elevation="15dp"
-        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="@+id/diagonalLayoutEventDetailImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage" />
+        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage"
+        tools:ignore="ContentDescription" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"

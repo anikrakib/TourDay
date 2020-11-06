@@ -57,7 +57,7 @@
                 android:text="@string/enable_dark_color"
                 android:textSize="20sp" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/darkMoodLightMoodSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

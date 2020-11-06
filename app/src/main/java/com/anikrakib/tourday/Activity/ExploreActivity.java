@@ -157,7 +157,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences userPref =getApplicationContext().getSharedPreferences("user",getApplicationContext().MODE_PRIVATE);
+                SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
                 SharedPreferences.Editor editor = userPref.edit();
                 editor.putBoolean("isLoggedIn",false);
                 editor.putBoolean("firstTime",false);

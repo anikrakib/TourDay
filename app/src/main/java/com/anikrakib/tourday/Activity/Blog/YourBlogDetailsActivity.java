@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,8 @@ import android.provider.MediaStore;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -105,12 +108,18 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
         editBlog = findViewById(R.id.yourBlogEditFloatingActionButton);
         deleteBlog = findViewById(R.id.yourBlogDeleteFloatingActionButton);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
 
         intent = getIntent();
         Bundle extras = intent.getExtras();
         resources= getResources();
         division = resources.getStringArray(R.array.bdDivision);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         myDialog = new Dialog(this);
         previewDialog = new Dialog(this);
 
@@ -530,5 +539,15 @@ public class YourBlogDetailsActivity extends AppCompatActivity {
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
 
+    }
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
     }
 }

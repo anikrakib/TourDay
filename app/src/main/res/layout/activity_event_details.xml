@@ -10,7 +10,7 @@
     <com.github.florent37.shapeofview.shapes.DiagonalView
         android:id="@+id/diagonalLayoutEventDetailImage"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="220dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -196,8 +196,8 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/eventLikeFloatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/diagonalLayoutEventDetailImage"
         android:layout_alignParentEnd="true"
         app:backgroundTint="@color/colorPrimary"
@@ -208,7 +208,8 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="@+id/diagonalLayoutEventDetailImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage" />
+        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage"
+        tools:ignore="ContentDescription" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
