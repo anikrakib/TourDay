@@ -53,8 +53,6 @@ public class YourEventDetailsActivity extends AppCompatActivity {
     ArrayList<PendingPayment> pendingPayments;
     ImageButton backButton;
 
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,9 +69,6 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         pendingUserRecyclerView = findViewById(R.id.pendingUserRecyclerView);
         backButton = findViewById(R.id.backButtonEvent);
 
-        intent = getIntent();
-        Bundle bundle = intent.getExtras();
-
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
@@ -82,6 +77,8 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
 
+        intent = getIntent();
+        Bundle bundle = intent.getExtras();
 
         assert bundle != null;
         int eventId = bundle.getInt("eventId");
@@ -160,8 +157,6 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                         JSONObject profile = jsonObject.getJSONObject("profile");
 
                         pendingPayments.add(new PendingPayment(profile.getString("picture"),profile.getString("name"),profile.getString("email")));
-
-
 
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();

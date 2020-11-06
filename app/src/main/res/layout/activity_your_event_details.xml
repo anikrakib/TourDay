@@ -344,7 +344,6 @@
 
             </LinearLayout>
 
-
             <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
                 android:id="@+id/dottedEdgesCutCornerView"
                 android:layout_width="150dp"

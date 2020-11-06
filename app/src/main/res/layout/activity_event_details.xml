@@ -225,7 +225,6 @@
 
     </LinearLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventGoingRecyclerView"
         android:layout_width="wrap_content"

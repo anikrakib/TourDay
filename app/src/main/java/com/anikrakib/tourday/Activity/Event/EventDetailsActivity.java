@@ -43,12 +43,6 @@ public class EventDetailsActivity extends AppCompatActivity {
     KenBurnsView eventDetailsImage;
     ImageButton backButton;
 
-
-
-
-
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +61,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         eventDetailsTextView = findViewById(R.id.eventDetailsDescriptionTextView);
         backButton = findViewById(R.id.backButtonEvent);
 
-        myDialog = new Dialog(this);
-        intent = getIntent();
-        Bundle bundle = intent.getExtras();
-
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
@@ -78,6 +68,10 @@ public class EventDetailsActivity extends AppCompatActivity {
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+
+        myDialog = new Dialog(this);
+        intent = getIntent();
+        Bundle bundle = intent.getExtras();
 
         assert bundle != null;
         int eventId = bundle.getInt("eventId");

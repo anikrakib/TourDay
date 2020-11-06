@@ -58,7 +58,6 @@ public class EventActivity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     EditText editTextLocation,eventPopUpTitle,eventPopUpDescription;;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,15 +141,8 @@ public class EventActivity extends AppCompatActivity {
         String eventTitle = sharedPreferences.getString("eventTitle","");
         String eventDescription = sharedPreferences.getString("eventDescription","");
 
-//        //delete SharedPreference data
-//        SharedPreferences preferences = getSharedPreferences("postTitle", 0);
-//        preferences.edit().remove("postTitle").apply();
-
         eventPopUpTitle.setText(eventTitle);
         eventPopUpDescription.setText(eventDescription);
-
-
-
 
         if (ActivityCompat.checkSelfPermission(myDialog.getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -172,7 +164,7 @@ public class EventActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Save Event Title and Description in SharedPreferences when close CreateEvent PopUp
 
-                createEventLayout.startAnimation(top_to_bottom);
+                createEventLayout.startAnimation(bottom_to_top);
 
 
                 eventTitleSave[0] = eventPopUpTitle.getText().toString();
