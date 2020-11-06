@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="34dp"
+            android:layout_marginEnd="20dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_baseline_share_24"
             app:tint="@color/white"

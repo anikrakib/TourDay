@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,9 +22,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -60,6 +64,17 @@ public class EventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
+        if(loadNightModeState()){
+            if (Build.VERSION.SDK_INT >= 23) {
+                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
+
         /*     initialize view   */
         createEvent = findViewById(R.id.fabButtonCreateEvent);
         profileBackButton = findViewById(R.id.backButtonEvent);
@@ -69,9 +84,6 @@ public class EventActivity extends AppCompatActivity {
         myDialog = new Dialog(this);
         mDialog = new Dialog(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
 
         /////*     initialize ViewPager   */////
         viewEventPagerAdapter = new ViewEventPagerAdapter(getSupportFragmentManager());
@@ -106,7 +118,7 @@ public class EventActivity extends AppCompatActivity {
 
     public void createEventPopUp() {
         ImageButton postCloseButton;
-        Animation top_to_bottom;
+        Animation top_to_bottom,bottom_to_top;
         final ConstraintLayout createEventLayout;
         final String[] eventTitleSave = new String[1];
         final String[] eventDescriptionSave = new String[1];
@@ -122,6 +134,7 @@ public class EventActivity extends AppCompatActivity {
 
 
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
+        bottom_to_top = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top);
 
         // Retrieve and set Event Title and Description from SharedPreferences when again open CreateEvent PopUp
 
@@ -159,6 +172,9 @@ public class EventActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Save Event Title and Description in SharedPreferences when close CreateEvent PopUp
 
+                createEventLayout.startAnimation(top_to_bottom);
+
+
                 eventTitleSave[0] = eventPopUpTitle.getText().toString();
                 eventDescriptionSave[0] = eventPopUpDescription.getText().toString();
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -167,7 +183,7 @@ public class EventActivity extends AppCompatActivity {
                 editor.putString("eventDescription", eventDescriptionSave[0]);
                 editor.apply();
 
-                myDialog.dismiss();
+                handlerForCustomDialog();
             }
         });
 
@@ -178,6 +194,15 @@ public class EventActivity extends AppCompatActivity {
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.setCancelable(false);
         myDialog.show();
+    }
+
+    public void handlerForCustomDialog(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                myDialog.dismiss();
+            }
+        },500);
     }
 
 
@@ -240,5 +265,19 @@ public class EventActivity extends AppCompatActivity {
         });
     }
 
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
+    }
+    public Boolean loadNightModeState (){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
+        return userPref.getBoolean("night_mode",false);
+    }
 
 }

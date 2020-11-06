@@ -12,16 +12,13 @@
         android:layout_width="290dp"
         android:layout_height="150dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginTop="250dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:src="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.413"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
@@ -39,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="145dp"
             android:text="@string/sring1"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary_text"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -59,14 +56,14 @@
     <LinearLayout
         android:layout_width="140dp"
         android:layout_height="111dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="50dp"
         android:layout_weight="1"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <include layout="@layout/gif_view"/>
+        <include layout="@layout/gif_view" />
 
     </LinearLayout>
 

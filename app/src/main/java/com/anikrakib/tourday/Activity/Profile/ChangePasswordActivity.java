@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +15,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     LinearLayout confirmOldPasswordLayout,changePasswordLayout;
     TextInputLayout inputLayoutCode, inputLayoutNewPassword,inputLayoutConfirmNewPassword;
     TextView hintChangePassword;
+    ImageButton changePasswordBackButton;
 
 
 
@@ -66,6 +70,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
         inputLayoutConfirmNewPassword = findViewById(R.id.input_layout_confirm_new_password);
         inputLayoutNewPassword = findViewById(R.id.input_layout_new_password);
         hintChangePassword = findViewById(R.id.hintChangePassword);
+        changePasswordBackButton = findViewById(R.id.changePasswordBackButton);
+
+        if(loadNightModeState()){
+            if (Build.VERSION.SDK_INT >= 23) {
+                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
 
         SharedPreferences userPref = Objects.requireNonNull(getApplicationContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         userOldPassword = userPref.getString("password","");
@@ -73,8 +89,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         postDialog = new Dialog(this);
         myDialog = new Dialog(this);
-
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
 
         changeOrOkButton.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +132,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         }
                     }
                 }
+            }
+        });
+
+        changePasswordBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -268,5 +289,20 @@ public class ChangePasswordActivity extends AppCompatActivity {
         sb.cornerRadius(15);
         sb.duration(Snackbar.LENGTH_LONG);
         sb.show();
+    }
+
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
+    }
+    public Boolean loadNightModeState (){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
+        return userPref.getBoolean("night_mode",false);
     }
 }

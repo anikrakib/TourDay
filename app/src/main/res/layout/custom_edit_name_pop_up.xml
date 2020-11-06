@@ -16,8 +16,9 @@
         android:textStyle="bold"
         android:layout_gravity="end"
         android:gravity="center"
-        android:background="@drawable/ic_cancel_black_24dp"
-        tools:ignore="ContentDescription" />
+        android:src="@drawable/ic_cancel_black_24dp"
+        tools:ignore="ContentDescription"
+        app:tint="@color/color_primary_text" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -37,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 tools:ignore="Autofill,LabelFor,TextFields" />
 

@@ -83,7 +83,7 @@
             android:layout_marginBottom="10dp"
             android:background="@color/backgroundColor"
             app:tabBackground="@android:color/transparent"
-            app:tabIndicatorColor="#ff9e7f"
+            app:tabIndicatorColor="@color/dividerColor"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/color_primary_text"
             app:tabTextAppearance="@style/MyCustomTextAppearance"
@@ -109,7 +109,8 @@
         android:background="@color/colorPrimary"
         android:layout_margin="16dp"
         android:src="@drawable/ic_baseline_create_24"
-        android:tint="@color/white" />
+        android:tint="@color/white"
+        tools:ignore="ContentDescription" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

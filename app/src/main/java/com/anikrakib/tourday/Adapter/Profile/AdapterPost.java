@@ -51,7 +51,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
     }
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item_update, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item, parent, false);
         return new ExampleViewHolder(v);
     }
     @SuppressLint("SetTextI18n")

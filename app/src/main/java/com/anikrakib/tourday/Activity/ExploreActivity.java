@@ -3,10 +3,14 @@ package com.anikrakib.tourday.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +22,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,6 +43,8 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     Toolbar toolbarMenu;
     ActionBarDrawerToggle toggle;
     Dialog myDialog;
+    SwitchCompat switchCompat;
+    SharedPreferences sharedPreferences = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +52,23 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_explore);
         myDialog = new Dialog(this);
 
+        if(loadNightModeState()){
+            if (Build.VERSION.SDK_INT >= 23) {
+                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
+
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.nav_view);
         toolbarMenu = findViewById(R.id.toolbar);
 
         setTitle("");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
 
         setSupportActionBar(toolbarMenu);
 
@@ -98,6 +115,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
@@ -138,6 +156,31 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         ImageView close;
         myDialog.setContentView(R.layout.custom_setting_pop_up);
         close = myDialog.findViewById(R.id.txtclose);
+        switchCompat = myDialog.findViewById(R.id.darkMoodLightMoodSwitch);
+
+        if (loadNightModeState()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            switchCompat.setChecked(true);
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            switchCompat.setChecked(false);
+        }
+
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    switchCompat.setChecked(true);
+                    setNightModeState(true);
+                }else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    switchCompat.setChecked(false);
+                    setNightModeState(false);
+                }
+            }
+        });
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,6 +209,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 editor.putString("userProfilePicture","");
                 editor.putString("id","");
                 editor.putString("password","");
+                editor.putString("userFullName","");
                 editor.apply();
                 startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
                 myDialog.dismiss();
@@ -182,4 +226,26 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         myDialog.show();
 
     }
+    public void setNightModeState(Boolean state) {
+        SharedPreferences userPref =getApplicationContext().getSharedPreferences("nightMode", MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putBoolean("night_mode",state);
+        editor.apply();
+    }
+    // this method will load the Night Mode State
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
+    }
+    public Boolean loadNightModeState (){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
+        return userPref.getBoolean("night_mode",false);
+    }
+
 }

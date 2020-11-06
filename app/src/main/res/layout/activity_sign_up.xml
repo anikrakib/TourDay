@@ -46,7 +46,7 @@
             android:gravity="center_horizontal"
             android:text="@string/sign_up"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary_text"
             android:textSize="30sp"
             android:textStyle="bold"/>
 
@@ -60,7 +60,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/text_input_layout_custom"
-                android:padding="3dp">
+                android:padding="3dp"
+                app:placeholderTextColor="@color/color_primary_text"
+                app:helperTextTextColor="@color/color_primary_text"
+                app:counterTextColor="@color/color_primary_text"
+                app:hintTextColor="@color/color_primary_text">
 
                 <EditText
                     android:id="@+id/userNameSignUp"
@@ -87,7 +91,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/text_input_layout_custom"
-                android:padding="3dp">
+                android:padding="3dp"
+                app:placeholderTextColor="@color/color_primary_text"
+                app:helperTextTextColor="@color/color_primary_text"
+                app:counterTextColor="@color/color_primary_text"
+                app:hintTextColor="@color/color_primary_text">
 
                 <EditText
                     android:id="@+id/emailSignUp"
@@ -114,7 +122,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/text_input_layout_custom"
-                android:padding="3dp">
+                android:padding="3dp"
+                app:placeholderTextColor="@color/color_primary_text"
+                app:helperTextTextColor="@color/color_primary_text"
+                app:counterTextColor="@color/color_primary_text"
+                app:hintTextColor="@color/color_primary_text">
 
                 <EditText
                     android:id="@+id/passwordSignUp"
@@ -167,7 +179,7 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="5dp"
                 android:text="@string/facebook_Signup"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/color_primary_text"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -196,7 +208,7 @@
                 android:paddingEnd="5dp"
                 android:text="@string/google_Signup"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/color_primary_text"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 

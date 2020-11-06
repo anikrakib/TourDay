@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/createPostLayout"
-        android:background="@drawable/popup_create_post_and_event_edittext_style"
+        android:background="@drawable/dialog_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -30,8 +30,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
-                android:src="@color/colorPrimary"
-                app:civ_border_color="#000000"
+                android:src="@color/color_primary_text"
+                app:civ_border_color="@color/color_primary_text"
                 app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_baseline_close_24"
-                android:tint="@color/black"
+                app:tint="@color/color_primary_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -64,6 +64,7 @@
             android:gravity="top|left"
             android:hint="@string/enter_description"
             android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/color_secondary_text"
             android:inputType="textMultiLine"
             android:lines="8"
             android:maxLines="10"
@@ -118,7 +119,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:src="@drawable/ic_date_range_black_24dp"
-                    app:tint="@color/black"
+                    app:tint="@color/color_primary_text"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -131,7 +132,7 @@
                     android:paddingTop="1dp"
                     android:paddingRight="3dp"
                     android:text="29/07/2020"
-                    android:textColor="@color/color_secondary_text"
+                    android:textColor="@color/color_primary_text"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -172,12 +173,12 @@
             app:rb_animation_progress_padding="8dp"
             app:rb_animation_progress_width="2dp"
             app:rb_background_color="@android:color/transparent"
-            app:rb_background_color_pressed="@color/colorPrimary"
-            app:rb_corner_color="@color/colorPrimary"
-            app:rb_corner_color_pressed="@color/colorPrimary"
+            app:rb_background_color_pressed="@color/color_primary_text"
+            app:rb_corner_color="@color/color_primary_text"
+            app:rb_corner_color_pressed="@color/color_primary_text"
             app:rb_corner_radius="6dp"
             app:rb_corner_width="1dp"
-            app:rb_text_color="@color/colorPrimary"
+            app:rb_text_color="@color/color_primary_text"
             app:rb_text_color_pressed="@android:color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

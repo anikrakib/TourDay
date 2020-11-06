@@ -11,7 +11,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +34,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -55,6 +58,7 @@ import com.anikrakib.tourday.Adapter.Profile.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.marozzi.roundbutton.RoundButton;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
@@ -140,14 +144,23 @@ public class MyProfileActivity extends AppCompatActivity{
         viewPager = findViewById(R.id.viewPager);
         profileMoreButton = findViewById(R.id.profileMoreIcon);
 
+        if(loadNightModeState()){
+            if (Build.VERSION.SDK_INT >= 23) {
+                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
+
 
         resources= getResources();
         districtKeys = resources.getStringArray(R.array.bdDistrict);
 
         myDialog = new Dialog(this);
         myDialog2 = new Dialog(this);
-
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
         // show current login user all data
         showUserData();
@@ -183,13 +196,29 @@ public class MyProfileActivity extends AppCompatActivity{
         facebookLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSocialMediaPopup(v.getId());
+                if (isFacebookAppInstalled()) {
+                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                    String facebookUrl = getFacebookPageURL(getApplicationContext());
+                    facebookIntent.setData(Uri.parse(facebookUrl));
+                    startActivity(facebookIntent);
+
+                } else {
+                    showUserSocialMediaAccount("https://www.facebook.com/" + facebookLink.getText().toString());
+                }
             }
         });
         instagramLinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSocialMediaPopup(v.getId());
+                if (isInstagramInstalled()) {
+                    Intent instagramIntent = new Intent(Intent.ACTION_VIEW);
+                    String facebookUrl = getInstragamPageURL(getApplicationContext());
+                    instagramIntent.setData(Uri.parse(facebookUrl));
+                    startActivity(instagramIntent);
+
+                } else {
+                    showUserSocialMediaAccount("https://www.instagram.com/" + instagramLink.getText().toString());
+                }
             }
         });
         bangladeshImageView.setOnClickListener(new View.OnClickListener() {
@@ -674,6 +703,13 @@ public class MyProfileActivity extends AppCompatActivity{
         createPostDate = myDialog2.findViewById(R.id.createPostDate);
         postImageView = myDialog2.findViewById(R.id.postImageView);
 
+
+        String userFullName = userPref.getString("userFullName","");
+        String[] arr = userFullName.split(" ", 2);
+
+        postPopUpDescription.setHint("What's on your Mind,"+arr[0]+"?");
+
+
         // set animation in create post pop up
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
         bottom_to_top = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top);
@@ -912,6 +948,7 @@ public class MyProfileActivity extends AppCompatActivity{
                         editor.putString("userProfilePicture",profile.getString("picture"));
                         editor.putString("userName",jsonObject.getString("username"));
                         editor.putString("id",jsonObject.getString("id"));
+                        editor.putString("userFullName",profile.getString("name"));
                         editor.apply();
                         Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
 
@@ -1083,5 +1120,99 @@ public class MyProfileActivity extends AppCompatActivity{
         },500);
     }
 
+    public String getFacebookPageURL(Context context) {
+        String fbUsername = facebookLink.getText().toString();
+        String FACEBOOK_URL = "https://www.facebook.com/"+fbUsername;
+        String FACEBOOK_PAGE_ID = "YourPageName";
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.orca", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } else { //older versions of fb app
+                return "fb://page/" + FACEBOOK_PAGE_ID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return FACEBOOK_URL; //normal web url
+        }
+    }
+    public String getInstragamPageURL(Context context) {
+        String INSTAGRAM_URL = "https://www.instagram.com/"+instagramLink.getText().toString();
+        Uri uri = Uri.parse("http://instagram.com/_u/"+instagramLink.getText().toString());
+        Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
+
+        likeIng.setPackage("com.instagram.android");
+
+        try {
+            startActivity(likeIng);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(INSTAGRAM_URL)));
+        }
+        return INSTAGRAM_URL;
+    }
+
+    public boolean isFacebookAppInstalled() {
+        try {
+            getApplicationContext().getPackageManager().getApplicationInfo("com.facebook.katana", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+    public boolean isInstagramInstalled() {
+        try {
+            getApplicationContext().getPackageManager().getApplicationInfo("com.instagram.android", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+    @SuppressLint("SetJavaScriptEnabled")
+    public void showUserSocialMediaAccount(String url) {
+        ImageView close;
+        myDialog2.setContentView(R.layout.custom_bd_map_pop_up);
+        close = myDialog2.findViewById(R.id.socialMediaClose);
+
+        final WebView webView = myDialog2.findViewById(R.id.webViewSocialMedia);
+
+        WebSettings webSettings = webView.getSettings();
+        webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        WebViewClient webViewClient = new WebViewClient();
+        webView.setWebViewClient(webViewClient);
+
+        webView.loadUrl(url);
+        // set image scale to fit screen if larger than screen width
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager) MyProfileActivity.this.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+        myDialog.setCancelable(false);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
+    }
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
+    }
+    public Boolean loadNightModeState (){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
+        return userPref.getBoolean("night_mode",false);
+    }
 }
 

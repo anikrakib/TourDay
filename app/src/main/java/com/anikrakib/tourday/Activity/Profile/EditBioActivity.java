@@ -1,6 +1,7 @@
 package com.anikrakib.tourday.Activity.Profile;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +15,8 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -69,7 +72,17 @@ public class EditBioActivity extends AppCompatActivity {
         textView = findViewById(R.id.characterCount);
         backBio = findViewById(R.id.editBioBackButton);
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        if(loadNightModeState()){
+            if (Build.VERSION.SDK_INT >= 23) {
+                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
+
         postDialog = new Dialog(this);
 
 
@@ -124,12 +137,10 @@ public class EditBioActivity extends AppCompatActivity {
                     textView.setText(String.valueOf(100-charSequence.length())+" Character Remaining");
                     textView.setTextColor(getResources().getColor(R.color.color_secondary_text));
                 }
-                if(!bioEditText.getText().toString().isEmpty()){
-                    saveBio.setColorFilter(ContextCompat.getColor(Objects.requireNonNull(getApplicationContext()),R.color.black));
-                    saveBio.setEnabled(true);
+                if(!bioEditText.getText().toString().isEmpty() && charSequence.length() <= 100){
+                    saveBio.setVisibility(View.VISIBLE);
                 }else{
-                    saveBio.setColorFilter(ContextCompat.getColor(Objects.requireNonNull(getApplicationContext()),R.color.color_secondary_text));
-                    saveBio.setEnabled(false);
+                    saveBio.setVisibility(View.GONE);
                 }
             }
 
@@ -248,4 +259,18 @@ public class EditBioActivity extends AppCompatActivity {
         }, 1500);
     }
 
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
+    }
+    public Boolean loadNightModeState (){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
+        return userPref.getBoolean("night_mode",false);
+    }
 }

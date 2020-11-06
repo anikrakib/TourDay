@@ -67,7 +67,7 @@
     <string name="transaction_nb">* You can Send the transaction number only once.\nPlease Check Carefully</string>
     <string name="settings">Settings</string>
     <string name="enable_dark_color">Enable Dark Color</string>
-    <string name="dark_mood">Dark Mood</string>
+    <string name="dark_mood">Light Mood</string>
     <string name="upload">Upload</string>
     <string name="resend_code">Resend Code</string>
     <string name="change_password">Change Password</string>

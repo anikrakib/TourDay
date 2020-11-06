@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="@string/already_have_an_account"
         android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/color_primary_text"
         android:textSize="12sp" />
 
     <TextView

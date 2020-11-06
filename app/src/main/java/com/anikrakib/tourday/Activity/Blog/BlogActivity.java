@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -26,11 +27,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
@@ -102,10 +106,19 @@ public class BlogActivity extends AppCompatActivity {
         viewPagerBlog = (ViewPager) findViewById(R.id.viewPagerBlog);
         blogBackButton = findViewById(R.id.backBlogImageButton);
 
+        if(loadNightModeState()){
+            if (Build.VERSION.SDK_INT >= 23) {
+                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
 
         resources= getResources();
         division = resources.getStringArray(R.array.bdDivision);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         myDialog = new Dialog(this);
         previewDialog = new Dialog(this);
 
@@ -179,7 +192,7 @@ public class BlogActivity extends AppCompatActivity {
     private void createBlogPopUp() {
         ImageButton postCloseButton;
         ImageView descriptionPreview;
-        Animation top_to_bottom;
+        Animation top_to_bottom,bottom_to_top;
         RichEditor blogTextEditor;
         CircleImageView userProfilePicturePopUP;
         Spinner divisionSpinner;
@@ -212,6 +225,7 @@ public class BlogActivity extends AppCompatActivity {
 
         //set Animation
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
+        bottom_to_top = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top);
 
         // Retrieve and set Event Title and Description from SharedPreferences when again open CreateEvent PopUp
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -267,12 +281,14 @@ public class BlogActivity extends AppCompatActivity {
         postCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                createEventLayout.startAnimation(bottom_to_top);
+
                 String blogDescriptionString = Html.fromHtml(blogTextEditor.getHtml()).toString();
                 editor.putString("blogDescription",blogDescriptionString);
                 editor.putString("blogTitle",blogPopUpTitle.getText().toString());
                 editor.apply();
 
-                myDialog.dismiss();
+                handlerForCustomDialog();
             }
         });
 
@@ -294,6 +310,15 @@ public class BlogActivity extends AppCompatActivity {
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.setCancelable(false);
         myDialog.show();
+    }
+
+    public void handlerForCustomDialog(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                myDialog.dismiss();
+            }
+        },500);
     }
 
     // method for custom Text Editor Elements action
@@ -652,4 +677,18 @@ public class BlogActivity extends AppCompatActivity {
 
     }
 
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
+    }
+    public Boolean loadNightModeState (){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
+        return userPref.getBoolean("night_mode",false);
+    }
 }

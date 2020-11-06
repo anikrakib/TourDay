@@ -7,12 +7,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anikrakib.tourday.Models.Profile.PostItem;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
-import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
@@ -45,7 +42,7 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
     }
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item_update, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.list_post_item, parent, false);
         return new ExampleViewHolder(v);
     }
     @SuppressLint("SetTextI18n")

@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:textColor="@color/color_primary_text"
+        android:textColor="@color/colorPrimary"
         android:textSize="15sp"
         tools:text="" />
 

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 import com.anikrakib.tourday.Adapter.Event.AdapterPendingPayment;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
+import com.anikrakib.tourday.WebService.Api;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.squareup.picasso.Picasso;
@@ -48,6 +51,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
     SocialTextView eventDetailsTextView;
     KenBurnsView eventDetailsImage;
     ArrayList<PendingPayment> pendingPayments;
+    ImageButton backButton;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -65,6 +69,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         eventTotalPendingTextView = findViewById(R.id.eventDetailsTotalPendingTextView);
         eventDetailsTextView = findViewById(R.id.eventDetailsDescriptionTextView);
         pendingUserRecyclerView = findViewById(R.id.pendingUserRecyclerView);
+        backButton = findViewById(R.id.backButtonEvent);
 
         intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -104,9 +109,15 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         eventTotalPendingTextView.setText(String.valueOf(totalPending));
         eventTotalGoingTextView.setText(String.valueOf(totalGoing));
         eventTotalCapacityTextView.setText(String.valueOf(capacity));
-        Picasso.get().load("https://www.tourday.team/"+ eventImageUrl).fit().centerInside().into(eventDetailsImage);
+        Picasso.get().load(ApiURL.IMAGE_BASE + eventImageUrl).fit().centerInside().into(eventDetailsImage);
 
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         pendingPaymentLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override

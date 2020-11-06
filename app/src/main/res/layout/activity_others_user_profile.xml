@@ -116,10 +116,11 @@
                             android:background="@drawable/primary_background"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:textColor="@color/color_primary_text"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
 
                     </LinearLayout>
+
                 </RelativeLayout>
 
                 <LinearLayout

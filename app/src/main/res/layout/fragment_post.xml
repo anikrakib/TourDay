@@ -31,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:background="@null"
-                tools:listitem="@layout/list_post_item_update"
+                tools:listitem="@layout/list_post_item"
                 android:layout_marginBottom="10dp" />
 
         </LinearLayout>

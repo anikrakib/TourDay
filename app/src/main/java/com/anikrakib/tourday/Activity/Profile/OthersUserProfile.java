@@ -5,6 +5,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -75,16 +77,23 @@ public class OthersUserProfile extends AppCompatActivity {
         otherUserProfileBackButton = findViewById(R.id.otherUserProfileBackButton);
         coordinatorLayout = findViewById(R.id.otherUserProfileLayout);
 
+        if(loadNightModeState()){
+            if (Build.VERSION.SDK_INT >= 23) {
+                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
+
         myDialog = new Dialog(this);
-        userPref = OthersUserProfile.this.getSharedPreferences("otherUser",getApplicationContext().MODE_PRIVATE);
+        userPref = OthersUserProfile.this.getSharedPreferences("otherUser", MODE_PRIVATE);
         editor = userPref.edit();
 
         intent = getIntent();
         Bundle extras = intent.getExtras();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
         assert extras != null;
         userName = extras.getString("userName");
 
@@ -231,6 +240,20 @@ public class OthersUserProfile extends AppCompatActivity {
                         editor.putString("otherUsersProfilePic",profile.getString("picture"));
                         editor.apply();
 
+                        /////*     Check SocialMediaLink is null or not   */////
+                        if(!(facebookLink.getText().toString().equals("null") || facebookLink.getText().toString().isEmpty())){
+                            facebookLinkImageView.setVisibility(View.VISIBLE);
+                        }else{
+                            facebookLink.setText("");
+                            facebookLinkImageView.setVisibility(View.GONE);
+                        }
+                        if(!(instagramLink.getText().toString().equals("null") || instagramLink.getText().toString().isEmpty())){
+                            instagramLinkImageView.setVisibility(View.VISIBLE);
+                        }else{
+                            instagramLink.setText("");
+                            instagramLinkImageView.setVisibility(View.GONE);
+                        }
+
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
@@ -361,5 +384,20 @@ public class OthersUserProfile extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
+    }
+    public Boolean loadNightModeState (){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
+        return userPref.getBoolean("night_mode",false);
     }
 }

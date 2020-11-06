@@ -93,10 +93,10 @@
         android:layout_width="wrap_content"
         android:layout_height="72dp"
         android:layout_above="@+id/layoutBottomBar"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:padding="5dp"
-        android:background="@drawable/primary_background"
         app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage">
 
         <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
@@ -113,28 +113,28 @@
                 android:id="@+id/goingYourEventLinearLayout"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Going"
                     android:layout_marginBottom="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
                     android:gravity="center"
+                    android:text="Going"
+                    android:textColor="@color/color_primary_text"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/eventDetailsTotalGoingTextView"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:text="20"
-                    android:textStyle="bold"
+                    android:background="@color/whiteIcon"
                     android:gravity="center"
-                    android:textColor="@color/txtWhite"
-                    android:background="@color/colorPrimary"
+                    android:text="20"
+                    android:textColor="@color/cameraIcon"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
             </LinearLayout>
@@ -149,35 +149,35 @@
             app:shape_dot_spacing="3dp"
             app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
             app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
-            app:shape_edge_position="left">
+            app:shape_edge_position="left|right">
 
             <LinearLayout
                 android:id="@+id/pendingYourEventLinearLayout"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pending"
                     android:layout_marginBottom="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
                     android:gravity="center"
+                    android:text="Pending"
+                    android:textColor="@color/color_primary_text"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/eventDetailsTotalPendingTextView"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:text="10"
-                    android:textStyle="bold"
+                    android:background="@color/whiteIcon"
                     android:gravity="center"
-                    android:textColor="@color/txtWhite"
-                    android:background="@color/colorPrimary"
-                    tools:ignore="HardcodedText" />
+                    android:text="20"
+                    android:textColor="@color/cameraIcon"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText"  />
 
             </LinearLayout>
 
@@ -197,29 +197,29 @@
                 android:id="@+id/capacityYourEventLinearLayout"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="bottom"
-                >
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Capacity"
                     android:layout_marginBottom="10dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
                     android:gravity="center"
+                    android:text="Capacity"
+                    android:textColor="@color/color_primary_text"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/eventDetailsTotalCapacityTextView"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
-                    android:text="10"
-                    android:textStyle="bold"
+                    android:background="@color/whiteIcon"
                     android:gravity="center"
-                    android:textColor="@color/txtWhite"
-                    android:background="@color/colorPrimary"
-                    tools:ignore="HardcodedText" />
+                    android:text="20"
+                    android:textColor="@color/cameraIcon"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText"  />
 
             </LinearLayout>
 
@@ -238,26 +238,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/eventLikeFloatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/diagonalLayoutEventDetailImage"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="5dp"
-        android:src="@drawable/event_edit"
-        android:tint="@color/white"
-        app:elevation="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/diagonalLayoutEventDetailImage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutEventDetailImage"
-        tools:ignore="ContentDescription" />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_below="@+id/eventLikeFloatingActionButton"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/layoutBottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -275,7 +261,7 @@
                 android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/event_details"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/color_primary_text"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -288,12 +274,12 @@
                 android:text="@string/bio"
                 android:textColor="@color/color_primary_text"
                 android:textSize="15sp"
+                app:emailColor="@color/flamingo.900"
                 app:hashtagColor="@color/flamingo.900"
+                app:linkModes="mention|hashtag|email|url"
                 app:mentionColor="@color/flamingo.900"
                 app:phoneColor="@color/flamingo.phoneColor"
-                app:emailColor="@color/flamingo.900"
-                app:urlColor="@color/flamingo.900"
-                app:linkModes="mention|hashtag|email|url"/>
+                app:urlColor="@color/flamingo.900" />
 
         </LinearLayout>
 
@@ -304,10 +290,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:visibility="gone"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:background="@drawable/primary_background"
-        app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/layoutBottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -350,7 +337,7 @@
                     android:paddingLeft="3dp"
                     android:paddingTop="1dp"
                     android:text="Pending Payment"
-                    android:textColor="#0B0B0B"
+                    android:textColor="@color/color_primary_text"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />

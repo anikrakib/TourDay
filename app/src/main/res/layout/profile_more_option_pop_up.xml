@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:src="@drawable/ic_baseline_arrow_forward_24"
-                app:tint="@color/colorPrimary"/>
+                app:tint="@color/color_primary_text" />
 
         </LinearLayout>
 
@@ -111,7 +111,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:padding="5dp"
-                    android:textColor="@color/color_primary_text"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -124,7 +124,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@color/color_primary_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/userBioInPopUp" />
@@ -237,7 +237,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Password Change"
+                            android:text="Change Password"
                             android:textColor="@color/color_primary_text"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -295,7 +295,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Facebook id"
+                        android:text="Facebook"
                         android:textColor="@color/color_primary_text"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -323,7 +323,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Instagram id"
+                        android:text="Instagram"
                         android:textColor="@color/color_primary_text"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -337,7 +337,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@color/color_primary_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/instagramLinkEdit" />
@@ -388,7 +388,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@color/color_primary_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/shareProfile" />
@@ -438,7 +438,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@color/color_primary_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/termOfUse" />
@@ -472,7 +472,7 @@
                     android:layout_width="2dp"
                     android:layout_height="58dp"
                     android:layout_marginStart="25dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/color_primary_text"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/socialMediaCustomized" />
 
@@ -485,7 +485,7 @@
                     android:src="@drawable/ic_baseline_arrow_forward_24"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/socialMediaCustomized"
-                    app:tint="@color/colorPrimary" />
+                    app:tint="@color/color_primary_text" />
 
                 <Switch
                     android:id="@+id/facebookLinkHide"
@@ -493,7 +493,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
                     android:text="Link"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/color_primary_text"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/image1"
                     app:layout_constraintStart_toEndOf="@+id/image1"
@@ -509,7 +509,7 @@
                     android:src="@drawable/ic_baseline_arrow_forward_24"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/image1"
-                    app:tint="@color/colorPrimary" />
+                    app:tint="@color/color_primary_text" />
 
                 <Switch
                     android:id="@+id/instagramLinkHide"
@@ -517,7 +517,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
                     android:text="Icon"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/color_primary_text"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/image2"
                     app:layout_constraintStart_toEndOf="@+id/image2"
@@ -531,7 +531,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@color/colorPrimaryDark"
+                    android:background="@color/color_primary_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/instagramLinkHide" />

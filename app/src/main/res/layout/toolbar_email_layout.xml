@@ -15,7 +15,7 @@
             android:layout_marginLeft="20dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_arrow_back_black_24dp"
-            android:tint="@color/color_primary_text"
+            app:tint="@color/color_primary_text"
             tools:ignore="ContentDescription,RtlHardcoded" />
 
         <!--  Title icon  -->

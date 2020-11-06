@@ -16,7 +16,7 @@
             android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_arrow_back_black_24dp"
-            app:tint="@color/colorPrimary"
+            app:tint="@color/color_primary_text"
             tools:ignore="ContentDescription" />
 
 
@@ -37,7 +37,7 @@
                 android:layout_height="30dp"
                 android:layout_marginEnd="5dp"
                 android:src="@drawable/ic_baseline_edit_location_24"
-                app:tint="@color/colorPrimary"
+                app:tint="@color/color_primary_text"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -62,7 +62,7 @@
             android:layout_marginEnd="20dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_baseline_refresh_24"
-            app:tint="@color/colorPrimary"
+            app:tint="@color/color_primary_text"
             tools:ignore="ContentDescription" />
 
 </RelativeLayout>

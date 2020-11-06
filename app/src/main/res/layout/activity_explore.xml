@@ -16,8 +16,9 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header"
         app:menu="@menu/menu_bar"
-        app:itemTextColor="@color/colorPrimary"
-        app:itemIconTint="@color/colorPrimaryDark"/>
+        android:background="@color/backgroundColor"
+        app:itemTextColor="@color/color_primary_text"
+        app:itemIconTint="@color/color_primary_text"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"
@@ -70,7 +71,7 @@
                 android:layout_marginStart="15dp"
                 android:src="@drawable/ic_search_black_24dp"
                 tools:ignore="ContentDescription"
-                app:tint="@color/colorPrimary" />
+                app:tint="@color/color_primary_text" />
 
             <EditText
                 android:layout_width="279dp"

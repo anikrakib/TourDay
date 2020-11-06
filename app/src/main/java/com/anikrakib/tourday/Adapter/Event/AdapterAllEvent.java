@@ -1,6 +1,8 @@
 package com.anikrakib.tourday.Adapter.Event;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anikrakib.tourday.Activity.Event.EventDetailsActivity;
+import com.anikrakib.tourday.Activity.Event.YourEventDetailsActivity;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
@@ -89,6 +93,31 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .transforms(new CenterCrop(),new RoundedCorners(16))
                 .into(eventVH.eventImage); // destination path
 
+        eventVH.linearLayOutEventItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent;
+                intent =  new Intent(context, EventDetailsActivity.class);
+                intent.putExtra("eventId",result.getId());
+                intent.putExtra("eventTitle",result.getTitle());
+                intent.putExtra("eventLocation",result.getLocation());
+                intent.putExtra("eventDate",result.getDate());
+                intent.putExtra("eventDetails",result.getDetails());
+                intent.putExtra("eventPay1",result.getPay1());
+                intent.putExtra("eventPay1Method",result.getPay1Method());
+                intent.putExtra("eventPay2",result.getPay2());
+                intent.putExtra("eventPay2Method",result.getPay2Method());
+                intent.putExtra("eventImageUrl",result.getImage());
+                intent.putExtra("eventCapacity",result.getCapacity());
+                intent.putExtra("eventCost",result.getCost());
+                intent.putExtra("eventHostId",result.getHost());
+                intent.putExtra("eventTotalGoing",result.getGoing().size());
+                intent.putExtra("eventTotalPending",result.getPending().size());
+//                intent.putExtra("goingList", (Parcelable) result.getGoing());
+//                intent.putExtra("pendingList", (Parcelable) result.getPending());
+                context.startActivity(intent);
+            }
+        });
 
         //set Animation in recyclerView Item
         eventVH.linearLayOutEventItem.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));

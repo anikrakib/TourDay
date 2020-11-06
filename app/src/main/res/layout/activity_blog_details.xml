@@ -47,7 +47,7 @@
                 android:layout_marginStart="15dp"
                 android:textIsSelectable="true"
                 android:adjustViewBounds="true"
-                android:textColor="@color/white"
+                android:textColor="@color/txtWhite"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -68,7 +68,7 @@
                     android:layout_height="18dp"
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
-                    app:tint="@color/white"
+                    app:tint="@color/txtWhite"
                     tools:ignore="ContentDescription,RtlHardcoded" />
 
                 <TextView
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/txtWhite"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -136,7 +136,9 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="@+id/diagonalLayoutBlogDetailImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutBlogDetailImage" />
+        app:layout_constraintTop_toBottomOf="@+id/diagonalLayoutBlogDetailImage"
+        android:contentDescription="BlogFavouriteFb"
+        tools:ignore="HardcodedText" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
