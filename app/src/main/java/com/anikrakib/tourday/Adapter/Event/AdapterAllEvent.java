@@ -52,7 +52,7 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         allEventResults = new ArrayList<>();
     }
 
-    public List<AllEventResult> getMovies() {
+    public List<AllEventResult> getAllEventResults() {
         return allEventResults;
     }
 

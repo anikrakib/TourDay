@@ -4,13 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".Activity.Blog.DivisionBlogActivity">
+    tools:context=".Activity.Blog.DivisionBlogActivity"
+    android:background="@color/backgroundColor">
 
     <include
         android:id="@+id/id_toolbar_profile"
         layout="@layout/toolbar_division_blog"
         app:layout_collapseMode="pin" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        shimmer:duration="800">
+
+        <!-- Adding 7 rows of placeholders -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/list_blog_item_shimmer_effect" />
+
+            <include layout="@layout/list_blog_item_shimmer_effect" />
+
+            <include layout="@layout/list_blog_item_shimmer_effect" />
+
+            <include layout="@layout/list_blog_item_shimmer_effect" />
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/divisionBlogItemRefreshLayout"

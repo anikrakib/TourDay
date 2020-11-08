@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Event extends Fragment {
+public class  Event extends Fragment {
     private LinearLayoutManager layoutManager;
     private AdapterAllEvent adapterAllEvent;
     private SwipeRefreshLayout eventRefreshLayout;
@@ -103,7 +103,7 @@ public class Event extends Fragment {
                 currentOffset = 0;
                 isLastPageAllEvent = false;
                 isLoadingAllEvent = false;
-                adapterAllEvent.getMovies().clear();
+                adapterAllEvent.getAllEventResults().clear();
                 adapterAllEvent.notifyDataSetChanged();
                 getAllEvent();
             }
@@ -154,6 +154,8 @@ public class Event extends Fragment {
             @Override
             public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
                 if (response.isSuccessful()) {
+
+                    isLoadingAllEvent = false;
 
                     List<AllEventResult> results = fetchResultsAllEvent(response);
                     adapterAllEvent.addAll(results);

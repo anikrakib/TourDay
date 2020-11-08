@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,6 +30,7 @@ import com.anikrakib.tourday.Models.Blog.BlogItem;
 import com.anikrakib.tourday.Models.Profile.PostItem;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +59,8 @@ public class DivisionBlogActivity extends AppCompatActivity {
     int page = 1;
     int limit = 1;
     NestedScrollView nestedScrollView;
+    private ShimmerFrameLayout shimmerViewContainer;
+
 
 
 
@@ -69,7 +73,12 @@ public class DivisionBlogActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backDivisionBlogImageButton);
         divisionBlogRecyclerView = findViewById(R.id.divisionBlogRecyclerView);
         divisionBlogSwipeRefreshLayout = findViewById(R.id.divisionBlogItemRefreshLayout);
+        shimmerViewContainer = findViewById(R.id.shimmer_view_container);
+
         //nestedScrollView = findViewById(R.id.nestedScrollView);
+
+        showLoadingIndicator(true);
+
 
         if(loadNightModeState()){
             if (Build.VERSION.SDK_INT >= 23) {
@@ -159,6 +168,8 @@ public class DivisionBlogActivity extends AppCompatActivity {
 
                         adapterDivisionBlog = new AdapterDivisionBlog(DivisionBlogActivity.this, mBlogItem);
                         divisionBlogRecyclerView.setAdapter(adapterDivisionBlog);
+                        showLoadingIndicator(false);
+
 
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
@@ -191,5 +202,35 @@ public class DivisionBlogActivity extends AppCompatActivity {
     public Boolean loadNightModeState (){
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
         return userPref.getBoolean("night_mode",false);
+    }
+
+    public void showLoadingIndicator(boolean active) {
+        if (active) {
+            shimmerViewContainer.setVisibility(View.VISIBLE);
+            shimmerViewContainer.startShimmerAnimation();
+        } else {
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    shimmerViewContainer.stopShimmerAnimation();
+                    shimmerViewContainer.setVisibility(View.GONE);
+                }
+            }, 1000);
+
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        shimmerViewContainer.startShimmerAnimation();
+    }
+
+    @Override
+    public void onPause() {
+        shimmerViewContainer.stopShimmerAnimation();
+        super.onPause();
     }
 }

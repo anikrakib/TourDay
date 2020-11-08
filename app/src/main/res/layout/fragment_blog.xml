@@ -4,19 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragment.Event.Event">
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.mancj.materialsearchbar.MaterialSearchBar
-        android:id="@+id/blogSearchBar"
-        style="@style/MyCustomTheme"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:mt_hint="Custom hint"
-        android:padding="5dp"
-        android:background="@drawable/primary_background"
-        app:mt_maxSuggestionsCount="10"
-        app:mt_speechMode="true" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        shimmer:duration="800">
+
+        <!-- Adding 7 rows of placeholders -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/list_blog_item_shimmer_effect" />
+
+            <include layout="@layout/list_blog_item_shimmer_effect" />
+
+            <include layout="@layout/list_blog_item_shimmer_effect" />
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/blogRefreshLayout"

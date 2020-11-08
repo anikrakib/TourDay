@@ -39,8 +39,8 @@ import retrofit2.Response;
 
 public class AdapterBlog extends RecyclerView.Adapter<AdapterBlog.BlogViewHolder>{
 
-    private Context mContext;
-    private ArrayList<BlogItem> mBlogItemList;
+    private final Context mContext;
+    private final ArrayList<BlogItem> mBlogItemList;
     Context context;
     Dialog myDialog;
 

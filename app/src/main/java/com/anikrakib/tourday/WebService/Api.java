@@ -1,6 +1,7 @@
 package com.anikrakib.tourday.WebService;
 
 
+import com.anikrakib.tourday.Models.Blog.AllBlogResponse;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Event.GoingUser;
@@ -151,7 +152,7 @@ public interface Api {
             @Path("Division_Name") String divisionName);
 
     @GET("blog/allpost/")
-    Call<ResponseBody> getAllBlogPost(
+    Call<AllBlogResponse> getAllBlogPost(
             @Query("page") int pageNumber);
 
     @Multipart
@@ -178,6 +179,10 @@ public interface Api {
 
     @GET("blog/details/{post_id}")
     Call<ResponseBody> getPostDetails(@Path("post_id") int postId);
+
+    @GET("blog/")
+    Call<AllBlogResponse> getAllSearchBlog(
+            @Query("search") String key);
 
     @GET("user/{username}")
     Call<ResponseBody> otherUserProfileInformation(
