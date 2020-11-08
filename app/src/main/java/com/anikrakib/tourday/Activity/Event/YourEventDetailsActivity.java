@@ -1,5 +1,6 @@
 package com.anikrakib.tourday.Activity.Event;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,11 +17,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
 import com.anikrakib.tourday.Adapter.Event.AdapterPendingPayment;
+import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
@@ -44,14 +48,18 @@ import retrofit2.Response;
 
 public class YourEventDetailsActivity extends AppCompatActivity {
     RelativeLayout pendingPaymentLinearLayout;
-    RecyclerView pendingUserRecyclerView;
+    RecyclerView pendingUserRecyclerView,goingUserRecyclerView;
     AdapterPendingPayment adapterPendingPayment;
     Intent intent;
     TextView eventDetailsTitleTextView,eventLocationTextView,eventTotalGoingTextView,eventTotalPendingTextView,eventTotalCapacityTextView;
     SocialTextView eventDetailsTextView;
     KenBurnsView eventDetailsImage;
     ArrayList<PendingPayment> pendingPayments;
+    List<GoingUser> goingUserList;
     ImageButton backButton;
+    AdapterGoingEvent adapterGoingEvent;
+    LinearLayout goingLinearLayout;
+    int eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,9 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         eventDetailsTextView = findViewById(R.id.eventDetailsDescriptionTextView);
         pendingUserRecyclerView = findViewById(R.id.pendingUserRecyclerView);
         backButton = findViewById(R.id.backButtonEvent);
+        goingUserRecyclerView = findViewById(R.id.eventGoingRecyclerView);
+        goingLinearLayout = findViewById(R.id.goingYourEventLinearLayout);
+
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -81,7 +92,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
 
         assert bundle != null;
-        int eventId = bundle.getInt("eventId");
+        eventId = bundle.getInt("eventId");
         int capacity = bundle.getInt("eventCapacity");
         int cost = bundle.getInt("eventCost");
         int hostId = bundle.getInt("eventHostId");
@@ -116,6 +127,17 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             }
         });
 
+        goingLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(goingUserRecyclerView.getVisibility() == View.GONE){
+                    goingUserRecyclerView.setVisibility(View.VISIBLE);
+                }else{
+                    goingUserRecyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
+
         pendingPaymentLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,17 +149,45 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             }
         });
 
+        //pendingUserList
         pendingPayments = new ArrayList<>();
-
         assert list != null;
         for (int i : list) {
             //pendingPayments.add(new PendingPayment(i));
             showUserData(i);
         }
 
+        // goingUser List
+        goingUserList = new ArrayList<>();
+        goingUserList(eventId);
+
+
         adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayments);
         pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         pendingUserRecyclerView.setAdapter(adapterPendingPayment);
+    }
+
+    public void goingUserList(int eventId){
+        Call<List<GoingUser>> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getAllGoingUser(eventId);
+        call.enqueue(new Callback<List<GoingUser>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<GoingUser>> call, @NonNull Response<List<GoingUser>> response) {
+                if (response.isSuccessful()) {
+                    goingUserList = response.body();
+                }
+                adapterGoingEvent = new AdapterGoingEvent(YourEventDetailsActivity.this,goingUserList);
+                goingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
+                goingUserRecyclerView.setAdapter(adapterGoingEvent);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<GoingUser>> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void showUserData(int userId){
@@ -148,7 +198,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                 .getUserInfoByUserId(userId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if(response.isSuccessful()){
                     JSONObject jsonObject = null;
                     try {
@@ -167,7 +217,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
 
             }

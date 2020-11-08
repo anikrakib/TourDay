@@ -109,7 +109,7 @@
 
             <LinearLayout
                 android:id="@+id/goingLinearLayout"
-                android:layout_width="100dp"
+                android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
                 android:orientation="vertical">
@@ -151,7 +151,7 @@
 
             <LinearLayout
                 android:id="@+id/pendingLinearLayout"
-                android:layout_width="100dp"
+                android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
                 android:orientation="vertical">
@@ -189,11 +189,11 @@
             app:shape_dot_spacing="3dp"
             app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
             app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
-            app:shape_edge_position="left">
+            app:shape_edge_position="left|right">
 
             <LinearLayout
                 android:id="@+id/capacityYourEventLinearLayout"
-                android:layout_width="100dp"
+                android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
                 android:orientation="vertical">
@@ -223,17 +223,62 @@
 
         </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
 
+        <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:shape_dot_radius="4dp"
+            app:shape_dot_spacing="3dp"
+            app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
+            app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
+            app:shape_edge_position="left">
+
+            <LinearLayout
+                android:id="@+id/availableLinearLayout"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="Available"
+                    android:textColor="@color/color_primary_text"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/eventDetailsAvailableTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:background="@color/whiteIcon"
+                    android:gravity="center"
+                    android:text="20"
+                    android:textColor="@color/cameraIcon"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+        </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventGoingRecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/primary_background"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/layout_bg"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <androidx.core.widget.NestedScrollView

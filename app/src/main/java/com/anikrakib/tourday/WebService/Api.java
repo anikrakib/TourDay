@@ -3,10 +3,12 @@ package com.anikrakib.tourday.WebService;
 
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
+import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
 import com.github.florent37.shapeofview.shapes.BubbleView;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -190,5 +192,9 @@ public interface Api {
     Call<AllEventResponse> getAllEvent(
             @Query("limit") int limit,
             @Query("offset") int offSet);
+
+    @GET("going_users/{event_id}")
+    Call<List<GoingUser>> getAllGoingUser(
+            @Path("event_id") int userName);
 
 }

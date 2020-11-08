@@ -203,7 +203,7 @@
                 android:background="@drawable/primary_background"
                 android:popupBackground="@drawable/primary_background"
                 android:spinnerMode="dropdown"
-                tools:listitem="@layout/custom_district_spinner_item" />
+                tools:listitem="@layout/custom_spinner_item" />
 
         </LinearLayout>
 

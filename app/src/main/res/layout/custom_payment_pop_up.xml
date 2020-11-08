@@ -55,10 +55,10 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout4"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
@@ -71,44 +71,93 @@
         tools:ignore="RtlHardcoded,RtlSymmetry">
 
         <TextView
+            android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:background="@null"
             android:paddingLeft="3dp"
             android:paddingTop="1dp"
-            android:text="Payment Information:"
+            android:text="Payment Information"
             android:textColor="#0B0B0B"
             android:textSize="15sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="HardcodedText" />
+
+        <View
+            android:id="@+id/view10"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="#000000"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            tools:layout_editor_absoluteY="2dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/view10"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/view10">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="26dp"
+                android:src="@drawable/ic_baseline_arrow_forward_24"
+                app:tint="#000000"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="26dp"
+                android:src="@drawable/ic_baseline_arrow_forward_24"
+                app:tint="#000000"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
+            android:layout_marginEnd="5dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout12"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/payment1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bkash - 01254125215"
                 android:textColor="#0B0B0B"
                 android:textSize="15sp"
+                android:layout_marginBottom="2dp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
 
             <TextView
+                android:id="@+id/payment2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rocket - 01254125215"
                 android:textColor="#0B0B0B"
+                android:layout_marginTop="2dp"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <LinearLayout
         android:id="@+id/linearLayout5"
@@ -136,10 +185,18 @@
             tools:ignore="HardcodedText" />
 
         <Spinner
-            android:id="@+id/nice_spinner"
-            android:layout_width="110dp"
-            android:layout_height="27dp"
-            android:layout_margin="5dp" />
+            android:id="@+id/paymentTypeSpinner"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/primary_background"
+            android:popupBackground="@drawable/primary_background"
+            android:spinnerMode="dropdown"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/custom_spinner_item" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -147,13 +204,13 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+        app:layout_constraintTop_toTopOf="@+id/linearLayout5">
 
         <TextView
             android:layout_width="wrap_content"
@@ -168,20 +225,21 @@
             tools:ignore="HardcodedText,RtlSymmetry" />
 
         <EditText
+            android:id="@+id/txIdEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/primary_background"
+            android:gravity="center"
             android:hint="TrxID XXXXXXXXXXXX"
             android:paddingStart="3dp"
-            android:gravity="center"
             android:paddingTop="1dp"
             android:singleLine="true"
+            android:textColorHint="@color/grayColor"
             android:textColor="#0B0B0B"
             android:textSize="15sp"
             android:textStyle="bold"
             tools:ignore="Autofill,HardcodedText,RtlSymmetry,TextFields" />
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/textView3"
@@ -196,20 +254,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
-    <Button
-        android:id="@+id/yesButton"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
+    <include
+        layout="@layout/tap_to_progress_payment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/popup_button_background"
-        android:text="Proceed"
-        android:textColor="@color/dark_green"
-        android:textStyle="bold"
+        android:layout_marginEnd="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

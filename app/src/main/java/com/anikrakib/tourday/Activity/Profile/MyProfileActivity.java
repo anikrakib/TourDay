@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
@@ -19,7 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -47,7 +45,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,9 +53,12 @@ import com.anikrakib.tourday.Activity.ExploreActivity;
 import com.anikrakib.tourday.Activity.LocationActivity;
 import com.anikrakib.tourday.Adapter.Profile.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.marozzi.roundbutton.RoundButton;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
@@ -705,6 +705,7 @@ public class MyProfileActivity extends AppCompatActivity{
 
 
         String userFullName = userPref.getString("userFullName","");
+        assert userFullName != null;
         String[] arr = userFullName.split(" ", 2);
 
         postPopUpDescription.setHint("What's on your Mind,"+arr[0]+"?");
@@ -729,7 +730,7 @@ public class MyProfileActivity extends AppCompatActivity{
         createPostDate.setText(formattedDate);
 
         // set value in district spinner
-        ArrayAdapter<String> arrayAdapterDivision = new ArrayAdapter<String>(this,R.layout.custom_district_spinner_item,R.id.districtNameTextView,districtKeys);
+        ArrayAdapter<String> arrayAdapterDivision = new ArrayAdapter<String>(this,R.layout.custom_spinner_item,R.id.districtNameTextView,districtKeys);
         districtSpinner.setAdapter(arrayAdapterDivision);
 
 
@@ -951,6 +952,13 @@ public class MyProfileActivity extends AppCompatActivity{
                         editor.putString("userFullName",profile.getString("name"));
                         editor.apply();
                         Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
+                        Glide.with(getApplicationContext())
+                                .load(ApiURL.IMAGE_BASE+profile.getString("picture"))
+                                .placeholder(R.drawable.loading)
+                                .error(Glide.with(getApplicationContext())
+                                        .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
+                                .transforms(new CenterCrop(),new RoundedCorners(16))
+                                .into(userProfilePic);
 
                         /////*     Check SocialMediaLink is null or not   */////
                         if(!(facebookLink.getText().toString().equals("null") || facebookLink.getText().toString().isEmpty())){

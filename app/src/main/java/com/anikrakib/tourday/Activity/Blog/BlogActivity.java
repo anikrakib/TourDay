@@ -239,7 +239,7 @@ public class BlogActivity extends AppCompatActivity {
         blogTextEditor.setHtml(blogDescription);
         Picasso.get().load("https://tourday.team"+userProfilePicture).into(userProfilePicturePopUP);
         // set value in district spinner
-        ArrayAdapter<String> arrayAdapterDivision = new ArrayAdapter<String>(this,R.layout.custom_district_spinner_item,R.id.districtNameTextView,division);
+        ArrayAdapter<String> arrayAdapterDivision = new ArrayAdapter<String>(this,R.layout.custom_spinner_item,R.id.districtNameTextView,division);
         divisionSpinner.setAdapter(arrayAdapterDivision);
 
 

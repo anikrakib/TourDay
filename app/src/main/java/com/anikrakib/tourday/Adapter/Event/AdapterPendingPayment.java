@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -28,8 +30,9 @@ public class AdapterPendingPayment extends RecyclerView.Adapter<AdapterPendingPa
     }
 
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.pending_payment_user_list_item, parent, false);
         return new MyViewHolder(v);
 
@@ -43,7 +46,7 @@ public class AdapterPendingPayment extends RecyclerView.Adapter<AdapterPendingPa
         myViewHolder.pendingUserName.setText(mData.get(i).getUserName());
         myViewHolder.pendingEmail.setText(mData.get(i).getEmail());
 
-        Picasso.get().load("https://www.tourday.team/"+mData.get(i).getImageUrl()).fit().centerInside().into(myViewHolder.userImage);
+        Picasso.get().load(ApiURL.IMAGE_BASE +mData.get(i).getImageUrl()).fit().centerInside().into(myViewHolder.userImage);
 
 
     }
@@ -57,8 +60,8 @@ public class AdapterPendingPayment extends RecyclerView.Adapter<AdapterPendingPa
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-        private TextView pendingUserName;
-        private TextView pendingEmail;
+        private final TextView pendingUserName;
+        private final TextView pendingEmail;
         CircleImageView userImage;
 
 

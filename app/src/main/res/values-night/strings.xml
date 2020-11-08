@@ -85,6 +85,11 @@
         <item>Sylhet</item>
     </string-array>
 
+    <string-array name="paymentType">
+        <item>Bkash</item>
+        <item>Rocket</item>
+    </string-array>
+
     <string-array name="bdDistrict">
         <item>Select District</item>
         <item>Panchagarh</item>
