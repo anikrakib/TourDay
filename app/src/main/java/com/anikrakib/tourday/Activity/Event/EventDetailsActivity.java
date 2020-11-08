@@ -169,13 +169,45 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     private void showPaymentPopUp() {
         TextView payment1,payment2,eventPrice,infoText;
         Spinner paymentTypeSpinner;
-
+        EditText txIdEditText;
+        Button proceedButton;
+        Circle curve;
+        LinearLayout taplayout,tapLayout2;
+        Context context;
 
         myDialog.setContentView(R.layout.custom_payment_pop_up);
         payment1 = myDialog.findViewById(R.id.payment1);
         payment2 = myDialog.findViewById(R.id.payment2);
         paymentTypeSpinner = myDialog.findViewById(R.id.paymentTypeSpinner);
+        txIdEditText = myDialog.findViewById(R.id.txIdEditText);
         eventPrice = myDialog.findViewById(R.id.eventPriceTextView);
+        curve = myDialog.findViewById(R.id.curve);
+        taplayout = myDialog.findViewById(R.id.layouttap);
+
+
+        CircleAnimation circleAnimation = new CircleAnimation(curve, 130.0f);
+        curve.setCurveColor(ContextCompat.getColor(getApplicationContext(), R.color.tap_light), ContextCompat.getColor(getApplicationContext(), R.color.tap_dark));
+        circleAnimation.setDuration(1500);
+        circleAnimation.setAnimationListener(this);
+
+        taplayout.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case 0:
+                        curve.startAnimation(circleAnimation);
+                        cancel = false;
+                        return true;
+                    case 1:
+                    case 3:
+                        circleAnimation.cancel();
+                        cancel = true;
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
 
 
         payment1.setText(pay1Method+" - "+pay1);

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:gravity="bottom"
+    android:layout_height="wrap_content">
+
+    <com.anikrakib.tourday.Utils.TapToProgress.Circle
+        android:id="@+id/curve"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tapandhold_buttonHeight_outter"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent" />
+
+    <LinearLayout
+        android:id="@+id/layouttap"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tapandhold_buttonHeight_middle"
+        android:gravity="center"
+        android:background="@drawable/tapbg"
+        android:layout_marginTop="@dimen/margin_10">
+
+        <TextView
+            android:id="@+id/info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_10"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="Tap to Proceed"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:autoSizeTextType="uniform"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+
+</RelativeLayout>
