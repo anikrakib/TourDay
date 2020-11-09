@@ -47,6 +47,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Activity.SearchActivity;
 import com.anikrakib.tourday.Adapter.Blog.DivisionAdapter;
 import com.anikrakib.tourday.Adapter.Blog.ViewBlogPagerAdapter;
 import com.anikrakib.tourday.Models.Blog.DivisionModelItem;
@@ -92,6 +93,7 @@ public class BlogActivity extends AppCompatActivity {
     RoundedImageView blogImageView;
     private static final int INTENT_REQUEST_CODE = 100;
     ImageView blogBackButton;
+    ImageButton   searchButton;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -105,6 +107,7 @@ public class BlogActivity extends AppCompatActivity {
         createBlog = findViewById(R.id.fabButtonCreateBlog);
         viewPagerBlog = (ViewPager) findViewById(R.id.viewPagerBlog);
         blogBackButton = findViewById(R.id.backBlogImageButton);
+        searchButton = findViewById(R.id.search_button);
 
         if(loadNightModeState()){
             if (Build.VERSION.SDK_INT >= 23) {
@@ -183,7 +186,19 @@ public class BlogActivity extends AppCompatActivity {
             }
         });
 
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //overridePendingTransition(0,R.anim.left_to_right);
+                startActivity(new Intent(BlogActivity.this, SearchActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
+            }
+        });
+
     }
+
+    //@Override public void onBackPressed() { super.onBackPressed(); overridePendingTransition(R.anim.hold, R.anim.fade_out); }
 
 
     /////*     method   */////

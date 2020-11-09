@@ -39,7 +39,7 @@
         <item name="android:textColorSecondary">@color/color_primary_text</item>
     </style>
 
-    <style name="MyCustomTheme" parent="MaterialSearchBarLight">
+    <style name="MyCustomTheme" parent="Widget.AppCompat.SearchView">
         <item name="mt_searchBarColor">@color/searchBarPrimaryColor</item>
         <item name="mt_dividerColor">@color/searchBarDividerColor</item>
         <item name="mt_navIconTint">@color/searchBarNavIconTintColor</item>
@@ -52,6 +52,13 @@
         <item name="mt_hintColor">@color/searchBarHintColor</item>
         <item name="mt_placeholderColor">@color/searchBarPlaceholderColor</item>
         <item name="mt_highlightedTextColor">@color/searchBarTextHighlightColor</item>
+    </style>
+
+    <style name="SearchView" parent="">
+        <item name="android:editTextColor">@color/color_primary_text</item>
+        <item name="android:textColorHint">@color/color_secondary_text</item>
+        <item name="icon">@color/color_primary_text</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 
