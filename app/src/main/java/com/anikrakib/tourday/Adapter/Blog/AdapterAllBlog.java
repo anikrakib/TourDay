@@ -25,6 +25,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Activity.Blog.BlogDetailsActivity;
+import com.anikrakib.tourday.Activity.Blog.YourBlogDetailsActivity;
 import com.anikrakib.tourday.Models.Blog.AllBlogResult;
 import com.anikrakib.tourday.Models.Blog.BlogItem;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
@@ -100,11 +101,9 @@ public class AdapterAllBlog extends RecyclerView.Adapter<RecyclerView.ViewHolder
         blogVh.blogDate.setText(allBlogResult.getDate());
         blogVh.blogTitle.setText(allBlogResult.getTitle());
 
-//        if(currentItem.isSearch()){
-//            Picasso.get().load(allBlogResult.getImage()).fit().centerInside().into(blogVh.blogImage);
-//        }else{
-            Picasso.get().load(ApiURL.IMAGE_BASE +allBlogResult.getImage()).fit().centerInside().into(blogVh.blogImage);
-       // }
+
+        Picasso.get().load(ApiURL.IMAGE_BASE +allBlogResult.getImage()).fit().centerInside().into(blogVh.blogImage);
+
 
         if(allBlogResult.getSlug().equals(userName)){
             blogVh.moreBlogButton.setVisibility(View.VISIBLE);
@@ -115,10 +114,18 @@ public class AdapterAllBlog extends RecyclerView.Adapter<RecyclerView.ViewHolder
         blogVh.cardViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent;
-                intent =  new Intent(context, BlogDetailsActivity.class);
-                intent.putExtra("blogId",allBlogResult.getId());
-                context.startActivity(intent);
+                if(allBlogResult.getSlug().equals(userName)){
+                    final Intent intent;
+                    intent =  new Intent(context, YourBlogDetailsActivity.class);
+                    intent.putExtra("yourBlogId",allBlogResult.getId());
+                    context.startActivity(intent);
+                } else {
+                    final Intent intent;
+                    intent =  new Intent(context, BlogDetailsActivity.class);
+                    intent.putExtra("blogId",allBlogResult.getId());
+                    context.startActivity(intent);
+                }
+
             }
         });
 

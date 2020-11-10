@@ -54,7 +54,7 @@ public class DivisionBlogActivity extends AppCompatActivity {
     SwipeRefreshLayout divisionBlogSwipeRefreshLayout;
     ArrayList<BlogItem> mBlogItem;
     AdapterDivisionBlog adapterDivisionBlog;
-    private RecyclerView.LayoutManager layoutManager;
+    LinearLayoutManager layoutManager;
     String division;
     int page = 1;
     int limit = 1;

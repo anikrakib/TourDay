@@ -182,6 +182,7 @@ public interface Api {
 
     @GET("blog/")
     Call<AllBlogResponse> getAllSearchBlog(
+            @Query("page") int page,
             @Query("search") String key);
 
     @GET("user/{username}")

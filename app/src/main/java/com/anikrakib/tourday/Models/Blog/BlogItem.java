@@ -1,13 +1,13 @@
 package com.anikrakib.tourday.Models.Blog;
 
 public class BlogItem {
-    private String blogImageUrl;
-    private String blogTitle;
-    private String blogDescription;
-    private String blogDivision;
-    private String blogDate;
-    private String blogAuthorName;
-    private String blogId;
+    private final String blogImageUrl;
+    private final String blogTitle;
+    private final String blogDescription;
+    private final String blogDivision;
+    private final String blogDate;
+    private final String blogAuthorName;
+    private final String blogId;
     private boolean search;
 
     public BlogItem(String blogImageUrl, String blogTitle, String blogDescription, String blogDivision, String blogDate, String blogAuthorName, String blogId) {
@@ -18,17 +18,6 @@ public class BlogItem {
         this.blogDate = blogDate;
         this.blogAuthorName = blogAuthorName;
         this.blogId = blogId;
-    }
-
-    public BlogItem(String blogImageUrl, String blogTitle, String blogDescription, String blogDivision, String blogDate, String blogAuthorName, String blogId,boolean search) {
-        this.blogImageUrl = blogImageUrl;
-        this.blogTitle = blogTitle;
-        this.blogDescription = blogDescription;
-        this.blogDivision = blogDivision;
-        this.blogDate = blogDate;
-        this.blogAuthorName = blogAuthorName;
-        this.blogId = blogId;
-        this.search = search;
     }
 
     public boolean isSearch() {
