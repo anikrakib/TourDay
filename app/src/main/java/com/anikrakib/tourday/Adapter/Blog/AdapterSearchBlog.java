@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,27 +27,43 @@ import com.anikrakib.tourday.Activity.Blog.BlogDetailsActivity;
 import com.anikrakib.tourday.Activity.Blog.YourBlogDetailsActivity;
 import com.anikrakib.tourday.Models.Blog.BlogItem;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
+import com.anikrakib.tourday.Models.Blog.SearchBlogHistory;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class AdapterSearchBlog extends RecyclerView.Adapter<AdapterSearchBlog.BlogViewHolder> {
 
     private final Context mContext;
     private final ArrayList<BlogItem> mBlogItemList;
     Dialog myDialog;
+    SearchView blogSearchView;
+    private List<SearchBlogHistory> searchBlogHistories;
+    AdapterSearchBlogHistory adapterSearchBlogHistory;
 
     public AdapterSearchBlog(Context mContext, ArrayList<BlogItem> mBlogItemList) {
         this.mContext = mContext;
         this.mBlogItemList = mBlogItemList;
+    }
+
+    public AdapterSearchBlog(Context mContext, ArrayList<BlogItem> mBlogItemList, SearchView blogSearchView, List<SearchBlogHistory> searchBlogHistories) {
+        this.mContext = mContext;
+        this.mBlogItemList = mBlogItemList;
+        this.blogSearchView = blogSearchView;
+        this.searchBlogHistories = searchBlogHistories;
     }
 
     @NonNull
@@ -82,6 +99,14 @@ public class AdapterSearchBlog extends RecyclerView.Adapter<AdapterSearchBlog.Bl
         holder.blogItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // save value in sharedPref list  when user click blogSearch list item
+                searchBlogHistories.add(new SearchBlogHistory(blogSearchView.getQuery().toString()));
+                writeListInPref(mContext, searchBlogHistories);
+//                Collections.reverse(searchBlogHistories);
+//                if(searchBlogHistories!= null){
+//                    adapterSearchBlogHistory.setTaskModelList(searchBlogHistories);
+//                }
+
                 if(author.equals(userName)){
                     final Intent intent;
                     intent =  new Intent(mContext, YourBlogDetailsActivity.class);
@@ -125,4 +150,14 @@ public class AdapterSearchBlog extends RecyclerView.Adapter<AdapterSearchBlog.Bl
         }
     }
 
+    public void writeListInPref(Context context, List<SearchBlogHistory> list) {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(list);
+        SharedPreferences user = context.getSharedPreferences("user", MODE_PRIVATE);
+        String userName = user.getString("userName","");
+        SharedPreferences userPref = context.getSharedPreferences(userName, MODE_PRIVATE);
+        SharedPreferences.Editor editor = userPref.edit();
+        editor.putString("searchHistoryKey", jsonString);
+        editor.apply();
+    }
 }
