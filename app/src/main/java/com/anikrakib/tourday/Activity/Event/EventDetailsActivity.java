@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Activity.Event;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -31,6 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Activity.Profile.ChangePasswordActivity;
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
 import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.R;
@@ -39,6 +43,8 @@ import com.anikrakib.tourday.Utils.TapToProgress.Circle;
 import com.anikrakib.tourday.Utils.TapToProgress.CircleAnimation;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.google.android.material.snackbar.Snackbar;
+import com.kishandonga.csbx.CustomSnackbar;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
@@ -49,6 +55,8 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.pm.ActivityInfo.*;
 
 public class EventDetailsActivity extends AppCompatActivity implements Animation.AnimationListener {
     RecyclerView goingUserRecyclerView;
@@ -67,6 +75,8 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     int cost,eventId;
     List<GoingUser> goingUserList;
     boolean cancel =false;
+    Circle curve;
+
 
 
     @SuppressLint("SetTextI18n")
@@ -137,7 +147,6 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         }
         Picasso.get().load(ApiURL.IMAGE_BASE + eventImageUrl).fit().centerInside().into(eventDetailsImage);
 
-
         goingLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +160,19 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         joinNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPaymentPopUp();
+
+                int orientation = getApplicationContext().getResources().getConfiguration().orientation;
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    // code for portrait mode
+                    showPaymentPopUp();
+
+                } else {
+                    // code for landscape mode
+                    //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    snackBar("If You Want to Payment, Make sure your screen is Portrait Mode",R.color.white);
+
+
+                }
             }
         });
 
@@ -171,9 +192,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         Spinner paymentTypeSpinner;
         EditText txIdEditText;
         Button proceedButton;
-        Circle curve;
-        LinearLayout taplayout,tapLayout2;
+        LinearLayout taplayout;
         Context context;
+
+        //android:screenOrientation = "portrait"
 
         myDialog.setContentView(R.layout.custom_payment_pop_up);
         payment1 = myDialog.findViewById(R.id.payment1);
@@ -269,6 +291,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         if(cancel){
             Toast.makeText(getApplicationContext(),"incomplete",Toast.LENGTH_LONG).show();
         }else{
+            curve.setCurveColor(ContextCompat.getColor(getApplicationContext(), R.color.tap_light), ContextCompat.getColor(getApplicationContext(), R.color.tap_dark));
             Toast.makeText(getApplicationContext(),"complete",Toast.LENGTH_LONG).show();
         }
     }
@@ -276,5 +299,15 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     @Override
     public void onAnimationRepeat(Animation animation) {
 
+    }
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(this);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
     }
 }
