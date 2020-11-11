@@ -35,8 +35,8 @@
     <color name="flamingo.phoneColor">#898F9C</color>
 
     <color name="tap">#fff6687d</color>
-    <color name="tap_dark">#ffff5c69</color>
-    <color name="tap_light">#ffffe1e4</color>
+    <color name="tap_dark">#ff7346</color>
+    <color name="tap_light">#81F33F06</color>
 
 <!--    search bar color-->
     <color name="searchBarIconColor">#3a3a3a</color>

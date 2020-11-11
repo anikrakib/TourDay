@@ -202,7 +202,7 @@
     <LinearLayout
         android:id="@+id/linearLayout6"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:gravity="center"
@@ -217,7 +217,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:paddingStart="3dp"
-            android:paddingTop="1dp"
+            android:layout_marginBottom="5dp"
             android:text="Transaction Id"
             android:textColor="#0B0B0B"
             android:textSize="15sp"
@@ -227,15 +227,15 @@
         <EditText
             android:id="@+id/txIdEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:background="@drawable/primary_background"
             android:gravity="center"
             android:hint="TrxID XXXXXXXXXXXX"
             android:paddingStart="3dp"
             android:paddingTop="1dp"
             android:singleLine="true"
-            android:textColorHint="@color/grayColor"
             android:textColor="#0B0B0B"
+            android:textColorHint="@color/grayColor"
             android:textSize="15sp"
             android:textStyle="bold"
             tools:ignore="Autofill,HardcodedText,RtlSymmetry,TextFields" />
@@ -256,7 +256,7 @@
 
     <include
         layout="@layout/tap_to_progress_payment"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
