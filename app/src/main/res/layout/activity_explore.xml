@@ -74,20 +74,22 @@
                 app:tint="@color/color_primary_text" />
 
             <EditText
+                android:id="@+id/searchKeyWord"
                 android:layout_width="279dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@null"
-                android:singleLine="true"
                 android:fontFamily="@font/gilroybold"
-                android:hint="explore your desire"
+                android:hint="@string/explore_your_desire"
                 android:padding="5dp"
+                android:singleLine="true"
                 android:textSize="15sp" />
         </LinearLayout>
 
         <Button
+            android:id="@+id/searchButton"
             android:layout_width="135dp"
             android:layout_height="40dp"
             android:layout_margin="12dp"
@@ -101,7 +103,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.092"/>
+            app:layout_constraintVertical_bias="0.092" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

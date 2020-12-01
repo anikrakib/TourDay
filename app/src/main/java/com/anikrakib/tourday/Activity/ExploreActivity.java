@@ -26,6 +26,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -45,6 +46,9 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     Dialog myDialog;
     SwitchCompat switchCompat;
     SharedPreferences sharedPreferences = null;
+    Button search;
+    EditText keyWord;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +57,18 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         myDialog = new Dialog(this);
 
         if(loadNightModeState()){
-            if (Build.VERSION.SDK_INT >= 23) {
-                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
-            }
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
         }else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.nav_view);
         toolbarMenu = findViewById(R.id.toolbar);
+        keyWord = findViewById(R.id.searchKeyWord);
+        search = findViewById(R.id.searchButton);
 
         setTitle("");
 
@@ -95,6 +97,12 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ExploreActivity.this,SearchAllActivity.class).putExtra("keyword",keyWord.getText().toString()));
+            }
+        });
 
         //change user profile name when userLogin
         String username = userPref.getString("userName","");

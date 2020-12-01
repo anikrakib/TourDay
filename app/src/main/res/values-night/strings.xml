@@ -230,5 +230,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_bio">Edit Bio</string>
+    <string name="sorry_no_result_found_msg1">Sorry!! No Result Found</string>
+    <string name="sorry_no_result_found_msg2">We can not find the item you are searching for,maybe a little spelling mistake</string>
+    <string name="explore_your_desire">explore your desire</string>
 
 </resources>
