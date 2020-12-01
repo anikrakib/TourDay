@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:numberpicker="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/popup_create_post_and_event_edittext_style"
             android:ems="10"
+            android:textColor="@color/colorPrimary"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="2dp"
@@ -99,7 +100,7 @@
             android:lines="8"
             android:maxLines="10"
             android:minLines="6"
-            android:textColor="@color/color_primary_text"
+            android:textColor="@color/colorPrimary"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="2dp"
@@ -109,38 +110,43 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2"
             tools:ignore="Autofill,LabelFor,RtlHardcoded" />
 
-
         <LinearLayout
             android:id="@+id/eventDate"
-            android:layout_width="320dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingHorizontal="5dp"
             android:paddingVertical="5dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/popupEventDescription">
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_date_range_black_24dp"
-                app:tint="@color/black"
-                tools:ignore="ContentDescription" />
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:text="@string/event_date"
-                android:textColor="@color/color_primary_text"
-                android:textStyle="bold"
-                tools:ignore="RtlSymmetry" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_date_range_black_24dp"
+                    app:tint="@color/color_primary_text"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/event_date"
+                    android:textColor="@color/color_primary_text"
+                    android:textStyle="bold"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/eventStartDate"
@@ -161,64 +167,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/eventTime"
-            android:layout_width="320dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="5dp"
-            android:paddingVertical="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eventLocation">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_access_time_24"
-                app:tint="@color/black"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:text="Event Start"
-                android:textColor="@color/color_primary_text"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-
-            <TextView
-                android:id="@+id/eventStartTime"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@null"
-                android:paddingLeft="3dp"
-                android:paddingTop="1dp"
-                android:paddingRight="3dp"
-                android:text="7:00 AM"
-                android:textAlignment="center"
-                android:textColor="@color/color_secondary_text"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/eventLocation"
+            android:id="@+id/linearLayout14"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
             android:gravity="center"
             android:orientation="horizontal"
@@ -228,55 +180,259 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventDate">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cost"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_primary_text"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:id="@+id/eventPrice"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/primary_background"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/eventImage"
+                    app:layout_constraintTop_toBottomOf="@+id/eventDateLayout">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/taka"
+                        app:tint="@color/colorPrimary"
+                        tools:ignore="ContentDescription" />
+
+                    <EditText
+                        android:id="@+id/eventCost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@null"
+                        android:paddingStart="3dp"
+                        android:paddingTop="1dp"
+                        android:text="1000"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:ignore="Autofill,HardcodedText,RtlSymmetry" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/margin_10"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Capacity"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_primary_text"
+                    tools:ignore="HardcodedText" />
+
+                <include layout="@layout/number_picker_custom_layout" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/paymentDetails"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout14">
+
+            <LinearLayout
+                android:id="@+id/linearLayout5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingStart="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+                tools:ignore="RtlSymmetry">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:paddingStart="3dp"
+                    android:paddingTop="1dp"
+                    android:text="Payment Method"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+                <Spinner
+                    android:id="@+id/paymentTypeSpinner1"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:paddingBottom="3dp"
+                    android:background="@drawable/primary_background"
+                    android:popupBackground="@drawable/primary_background"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/custom_spinner_item" />
+
+                <Spinner
+                    android:id="@+id/paymentTypeSpinner2"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/primary_background"
+                    android:popupBackground="@drawable/primary_background"
+                    android:spinnerMode="dropdown"
+                    android:paddingBottom="3dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/custom_spinner_item" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+                app:layout_constraintTop_toTopOf="@+id/linearLayout5">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:background="@null"
+                    android:paddingStart="3dp"
+                    android:text="Account No"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+
+                <EditText
+                    android:id="@+id/numberEditText1"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/primary_background"
+                    android:gravity="center"
+                    android:hint="Enter Number"
+                    android:paddingStart="3dp"
+                    android:paddingTop="1dp"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:textColor="#0B0B0B"
+                    android:textColorHint="@color/grayColor"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:ignore="Autofill,HardcodedText,RtlSymmetry,TextFields" />
+
+                <EditText
+                    android:id="@+id/numberEditText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/primary_background"
+                    android:gravity="center"
+                    android:hint="Enter Number"
+                    android:paddingStart="3dp"
+                    android:paddingTop="1dp"
+                    android:singleLine="true"
+                    android:inputType="number"
+                    android:textColor="#0B0B0B"
+                    android:textColorHint="@color/grayColor"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:ignore="Autofill,HardcodedText,RtlSymmetry,TextFields" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/eventLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout14"
+            app:layout_constraintEnd_toStartOf="@+id/eventDate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/popupEventDescription">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center"
                 android:src="@drawable/ic_baseline_location_on_24"
-                app:tint="@color/black"
+                app:tint="@color/color_primary_text"
                 tools:ignore="ContentDescription,RtlHardcoded" />
 
             <EditText
                 android:id="@+id/createEventLocationEditText"
-                android:layout_width="260dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:singleLine="true"
+                android:hint="Event Location"
                 android:paddingStart="5dp"
-                android:hint="Enter Event Location"
+                android:ems="10"
+                android:textSize="15sp"
                 android:textColor="@color/color_primary_text"
                 android:textStyle="bold"
                 tools:ignore="Autofill,HardcodedText,RtlSymmetry,TextFields" />
 
-            <!-- Check Done   -->
-            <ImageButton
-                android:id="@+id/refreshLocationInEvent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_baseline_refresh_24"
-                app:tint="@color/color_primary_text"
-                tools:ignore="ContentDescription" />
-
-
         </LinearLayout>
 
-
-        <include
-            android:id="@+id/include"
-            layout="@layout/choose_image_for_post_event"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eventTime" />
 
         <com.marozzi.roundbutton.RoundButton
             android:id="@+id/uploadButton"
             android:layout_width="88dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:padding="0dp"
@@ -285,7 +441,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include"
+            app:layout_constraintTop_toBottomOf="@+id/paymentDetails"
             app:rb_animation_alpha="false"
             app:rb_animation_corner_radius="6dp"
             app:rb_animation_duration="500"
@@ -293,13 +449,13 @@
             app:rb_animation_progress_padding="8dp"
             app:rb_animation_progress_width="2dp"
             app:rb_background_color="@android:color/transparent"
-            app:rb_background_color_pressed="@color/colorPrimary"
-            app:rb_corner_color="@color/colorPrimary"
-            app:rb_corner_color_pressed="@color/colorPrimary"
+            app:rb_background_color_pressed="@color/color_primary_text"
+            app:rb_corner_color="@color/color_primary_text"
+            app:rb_corner_color_pressed="@color/color_primary_text"
             app:rb_corner_radius="6dp"
             app:rb_corner_width="1dp"
-            app:rb_text_color="@color/colorPrimary"
-            app:rb_text_color_pressed="@android:color/white"
+            app:rb_text_color="@color/color_primary_text"
+            app:rb_text_color_pressed="@color/colorPrimary"
             tools:ignore="HardcodedText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

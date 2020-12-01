@@ -5,9 +5,11 @@ import com.anikrakib.tourday.Models.Blog.AllBlogResponse;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Event.GoingUser;
+import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
 import com.github.florent37.shapeofview.shapes.BubbleView;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 import java.util.List;
 import java.util.Map;
@@ -202,5 +204,28 @@ public interface Api {
     @GET("going_users/{event_id}")
     Call<List<GoingUser>> getAllGoingUser(
             @Path("event_id") int userName);
+
+    @FormUrlEncoded
+    @POST("event-pay/{event_id}")
+    Call<EventPayment> eventPayment(
+            @Header("Authorization") String authToken,
+            @Path("event_id") int postId,
+            @Field("method") String paymentMethod,
+            @Field("tr") String transactionID);
+
+    @FormUrlEncoded
+    @POST("create_event/")
+    Call<ResponseBody> createEvent(
+            @Header("Authorization") String authToken,
+            @Field("title") String blogTitle,
+            @Field("location") String blogLocation,
+            @Field("date") String blogDate,
+            @Field("details") String blogDetails,
+            @Field("pay1") String pay1,
+            @Field("pay1_method") String pay1Method,
+            @Field("pay2") String pay2,
+            @Field("pay2_method") String pay2Method,
+            @Field("capacity") String blogCapacity,
+            @Field("cost") String blogCost);
 
 }
