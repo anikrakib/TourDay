@@ -258,7 +258,7 @@ public class MyProfileActivity extends AppCompatActivity{
     private void showProfileEditPopUp() {
         View touch;
         Animation rightToLeft,leftToRight;
-        LinearLayout linearLayout,emailLayout,changePasswordLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
+        LinearLayout linearLayout,emailLayout,changePasswordLayout,deleteAccountLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
         ImageView backButton;
 
         myDialog.setContentView(R.layout.profile_more_option_pop_up);
@@ -277,6 +277,7 @@ public class MyProfileActivity extends AppCompatActivity{
         facebookIdLayout = myDialog.findViewById(R.id.facebookLinkEdit);
         instagramIdLayout = myDialog.findViewById(R.id.instagramLinkEdit);
         swipeRefreshLayout = myDialog.findViewById(R.id.moreOptionSwifRefreshLayout);
+        deleteAccountLayout = myDialog.findViewById(R.id.deleteAccountLayout);
 
 
         rightToLeft = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
@@ -327,6 +328,12 @@ public class MyProfileActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MyProfileActivity.this, ChangePasswordActivity.class));
+            }
+        });
+        deleteAccountLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteUserAccount();
             }
         });
         manageMyAccountLayout.setOnClickListener(new View.OnClickListener() {
@@ -403,6 +410,14 @@ public class MyProfileActivity extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void deleteUserAccount(){
+        myDialog2.setContentView(R.layout.custom_delete_account_pop_up);
+
+        myDialog2.setCancelable(true);
+        Objects.requireNonNull(myDialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog2.show();
     }
 
     //this method show pop to edit user name
