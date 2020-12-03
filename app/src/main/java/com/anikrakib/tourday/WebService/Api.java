@@ -72,6 +72,10 @@ public interface Api {
             @Field("password1") String newPassword,
             @Field("password2") String confirmNewPassword);
 
+    @POST("delete_account/")
+    Call<ResponseBody> deleteAccount(
+            @Header("Authorization") String authToken);
+
     @GET("user/{user_id}")
     Call<ResponseBody> getUserInfoByUserId(
             @Path("user_id") int userId);

@@ -59,7 +59,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.kishandonga.csbx.CustomSnackbar;
 import com.marozzi.roundbutton.RoundButton;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
@@ -71,6 +73,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -110,9 +114,8 @@ public class MyProfileActivity extends AppCompatActivity{
     InputStream postInputStream;
     Boolean createPostImageClick = false;
     ImageView postImageView;
+    String token,userOldPassword;
     public static String location = "";
-    public static String userFacebookLink = "";
-    public static String userInstagramLink = "";
     public static final Pattern USER_NAME = Pattern.compile("^([a-z])+([\\w.]{2,})+$");
 
     // moreOptionPopUp variable
@@ -145,16 +148,15 @@ public class MyProfileActivity extends AppCompatActivity{
         profileMoreButton = findViewById(R.id.profileMoreIcon);
 
         if(loadNightModeState()){
-            if (Build.VERSION.SDK_INT >= 23) {
-                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
-            }
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
         }else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        token = userPref.getString("token","");
+        userOldPassword = userPref.getString("password","");
 
         resources= getResources();
         districtKeys = resources.getStringArray(R.array.bdDistrict);
@@ -395,7 +397,7 @@ public class MyProfileActivity extends AppCompatActivity{
                         userBioInPopUp.setText(profile.getString("bio"));
                         location = profile.getString("city");
                         swipeRefreshLayout.setRefreshing(false);
-                        Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userImageInPopUp);
+                        Picasso.get().load(ApiURL.IMAGE_BASE+profile.getString("picture")).into(userImageInPopUp);
 
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
@@ -413,11 +415,83 @@ public class MyProfileActivity extends AppCompatActivity{
     }
 
     public void deleteUserAccount(){
+        myDialog.dismiss();
+        EditText oldPassword;
+        Button okButton;
+
         myDialog2.setContentView(R.layout.custom_delete_account_pop_up);
+
+        oldPassword = myDialog2.findViewById(R.id.confirmOldPassword);
+        okButton = myDialog2.findViewById(R.id.okButton);
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(oldPassword.getText().toString().isEmpty()){
+                    snackBar("Password Required",R.color.dark_red);
+                }else{
+                    if(userOldPassword.equals(getHash(oldPassword.getText().toString()))){
+                        deleteAccount();
+                    }else{
+                        snackBar("Password Not Matched",R.color.dark_red);
+                    }
+                }
+            }
+        });
 
         myDialog2.setCancelable(true);
         Objects.requireNonNull(myDialog2.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog2.show();
+    }
+
+    private void deleteAccount() {
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .deleteAccount("Token "+token);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    DynamicToast.makeSuccess(getApplicationContext(), "Name Update Successfully").show();
+                    JSONObject jsonObject = null;
+                    try {
+                        assert response.body() != null;
+                        jsonObject = new JSONObject(response.body().string());
+                        int status = jsonObject.getInt("status");
+                        if(status==200){
+                            DynamicToast.makeSuccess(getApplicationContext(), "Account Delete SuccessFully").show();
+                            SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = userPref.edit();
+                            editor.putBoolean("isLoggedIn",false);
+                            editor.putBoolean("firstTime",false);
+                            editor.putString("token","");
+                            editor.putString("userName","");
+                            editor.putString("userProfilePicture","");
+                            editor.putString("id","");
+                            editor.putString("password","");
+                            editor.putString("userFullName","");
+                            editor.putString("searchHistoryKey","");
+                            editor.apply();
+                            startActivity(new Intent(MyProfileActivity.this,ExploreActivity.class));
+                            finish();
+                        }else{
+                            String detail = jsonObject.getString("detail");
+                            snackBar(detail,R.color.dark_red);
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     //this method show pop to edit user name
@@ -1159,6 +1233,7 @@ public class MyProfileActivity extends AppCompatActivity{
             return FACEBOOK_URL; //normal web url
         }
     }
+
     public String getInstragamPageURL(Context context) {
         String INSTAGRAM_URL = "https://www.instagram.com/"+instagramLink.getText().toString();
         Uri uri = Uri.parse("http://instagram.com/_u/"+instagramLink.getText().toString());
@@ -1183,6 +1258,7 @@ public class MyProfileActivity extends AppCompatActivity{
             return false;
         }
     }
+
     public boolean isInstagramInstalled() {
         try {
             getApplicationContext().getPackageManager().getApplicationInfo("com.instagram.android", 0);
@@ -1191,6 +1267,7 @@ public class MyProfileActivity extends AppCompatActivity{
             return false;
         }
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     public void showUserSocialMediaAccount(String url) {
         ImageView close;
@@ -1223,6 +1300,7 @@ public class MyProfileActivity extends AppCompatActivity{
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
     }
+
     public static void setWindowFlag(Activity activity, final int bits, boolean on) {
         Window window = activity.getWindow();
         WindowManager.LayoutParams winParams = window.getAttributes();
@@ -1233,9 +1311,39 @@ public class MyProfileActivity extends AppCompatActivity{
         }
         window.setAttributes(winParams);
     }
+
     public Boolean loadNightModeState (){
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
         return userPref.getBoolean("night_mode",false);
+    }
+
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(MyProfileActivity.this);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
+    }
+
+    public String getHash(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte[] messageDigest = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : messageDigest) hexString.append(Integer.toHexString(0xFF & b));
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
 
