@@ -83,6 +83,8 @@ public class EventActivity extends AppCompatActivity {
     String[] paymentType;
     Resources resources;
     TextView eventDate;
+    final String[] eventTitleSave = new String[1];
+    final String[] eventDescriptionSave = new String[1];
 
 
     @Override
@@ -91,14 +93,10 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
 
         if(loadNightModeState()){
-            if (Build.VERSION.SDK_INT >= 23) {
-                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
-            }
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
         }else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
         /*     initialize view   */
@@ -150,8 +148,6 @@ public class EventActivity extends AppCompatActivity {
         EditText capacity,cost,accountNumber1,accountNumber2;
         ImageView inc,dec;
         final ConstraintLayout createEventLayout;
-        final String[] eventTitleSave = new String[1];
-        final String[] eventDescriptionSave = new String[1];
         Spinner paymentTypeSpinner1,paymentTypeSpinner2;
         RoundButton createEventButton;
 
@@ -231,12 +227,11 @@ public class EventActivity extends AppCompatActivity {
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                createEvent(eventPopUpTitle.getText().toString(),editTextLocation.getText().toString(),
-//                        eventDate.getText().toString(),eventPopUpDescription.getText().toString(),
-//                        paymentTypeSpinner1.getSelectedItem().toString(),accountNumber1.getText().toString(),
-//                        paymentTypeSpinner2.getSelectedItem().toString(),accountNumber2.getText().toString(),
-//                        capacity.getText().toString(),cost.getText().toString());
-                createEvent("","","","","","","","","","");
+                createEvent(eventPopUpTitle.getText().toString(),editTextLocation.getText().toString(),
+                        eventDate.getText().toString(),eventPopUpDescription.getText().toString(),
+                        paymentTypeSpinner1.getSelectedItem().toString(),accountNumber1.getText().toString(),
+                        paymentTypeSpinner2.getSelectedItem().toString(),accountNumber2.getText().toString(),
+                        capacity.getText().toString(),cost.getText().toString());
             }
         });
 
@@ -298,43 +293,28 @@ public class EventActivity extends AppCompatActivity {
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
 
-//        RequestBody title = RequestBody.create(MediaType.parse("text/plain"),blogTitle );
-//        RequestBody location = RequestBody.create(MediaType.parse("text/plain"),blogLocation );
-//        RequestBody date = RequestBody.create(MediaType.parse("text/plain"),blogDate );
-//        RequestBody details = RequestBody.create(MediaType.parse("text/plain"),blogDetails );
-//        RequestBody pay1 = RequestBody.create(MediaType.parse("text/plain"),blogPay1 );
-//        RequestBody pay1Method = RequestBody.create(MediaType.parse("text/plain"),blogPay1Method );
-//        RequestBody pay2 = RequestBody.create(MediaType.parse("text/plain"),blogPay2 );
-//        RequestBody pay2Method = RequestBody.create(MediaType.parse("text/plain"),blogPay2Method );
-//        RequestBody capacity = RequestBody.create(MediaType.parse("text/plain"),blogCapacity );
-//        RequestBody cost = RequestBody.create(MediaType.parse("text/plain"),blogCost );
-
-
-        //MultipartBody.Part postImage = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
-
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                //.createEvent("Token "+token,title,location,date,details,pay1,pay1Method,pay2,pay2Method,capacity,cost);
                 .createEvent("Token "+token,blogTitle,blogLocation,blogDate,blogDetails,blogPay1,blogPay1Method,blogPay2,blogPay2Method,blogCapacity,blogCost);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     DynamicToast.makeSuccess(getApplicationContext(), "Event Created").show();
                     myDialog.dismiss();
                     // post description shared pref removed
-//                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
-//                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = userPref.edit();
-//                    editor.putString("eventDescription","");
-//                    editor.putString("eventTitle","");
-//                    editor.apply();
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("eventTitle", eventTitleSave[0]);
+                    editor.putString("eventDescription", eventDescriptionSave[0]);
+                    editor.apply();
                 } else {
                     DynamicToast.makeError(getApplicationContext(), "Something Wrong").show();
                 }
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
