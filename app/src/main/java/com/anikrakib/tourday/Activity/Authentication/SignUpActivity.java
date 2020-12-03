@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -38,6 +39,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -191,6 +194,7 @@ public class SignUpActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = userPref.edit();
                         editor.putString("token",token);
                         editor.putBoolean("isLoggedIn",true);
+                        editor.putString("password",getHash(inputPassword.getText().toString()));
                         editor.apply();
                         DynamicToast.makeSuccess(getApplicationContext(), "Registration Success").show();
                         startActivity(new Intent(SignUpActivity.this, MyProfileActivity.class));
@@ -303,6 +307,7 @@ public class SignUpActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
 
+        @SuppressLint("NonConstantResourceId")
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
                 case R.id.userNameSignUp:
@@ -345,8 +350,27 @@ public class SignUpActivity extends AppCompatActivity {
         }
         window.setAttributes(winParams);
     }
+
     public Boolean loadNightModeState (){
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
         return userPref.getBoolean("night_mode",false);
+    }
+
+    public String getHash(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte[] messageDigest = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : messageDigest) hexString.append(Integer.toHexString(0xFF & b));
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

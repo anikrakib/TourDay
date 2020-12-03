@@ -33,6 +33,8 @@ import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -96,7 +98,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(changeOrOkButton.getText().toString().equals("OK")){
-                    if(userOldPassword.equals(confirmOldPassword.getText().toString())){
+                    if(userOldPassword.equals(getHash(confirmOldPassword.getText().toString()))){
                         forgetPassword();
                         snackBar("Password Matched !!",R.color.dark_green);
                     }else{
@@ -304,5 +306,23 @@ public class ChangePasswordActivity extends AppCompatActivity {
     public Boolean loadNightModeState (){
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
         return userPref.getBoolean("night_mode",false);
+    }
+
+    public String getHash(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte[] messageDigest = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : messageDigest) hexString.append(Integer.toHexString(0xFF & b));
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

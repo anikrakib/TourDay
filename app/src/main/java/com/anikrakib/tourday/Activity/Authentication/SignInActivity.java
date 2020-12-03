@@ -32,6 +32,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,14 +62,10 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         if(loadNightModeState()){
-            if (Build.VERSION.SDK_INT >= 23) {
-                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
-            }
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
         }else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
         setTitle("");
 
@@ -202,7 +200,7 @@ public class SignInActivity extends AppCompatActivity {
                     editor.putString("token",response.body().getKey());
                     editor.putBoolean("isLoggedIn",true);
                     editor.putBoolean("firstTime",true);
-                    editor.putString("password",inputPassword.getText().toString());
+                    editor.putString("password",getHash(inputPassword.getText().toString()));
                     editor.apply();
                     startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
                     DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
@@ -253,7 +251,7 @@ public class SignInActivity extends AppCompatActivity {
                     editor.putString("token",response.body().getKey());
                     editor.putBoolean("isLoggedIn",true);
                     editor.putBoolean("firstTime",true);
-                    editor.putString("password",inputPassword.getText().toString());
+                    editor.putString("password",getHash(inputPassword.getText().toString()));
                     editor.apply();
                     startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
                     token=response.body().getKey();
@@ -324,5 +322,23 @@ public class SignInActivity extends AppCompatActivity {
     public Boolean loadNightModeState (){
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
         return userPref.getBoolean("night_mode",false);
+    }
+
+    public String getHash(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte[] messageDigest = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : messageDigest) hexString.append(Integer.toHexString(0xFF & b));
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
