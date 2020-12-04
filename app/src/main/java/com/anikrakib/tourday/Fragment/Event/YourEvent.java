@@ -87,7 +87,7 @@ public class YourEvent extends Fragment {
 
 
     private void getAllYourEvent() {
-        SharedPreferences userPref = Objects.requireNonNull(getContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences userPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String userName = userPref.getString("userName","");
         String token = userPref.getString("token","");
 

@@ -99,22 +99,6 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 final Intent intent;
                 intent =  new Intent(context, EventDetailsActivity.class);
                 intent.putExtra("eventId",result.getId());
-                intent.putExtra("eventTitle",result.getTitle());
-                intent.putExtra("eventLocation",result.getLocation());
-                intent.putExtra("eventDate",result.getDate());
-                intent.putExtra("eventDetails",result.getDetails());
-                intent.putExtra("eventPay1",result.getPay1());
-                intent.putExtra("eventPay1Method",result.getPay1Method());
-                intent.putExtra("eventPay2",result.getPay2());
-                intent.putExtra("eventPay2Method",result.getPay2Method());
-                intent.putExtra("eventImageUrl",result.getImage());
-                intent.putExtra("eventCapacity",result.getCapacity());
-                intent.putExtra("eventCost",result.getCost());
-                intent.putExtra("eventHostId",result.getHost());
-                intent.putExtra("eventTotalGoing",result.getGoing().size());
-                intent.putExtra("eventTotalPending",result.getPending().size());
-//                intent.putExtra("goingList", (Parcelable) result.getGoing());
-//                intent.putExtra("pendingList", (Parcelable) result.getPending());
                 context.startActivity(intent);
             }
         });

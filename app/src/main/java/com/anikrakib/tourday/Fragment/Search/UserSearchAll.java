@@ -29,7 +29,7 @@ public class UserSearchAll extends Fragment {
 
         textView = view.findViewById(R.id.yesButton);
 
-        //textView.setText(SearchAllActivity.keyWordText);
+        textView.setText(SearchAllActivity.keyWordText);
 
         return view;
     }

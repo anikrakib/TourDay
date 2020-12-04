@@ -1,9 +1,11 @@
 package com.anikrakib.tourday.WebService;
 
 
+import com.anikrakib.tourday.Fragment.Event.Event;
 import com.anikrakib.tourday.Models.Blog.AllBlogResponse;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
+import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.Models.Profile.Token;
@@ -194,6 +196,10 @@ public interface Api {
     @GET("user/{username}")
     Call<ResponseBody> otherUserProfileInformation(
             @Path("username") String userName);
+
+    @GET("event/{event_id}")
+    Call<AllEventResult> getEventDetails(
+            @Path("event_id") int eventId);
 
     @GET("get_events/{username}")
     Call<ResponseBody> getYourEvent(

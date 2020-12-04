@@ -35,7 +35,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingUserEvent;
+import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Event.GoingUser;
+import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
@@ -49,10 +51,15 @@ import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,7 +85,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     Circle curve;
     EditText txIdEditText;
     Spinner paymentTypeSpinner;
-    TextView eventJoinTextView;
+    TextView eventJoinTextView,hostUserName;
+    SocialTextView hostUserEmail;
+    CircleImageView hostUserImage;
+
 
 
 
@@ -103,6 +113,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         eventAvailableTextView = findViewById(R.id.eventDetailsAvailableTextView);
         backButton = findViewById(R.id.backButtonEvent);
         eventJoinTextView = findViewById(R.id.eventJoinTextView);
+        hostUserEmail = findViewById(R.id.hostUserEmail);
+        hostUserName = findViewById(R.id.hostUserName);
+        hostUserImage = findViewById(R.id.hostUserImage);
+
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -118,37 +132,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
         assert bundle != null;
         eventId = bundle.getInt("eventId");
-        int capacity = bundle.getInt("eventCapacity");
-        cost = bundle.getInt("eventCost");
-        int hostId = bundle.getInt("eventHostId");
-        int totalGoing = bundle.getInt("eventTotalGoing");
-        int totalPending = bundle.getInt("eventTotalPending");
-        ArrayList<Integer> list = bundle.getIntegerArrayList("list");
-
-        String title = bundle.getString("eventTitle");
-        String location = bundle.getString("eventLocation");
-        String date = bundle.getString("eventDate");
-        String details = bundle.getString("eventDetails");
-        pay1 = bundle.getString("eventPay1");
-        pay1Method = bundle.getString("eventPay1Method");
-        pay2 = bundle.getString("eventPay2");
-        pay2Method = bundle.getString("eventPay2Method");
-        String eventImageUrl = bundle.getString("eventImageUrl");
-
 
         //set Data
-        eventDetailsTextView.setLinkText(details);
-        eventDetailsTitleTextView.setText(title);
-        eventLocationTextView.setText(location);
-        eventTotalPendingTextView.setText(String.valueOf(totalPending));
-        eventTotalGoingTextView.setText(String.valueOf(totalGoing));
-        eventTotalCapacityTextView.setText(String.valueOf(capacity));
-        if(!(capacity-totalGoing == 0)){
-            eventAvailableTextView.setText(String.valueOf(capacity-totalGoing));
-        }else{
-            eventAvailableTextView.setText("No Seat");
-        }
-        Picasso.get().load(ApiURL.IMAGE_BASE + eventImageUrl).fit().centerInside().into(eventDetailsImage);
+        getEventAllDate();
 
         goingLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,6 +169,74 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         goingUserList = new ArrayList<>();
         goingUserList(eventId);
 
+    }
+
+    private void getEventAllDate() {
+        Call<AllEventResult> resultCall = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getEventDetails(eventId);
+        resultCall.enqueue(new Callback<AllEventResult>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<AllEventResult> call, @NonNull Response<AllEventResult> response) {
+                AllEventResult allEventResult = response.body();
+
+                eventDetailsTextView.setLinkText(allEventResult.getDetails());
+                eventDetailsTitleTextView.setText(allEventResult.getTitle());
+                eventLocationTextView.setText(allEventResult.getLocation());
+                eventTotalPendingTextView.setText(String.valueOf(allEventResult.getPending().size()));
+                eventTotalGoingTextView.setText(String.valueOf(allEventResult.getGoing().size()));
+                eventTotalCapacityTextView.setText(String.valueOf(allEventResult.getCapacity()));
+                if(!(allEventResult.getCapacity() - allEventResult.getGoing().size() == 0)){
+                    eventAvailableTextView.setText(String.valueOf(allEventResult.getCapacity() - allEventResult.getGoing().size()));
+                }else{
+                    eventAvailableTextView.setText("No Seat");
+                }
+                Picasso.get().load(ApiURL.IMAGE_BASE + allEventResult.getImage()).fit().centerInside().into(eventDetailsImage);
+                setHostData(allEventResult.getHost());
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AllEventResult> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void setHostData(int hostId) {
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getUserInfoByUserId(hostId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    JSONObject jsonObject = null;
+                    try {
+                        assert response.body() != null;
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONObject profile = jsonObject.getJSONObject("profile");
+
+                        Picasso.get().load(ApiURL.IMAGE_BASE + profile.getString("picture")).fit().centerInside().into(hostUserImage);
+                        hostUserName.setText(profile.getString("name"));
+                        hostUserEmail.setLinkText(profile.getString("email"));
+
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(),"Host Id Not Correct",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(),"Timed Out",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n,ClickableViewAccessibility")

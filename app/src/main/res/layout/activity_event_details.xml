@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="HardcodedText" >
 
     <com.github.florent37.shapeofview.shapes.DiagonalView
         android:id="@+id/diagonalLayoutEventDetailImage"
@@ -38,7 +39,7 @@
             <TextView
                 android:id="@+id/eventDetailsTitleTextView"
                 android:layout_width="290dp"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginBottom="40dp"
                 android:adjustViewBounds="true"
@@ -312,9 +313,8 @@
                 android:id="@+id/eventDetailsDescriptionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
+                android:layout_marginBottom="15dp"
                 android:fontFamily="sans-serif"
-                android:text="@string/bio"
                 android:textColor="@color/color_primary_text"
                 android:textSize="15sp"
                 app:emailColor="@color/flamingo.900"
@@ -323,6 +323,113 @@
                 app:mentionColor="@color/flamingo.900"
                 app:phoneColor="@color/flamingo.phoneColor"
                 app:urlColor="@color/flamingo.900" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif"
+                android:text="Hosted By"
+                android:textColor="@color/color_primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@android:color/transparent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/hostUserImage"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/profile"
+                    app:civ_border_color="@color/black"
+                    app:civ_border_width="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/hostUserImage"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/hostUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_primary_text"
+                        android:layout_marginEnd="16dp"
+                        android:maxLines="1"
+                        android:textStyle="bold"
+                        tools:ignore="SmallSp" />
+
+                    <com.tylersuehr.socialtextview.SocialTextView
+                        android:id="@+id/hostUserEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:text="example@email.com"
+                        android:textSize="12sp"
+                        android:layout_marginEnd="16dp"
+                        android:maxLines="1"
+                        android:textStyle="bold"
+                        app:emailColor="@color/flamingo.900"
+                        app:hashtagColor="@color/flamingo.900"
+                        app:linkModes="mention|hashtag|email|url"
+                        app:mentionColor="@color/flamingo.900"
+                        app:phoneColor="@color/flamingo.phoneColor"
+                        app:urlColor="@color/flamingo.900"
+                        tools:ignore="SmallSp" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Suggested Events"
+                    android:layout_alignParentStart="true"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/seeAllSuggestedEvents"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="See All"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/suggestedEventRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
 
         </LinearLayout>
 
@@ -362,7 +469,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:src="@drawable/taka"
-                    app:tint="@color/black"
+                    app:tint="@color/colorPrimary"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -414,6 +521,7 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         tools:ignore="RtlSymmetry" />
+
 
                 </RelativeLayout>
 
