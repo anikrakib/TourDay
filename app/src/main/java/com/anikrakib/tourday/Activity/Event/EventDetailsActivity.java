@@ -11,12 +11,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingUserEvent;
 import com.anikrakib.tourday.Models.Event.GoingUser;
+import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.Utils.TapToProgress.Circle;
@@ -42,6 +45,7 @@ import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.google.android.material.snackbar.Snackbar;
 import com.kishandonga.csbx.CustomSnackbar;
+import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
@@ -49,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +76,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     List<GoingUser> goingUserList;
     boolean cancel =false;
     Circle curve;
+    EditText txIdEditText;
+    Spinner paymentTypeSpinner;
+    TextView eventJoinTextView;
+
 
 
 
@@ -93,14 +102,13 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         eventDetailsTextView = findViewById(R.id.eventDetailsDescriptionTextView);
         eventAvailableTextView = findViewById(R.id.eventDetailsAvailableTextView);
         backButton = findViewById(R.id.backButtonEvent);
+        eventJoinTextView = findViewById(R.id.eventJoinTextView);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+        setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         resources= getResources();
         paymentType = resources.getStringArray(R.array.paymentType);
@@ -171,11 +179,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
             }
         });
 
-
         // going user list
         goingUserList = new ArrayList<>();
         goingUserList(eventId);
-
 
     }
 
@@ -184,8 +190,6 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
     private void showPaymentPopUp() {
         TextView payment1,payment2,eventPrice,infoText;
-        Spinner paymentTypeSpinner;
-        EditText txIdEditText;
         Button proceedButton;
         LinearLayout taplayout;
         Context context;
@@ -284,11 +288,48 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     @Override
     public void onAnimationEnd(Animation animation) {
         if(cancel){
-            Toast.makeText(getApplicationContext(),"incomplete",Toast.LENGTH_LONG).show();
+            DynamicToast.makeWarning(getApplicationContext(),"Hold Long To Succeed").show();
         }else{
             curve.setCurveColor(ContextCompat.getColor(getApplicationContext(), R.color.tap_light), ContextCompat.getColor(getApplicationContext(), R.color.tap_dark));
-            Toast.makeText(getApplicationContext(),"complete",Toast.LENGTH_LONG).show();
+            if(txIdEditText.getText().toString().isEmpty()){
+                snackBar("Invalid Transaction Id !!",R.color.dark_red);
+            }else{
+                eventPayment();
+                myDialog.cancel();
+            }
+            //Toast.makeText(getApplicationContext(),"complete",Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void eventPayment(){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+
+        Call<EventPayment> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .eventPayment("Token "+token,eventId,paymentTypeSpinner.getSelectedItem().toString(),txIdEditText.getText().toString());
+        call.enqueue(new Callback<EventPayment>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<EventPayment> call, @NonNull retrofit2.Response<EventPayment> response) {
+                if (response.isSuccessful()) {
+                    EventPayment eventPayment = response.body();
+                    if(eventPayment.getStatus() == 200){
+                        snackBar("Payment Completed Successfully",R.color.white);
+                        eventJoinTextView.setText("Pending");
+                    }else{
+                        snackBar("You Already Completed Your Payment",R.color.dark_red);
+                    }
+                } else {
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong").show();
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<EventPayment> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

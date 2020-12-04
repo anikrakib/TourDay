@@ -231,10 +231,10 @@ public interface Api {
             @Field("location") String blogLocation,
             @Field("date") String blogDate,
             @Field("details") String blogDetails,
-            @Field("pay1") String pay1,
             @Field("pay1_method") String pay1Method,
-            @Field("pay2") String pay2,
+            @Field("pay1") String pay1,
             @Field("pay2_method") String pay2Method,
+            @Field("pay2") String pay2,
             @Field("capacity") String blogCapacity,
             @Field("cost") String blogCost);
 
