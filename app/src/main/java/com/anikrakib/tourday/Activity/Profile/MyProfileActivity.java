@@ -1098,6 +1098,8 @@ public class MyProfileActivity extends AppCompatActivity{
         webView.getSettings().setJavaScriptEnabled(true);
         WebViewClient webViewClient = new WebViewClient();
         webView.setWebViewClient(webViewClient);
+        webView.setBackgroundColor(Color.TRANSPARENT);
+        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
 
         webView.loadUrl("https://www.tourday.team/api/map/"+username);
         // set image scale to fit screen if larger than screen width

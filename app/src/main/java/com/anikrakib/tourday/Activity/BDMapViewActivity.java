@@ -28,6 +28,8 @@ import com.anikrakib.tourday.R;
 public class BDMapViewActivity extends AppCompatActivity {
     ImageButton bdMapBackButton;
     Dialog mDialog;
+    WebView webView;
+    String username;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -58,9 +60,9 @@ public class BDMapViewActivity extends AppCompatActivity {
         });
 
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String username = userPref.getString("userName","");
+        username = userPref.getString("userName","");
 
-        final WebView webView = findViewById(R.id.webView);
+        webView = findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
@@ -68,16 +70,27 @@ public class BDMapViewActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         WebViewClient webViewClient = new WebViewClient();
         webView.setWebViewClient(webViewClient);
+        webView.setBackgroundColor(Color.TRANSPARENT);
+        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
 
         if(username.isEmpty()){
             showWarningPopUp();
         }else{
-            webView.loadUrl("https://www.tourday.team/api/map/"+username);
+            setMapTheme();
+            //webView.loadUrl("https://www.tourday.team/api/map/"+username);
         }
         // set image scale to fit screen if larger than screen width
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager wm = (WindowManager) BDMapViewActivity.this.getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(displayMetrics);
+    }
+
+    private void setMapTheme() {
+        if(loadNightModeState()){
+            webView.loadUrl("https://www.tourday.team/api/map-dark/"+username);
+        }else{
+            webView.loadUrl("https://www.tourday.team/api/map/"+username);
+        }
     }
 
     public void onBackPressed() {
