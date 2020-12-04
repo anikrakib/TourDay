@@ -209,6 +209,12 @@ public interface Api {
     Call<List<GoingUser>> getAllGoingUser(
             @Path("event_id") int userName);
 
+    @GET("going-events/{username}")
+    Call<AllEventResponse> getAllGoingEvent(
+            @Path("username") String userName,
+            @Query("limit") int limit,
+            @Query("offset") int offSet);
+
     @FormUrlEncoded
     @POST("event-pay/{event_id}")
     Call<EventPayment> eventPayment(

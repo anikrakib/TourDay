@@ -2,7 +2,6 @@ package com.anikrakib.tourday.Activity.Event;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,7 +11,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -34,8 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anikrakib.tourday.Activity.Profile.ChangePasswordActivity;
-import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
+import com.anikrakib.tourday.Adapter.Event.AdapterGoingUserEvent;
 import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
@@ -56,11 +53,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.pm.ActivityInfo.*;
-
 public class EventDetailsActivity extends AppCompatActivity implements Animation.AnimationListener {
     RecyclerView goingUserRecyclerView;
-    AdapterGoingEvent adapterGoingEvent;
+    AdapterGoingUserEvent adapterGoingUserEvent;
     LinearLayout goingLinearLayout,pendingLinearLayout;
     RelativeLayout joinNow;
     Dialog myDialog;
@@ -258,9 +253,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 if (response.isSuccessful()) {
                     goingUserList = response.body();
                 }
-                adapterGoingEvent = new AdapterGoingEvent(EventDetailsActivity.this,goingUserList);
+                adapterGoingUserEvent = new AdapterGoingUserEvent(EventDetailsActivity.this,goingUserList);
                 goingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
-                goingUserRecyclerView.setAdapter(adapterGoingEvent);
+                goingUserRecyclerView.setAdapter(adapterGoingUserEvent);
             }
 
             @Override

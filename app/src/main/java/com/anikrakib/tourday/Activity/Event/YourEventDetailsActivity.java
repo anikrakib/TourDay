@@ -1,15 +1,12 @@
 package com.anikrakib.tourday.Activity.Event;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,13 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
+import com.anikrakib.tourday.Adapter.Event.AdapterGoingUserEvent;
 import com.anikrakib.tourday.Adapter.Event.AdapterPendingPayment;
 import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
-import com.anikrakib.tourday.WebService.Api;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.squareup.picasso.Picasso;
@@ -57,7 +53,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
     ArrayList<PendingPayment> pendingPayments;
     List<GoingUser> goingUserList;
     ImageButton backButton;
-    AdapterGoingEvent adapterGoingEvent;
+    AdapterGoingUserEvent adapterGoingUserEvent;
     LinearLayout goingLinearLayout;
     int eventId;
 
@@ -178,9 +174,9 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     goingUserList = response.body();
                 }
-                adapterGoingEvent = new AdapterGoingEvent(YourEventDetailsActivity.this,goingUserList);
+                adapterGoingUserEvent = new AdapterGoingUserEvent(YourEventDetailsActivity.this,goingUserList);
                 goingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
-                goingUserRecyclerView.setAdapter(adapterGoingEvent);
+                goingUserRecyclerView.setAdapter(adapterGoingUserEvent);
             }
 
             @Override

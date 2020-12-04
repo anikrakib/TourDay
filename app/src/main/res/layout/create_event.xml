@@ -170,7 +170,7 @@
             android:id="@+id/linearLayout14"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:background="@android:color/transparent"
             android:gravity="center"
             android:orientation="horizontal"
@@ -183,20 +183,21 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cost"
-                    android:textStyle="bold"
                     android:textColor="@color/color_primary_text"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <LinearLayout
                     android:id="@+id/eventPrice"
                     android:layout_width="150dp"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:background="@drawable/primary_background"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -235,15 +236,16 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginStart="@dimen/margin_10"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Capacity"
-                    android:textStyle="bold"
                     android:textColor="@color/color_primary_text"
+                    android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <include layout="@layout/number_picker_custom_layout" />
@@ -294,9 +296,8 @@
                 <Spinner
                     android:id="@+id/paymentTypeSpinner1"
                     android:layout_width="100dp"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_margin="5dp"
-                    android:paddingBottom="3dp"
                     android:background="@drawable/primary_background"
                     android:popupBackground="@drawable/primary_background"
                     android:spinnerMode="dropdown"
@@ -308,12 +309,11 @@
                 <Spinner
                     android:id="@+id/paymentTypeSpinner2"
                     android:layout_width="100dp"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_margin="5dp"
                     android:background="@drawable/primary_background"
                     android:popupBackground="@drawable/primary_background"
                     android:spinnerMode="dropdown"
-                    android:paddingBottom="3dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -349,7 +349,7 @@
                 <EditText
                     android:id="@+id/numberEditText1"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_margin="2dp"
                     android:background="@drawable/primary_background"
                     android:gravity="center"
@@ -367,7 +367,7 @@
                 <EditText
                     android:id="@+id/numberEditText2"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="35dp"
                     android:layout_marginTop="7dp"
                     android:background="@drawable/primary_background"
                     android:gravity="center"

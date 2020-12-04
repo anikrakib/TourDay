@@ -7,6 +7,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.util.Pair;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -43,8 +46,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Adapter.Event.AdapterAllEvent;
+import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
 import com.anikrakib.tourday.Adapter.Event.ViewEventPagerAdapter;
+import com.anikrakib.tourday.Models.Event.AllEventResponse;
+import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.PaginationScrollListener;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -58,6 +66,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import okhttp3.MediaType;
@@ -66,6 +75,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class EventActivity extends AppCompatActivity {
@@ -82,9 +92,20 @@ public class EventActivity extends AppCompatActivity {
     int totalCapacity;
     String[] paymentType;
     Resources resources;
-    TextView eventDate;
+    TextView eventDate,viewAllEvent;
     final String[] eventTitleSave = new String[1];
     final String[] eventDescriptionSave = new String[1];
+
+    private LinearLayoutManager layoutManager;
+    private AdapterGoingEvent adapterGoingEvent;
+
+    private static final int LIMIT = 10;
+    private static final int OFFSET = 0;
+    private boolean isLoadingAllEvent = false;
+    private boolean isLastPageAllEvent = false;
+    private static int TOTAL_PAGES_ALL_EVENT;
+    private int currentOffset = OFFSET;
+    String userName;
 
 
     @Override
@@ -103,7 +124,57 @@ public class EventActivity extends AppCompatActivity {
         createEvent = findViewById(R.id.fabButtonCreateEvent);
         profileBackButton = findViewById(R.id.backButtonEvent);
         viewPagerEvent = (ViewPager) findViewById(R.id.viewPagerEventActivity);
+        viewAllEvent =  findViewById(R.id.viewAllEvent);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goingEventRecyclerView);
 
+
+        adapterGoingEvent = new AdapterGoingEvent(getApplicationContext());
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapterGoingEvent);
+
+        recyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoadingAllEvent = true;
+                currentOffset += 10;
+                getAllEventNextPage();
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES_ALL_EVENT;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPageAllEvent;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoadingAllEvent;
+            }
+        });
+
+        viewAllEvent.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                if(recyclerView.getVisibility() == View.GONE){
+                    recyclerView.setVisibility(View.VISIBLE);
+                    viewAllEvent.setText("Hide All");
+                }else{
+                    recyclerView.setVisibility(View.GONE);
+                    viewAllEvent.setText("View All");
+                }
+            }
+        });
+
+        SharedPreferences userPref = Objects.requireNonNull(getApplicationContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+        userName = userPref.getString("userName","");
 
         myDialog = new Dialog(this);
         mDialog = new Dialog(this);
@@ -135,11 +206,69 @@ public class EventActivity extends AppCompatActivity {
             }
         });
 
+        getAllEvent();
+
     }
 
     @Override
     public void onBackPressed() {
         EventActivity.this.finish();
+    }
+
+    private List<AllEventResult> fetchResultsAllEvent(Response<AllEventResponse> response) {
+        AllEventResponse allEventResponse = response.body();
+        assert allEventResponse != null;
+        return allEventResponse.getResults();
+    }
+
+    private void getAllEvent() {
+        Call<AllEventResponse> popular = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getAllGoingEvent(userName,LIMIT,currentOffset);
+        popular.enqueue(new Callback<AllEventResponse>() {
+            @Override
+            public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
+                if (response.isSuccessful()) {
+
+                    List<AllEventResult> results = fetchResultsAllEvent(response);
+                    adapterGoingEvent.addAll(results);
+//                    eventRefreshLayout.setRefreshing(false);
+//                    showLoadingIndicator(false);
+
+                }
+            }
+            @Override
+            public void onFailure(Call<AllEventResponse> call, Throwable t) {
+                t.printStackTrace();
+                //showErrorView(t);
+            }
+        });
+    }
+
+    private void getAllEventNextPage() {
+        Call<AllEventResponse> popular = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getAllGoingEvent(userName,LIMIT,currentOffset);
+        popular.enqueue(new Callback<AllEventResponse>() {
+            @Override
+            public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
+                if (response.isSuccessful()) {
+
+                    isLoadingAllEvent = false;
+
+                    List<AllEventResult> results = fetchResultsAllEvent(response);
+                    adapterGoingEvent.addAll(results);
+
+                }
+            }
+            @Override
+            public void onFailure(Call<AllEventResponse> call, Throwable t) {
+                t.printStackTrace();
+                //showErrorView(t);
+            }
+        });
     }
 
     public void createEventPopUp() {
