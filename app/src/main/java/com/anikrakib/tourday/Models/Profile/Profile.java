@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Profile {
-
     @SerializedName("name")
     @Expose
     private String name;
@@ -19,7 +18,7 @@ public class Profile {
     private String insta;
     @SerializedName("city")
     @Expose
-    private Object city;
+    private String city;
     @SerializedName("bio")
     @Expose
     private String bio;
@@ -59,11 +58,11 @@ public class Profile {
         this.insta = insta;
     }
 
-    public Object getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(Object city) {
+    public void setCity(String city) {
         this.city = city;
     }
 

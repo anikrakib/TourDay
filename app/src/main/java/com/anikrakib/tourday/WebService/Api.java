@@ -1,7 +1,6 @@
 package com.anikrakib.tourday.WebService;
 
 
-import com.anikrakib.tourday.Fragment.Event.Event;
 import com.anikrakib.tourday.Models.Blog.AllBlogResponse;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
@@ -10,8 +9,7 @@ import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
-import com.github.florent37.shapeofview.shapes.BubbleView;
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.anikrakib.tourday.Models.SearchResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -188,10 +186,10 @@ public interface Api {
     @GET("blog/details/{post_id}")
     Call<ResponseBody> getPostDetails(@Path("post_id") int postId);
 
-    @GET("blog/")
+    @GET("blog/query?")
     Call<AllBlogResponse> getAllSearchBlog(
-            @Query("page") int page,
-            @Query("search") String key);
+            @Query("search") String key,
+            @Query("page") int page);
 
     @GET("user/{username}")
     Call<ResponseBody> otherUserProfileInformation(
@@ -243,5 +241,11 @@ public interface Api {
             @Field("pay2") String pay2,
             @Field("capacity") String blogCapacity,
             @Field("cost") String blogCost);
+
+    @GET("search/user/{search_keyword}")
+    Call<SearchResponse> getAllSearchUser(
+            @Path("search_keyword") String searchKeyword,
+            @Query("limit") int limit,
+            @Query("offset") int offSet);
 
 }
