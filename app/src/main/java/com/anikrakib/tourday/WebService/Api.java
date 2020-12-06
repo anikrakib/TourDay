@@ -248,4 +248,10 @@ public interface Api {
             @Query("limit") int limit,
             @Query("offset") int offSet);
 
+    @GET("search/event/{query}")
+    Call<AllEventResponse> getAllSearchEvent(
+            @Path("query") String searchKeyword,
+            @Query("limit") int limit,
+            @Query("offset") int offSet);
+
 }

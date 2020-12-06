@@ -1,22 +1,19 @@
 package com.anikrakib.tourday.Adapter.Event;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Activity.Event.EventDetailsActivity;
@@ -28,16 +25,15 @@ import com.anikrakib.tourday.Utils.PaginationAdapterCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+public class AdapterSuggestedEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // View Types
     private static final int ITEM = 0;
     private static final int LOADING = 1;
+    private static int eventViewID ;
 
     private List<AllEventResult> allEventResults;
     private Context context;
@@ -49,16 +45,17 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private String errorMsg;
 
-    public AdapterAllEvent(Context context) {
+    public AdapterSuggestedEvent(Context context, int eventViewId) {
         this.context = context;
         allEventResults = new ArrayList<>();
+        eventViewID = eventViewId;
     }
 
     public List<AllEventResult> getAllEventResults() {
         return allEventResults;
     }
 
-    public void setMovies(List<AllEventResult> allEventResults) {
+    public void setEvent(List<AllEventResult> allEventResults) {
         this.allEventResults = allEventResults;
     }
 
@@ -68,25 +65,57 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        View viewItem = inflater.inflate(R.layout.list_event_item, parent, false);
-        viewHolder = new EventVH(viewItem);
+        View viewItem = inflater.inflate(R.layout.suggested_event_list_item, parent, false);
+        viewHolder = new AdapterSuggestedEvent.EventVH(viewItem);
 
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         AllEventResult result = allEventResults.get(position);
 
-        final EventVH eventVH = (EventVH) holder;
-        SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String userId = userPref.getString("id",String.valueOf(0));
+        final AdapterSuggestedEvent.EventVH eventVH = (AdapterSuggestedEvent.EventVH) holder;
 
-        eventVH.txTitle.setText(result.getTitle());
-        eventVH.txtBody.setText(result.getDetails());
+        SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String userId = userPref.getString("id", String.valueOf(0));
+        boolean isLoggedIn = userPref.getBoolean("isLoggedIn",false);
+        int a = result.getGoing().size()-1;
+
+
+        eventVH.eventTitle.setText(result.getTitle());
         eventVH.eventLocation.setText(result.getLocation());
         eventVH.eventDate.setText(result.getDate());
-        eventVH.eventCost.setText(String.valueOf(result.getCost()));
+        //checkGoingOrPendingCurrentUser(result,userId,eventVH);
+
+        assert userId != null;
+
+        if(Integer.parseInt(userId) == result.getHost()){
+            if(a == 0){
+                eventVH.totalGoing.setText("Only You Going");
+                eventVH.eventGoingOrPending.setText("Going");
+            }else if(result.getGoing().size() == 0){
+                eventVH.totalGoing.setText("No one Yet Going");
+                eventVH.eventGoingOrPending.setText("Join Now");
+            }else{
+                eventVH.totalGoing.setText("You and "+(result.getGoing().size()-1)+" others going");
+                eventVH.eventGoingOrPending.setText("Going");
+            }
+        }else{
+            if(result.getGoing().size() == 0){
+                eventVH.totalGoing.setText("No one Yet Going");
+                eventVH.eventGoingOrPending.setText("Join Now");
+            }else{
+                eventVH.totalGoing.setText(result.getGoing().size()+" others going");
+                eventVH.eventGoingOrPending.setText("Join Now");
+            }
+        }
+
+//        if(eventViewID == result.getId()){
+//            allEventResults.remove(position);
+//            notifyItemRemoved(position);
+//        }
 
         // load event thumbnail
         Glide.with(context)
@@ -97,10 +126,9 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .transforms(new CenterCrop(),new RoundedCorners(16))
                 .into(eventVH.eventImage); // destination path
 
-        eventVH.linearLayOutEventItem.setOnClickListener(new View.OnClickListener() {
+        eventVH.goingEventLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                assert userId != null;
                 if(Integer.parseInt(userId) == result.getHost()){
                     Intent intent;
                     intent =  new Intent(context, YourEventDetailsActivity.class);
@@ -116,30 +144,25 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         });
-
-        //set Animation in recyclerView Item
-        eventVH.linearLayOutEventItem.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
-
     }
 
     protected static class EventVH extends RecyclerView.ViewHolder {
-        public TextView txTitle, txtBody, eventDate, eventLocation, eventCost;
-        public ImageButton bLike;
-        public RoundedImageView eventImage;
-        LinearLayout linearLayOutEventItem;
+        public TextView eventTitle, eventDate, eventLocation, totalGoing, eventGoingOrPending;
+        public ImageView shareEvent;
+        public ImageView eventImage;
+        public CardView goingEventLayout;
 
         public EventVH(View itemView) {
             super(itemView);
 
-            eventImage = itemView.findViewById(R.id.eventImage);
-            txTitle = itemView.findViewById(R.id.titleEvent);
-            txtBody = itemView.findViewById(R.id.eventDescription);
+            eventImage = itemView.findViewById(R.id.suggestedEventImage);
+            eventTitle = itemView.findViewById(R.id.eventTitle);
             eventDate = itemView.findViewById(R.id.eventDate);
-            eventCost = itemView.findViewById(R.id.eventCost);
-            bLike = itemView.findViewById(R.id.eventInterestedLikeImage);
             eventLocation = itemView.findViewById(R.id.eventLocation);
-            eventImage = itemView.findViewById(R.id.eventImage);
-            linearLayOutEventItem = itemView.findViewById(R.id.linearLayOutEventItem);
+            totalGoing = itemView.findViewById(R.id.totalGoing);
+            shareEvent = itemView.findViewById(R.id.shareEvent);
+            eventGoingOrPending = itemView.findViewById(R.id.eventGoingOrPending);
+            goingEventLayout = itemView.findViewById(R.id.goingEventItemLayout);
         }
     }
 
@@ -155,7 +178,6 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return (position == allEventResults.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
 
     }
-
 
     public void add(AllEventResult r) {
         allEventResults.add(r);
@@ -174,6 +196,12 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
             allEventResults.remove(position);
             notifyItemRemoved(position);
         }
+    }
+
+    public void removeItem(int position) {
+        this.allEventResults.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, getItemCount() - position);
     }
 
     public void clear() {

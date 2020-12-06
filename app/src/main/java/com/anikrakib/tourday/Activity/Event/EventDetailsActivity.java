@@ -3,6 +3,7 @@ package com.anikrakib.tourday.Activity.Event;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,13 +35,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingUserEvent;
+import com.anikrakib.tourday.Adapter.Event.AdapterSuggestedEvent;
+import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
+import com.anikrakib.tourday.Utils.PaginationScrollListener;
 import com.anikrakib.tourday.Utils.TapToProgress.Circle;
 import com.anikrakib.tourday.Utils.TapToProgress.CircleAnimation;
 import com.anikrakib.tourday.WebService.RetrofitClient;
@@ -66,7 +71,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EventDetailsActivity extends AppCompatActivity implements Animation.AnimationListener {
-    RecyclerView goingUserRecyclerView;
+    RecyclerView goingUserRecyclerView,suggestedEventRecyclerView;
+    private LinearLayoutManager layoutManager;
+    private AdapterSuggestedEvent adapterSuggestedEvent;
     AdapterGoingUserEvent adapterGoingUserEvent;
     LinearLayout goingLinearLayout,pendingLinearLayout;
     RelativeLayout joinNow;
@@ -90,8 +97,14 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     String currentUserId;
     public static ArrayList<Integer> listPending,listGoing;
 
-
-
+    private static final int LIMIT = 10;
+    private static final int OFFSET = 0;
+    private boolean isLoadingAllEvent = false;
+    private boolean isLastPageAllEvent = false;
+    private static int TOTAL_PAGES_ALL_EVENT;
+    private int currentOffset = OFFSET;
+    String userName;
+    boolean isLoggedIn;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -100,6 +113,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         setContentView(R.layout.activity_event_details);
 
         goingUserRecyclerView = findViewById(R.id.eventGoingRecyclerView);
+        suggestedEventRecyclerView = findViewById(R.id.suggestedEventRecyclerView);
         goingLinearLayout = findViewById(R.id.goingLinearLayout);
         pendingLinearLayout = findViewById(R.id.pendingLinearLayout);
         joinNow = findViewById(R.id.joinNowRelativeLayOut);
@@ -127,6 +141,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         currentUserId = userPref.getString("id","");
+        isLoggedIn = userPref.getBoolean("isLoggedIn",false);
 
         resources= getResources();
         paymentType = resources.getStringArray(R.array.paymentType);
@@ -141,7 +156,37 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
         //set Data
         getEventAllData();
-        checkUserEventAction();
+
+        adapterSuggestedEvent = new AdapterSuggestedEvent(getApplicationContext(),eventId);
+        suggestedEventRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        suggestedEventRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        suggestedEventRecyclerView.setLayoutManager(layoutManager);
+        suggestedEventRecyclerView.setAdapter(adapterSuggestedEvent);
+
+        suggestedEventRecyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoadingAllEvent = true;
+                currentOffset += 10;
+                //getAllEventNextPage();
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES_ALL_EVENT;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPageAllEvent;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoadingAllEvent;
+            }
+        });
 
         goingLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,9 +222,61 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
     }
 
-    @SuppressLint("SetTextI18n")
-    private void checkUserEventAction() {
+    private List<AllEventResult> fetchResultsAllEvent(Response<AllEventResponse> response) {
+        AllEventResponse allEventResponse = response.body();
+        assert allEventResponse != null;
+        return allEventResponse.getResults();
+    }
 
+    private void getAllEvent(String location) {
+        Call<AllEventResponse> popular = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getAllSearchEvent(location,10,0);
+        popular.enqueue(new Callback<AllEventResponse>() {
+            @Override
+            public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
+                if (response.isSuccessful()) {
+                    SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+                    String userId = userPref.getString("id","");
+                    List<AllEventResult> results = fetchResultsAllEvent(response);
+                    adapterSuggestedEvent.addAll(results);
+//                    eventRefreshLayout.setRefreshing(false);
+//                    showLoadingIndicator(false);
+
+                }
+            }
+            @Override
+            public void onFailure(Call<AllEventResponse> call, Throwable t) {
+                t.printStackTrace();
+                //showErrorView(t);
+            }
+        });
+    }
+
+    private void getAllEventNextPage() {
+        Call<AllEventResponse> popular = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getAllSearchEvent(eventLocationTextView.getText().toString(),LIMIT,currentOffset);
+        popular.enqueue(new Callback<AllEventResponse>() {
+            @Override
+            public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
+                if (response.isSuccessful()) {
+
+                    isLoadingAllEvent = false;
+
+                    List<AllEventResult> results = fetchResultsAllEvent(response);
+                    adapterSuggestedEvent.addAll(results);
+
+                }
+            }
+            @Override
+            public void onFailure(Call<AllEventResponse> call, Throwable t) {
+                t.printStackTrace();
+                //showErrorView(t);
+            }
+        });
     }
 
     private void getEventAllData() {
@@ -197,21 +294,25 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 listPending = (ArrayList<Integer>) allEventResult.getPending();
                 listGoing = (ArrayList<Integer>) allEventResult.getGoing();
 
-                for (int i = 0; i<listGoing.size();i++){
-                    if(Integer.parseInt(currentUserId) == listGoing.get(i)){
-                        eventJoinTextView.setText("Going");
-                    }else{
-                        eventJoinTextView.setText("Join Now");
+                if(isLoggedIn){
+                    for (int i = 0; i<listGoing.size();i++){
+                        if(Integer.parseInt(currentUserId) == listGoing.get(i)){
+                            eventJoinTextView.setText("Going");
+                        }else{
+                            eventJoinTextView.setText("Join Now");
+                        }
                     }
+                    for (int i = 0; i<listPending.size();i++){
+                        if(Integer.parseInt(currentUserId) == listPending.get(i)){
+                            eventJoinTextView.setText("Pending");
+                        }else{
+                            eventJoinTextView.setText("Join Now");
+                        }
+                    }
+                }else{
+                    eventJoinTextView.setText("Join Now");
                 }
 
-                for (int i = 0; i<listPending.size();i++){
-                    if(Integer.parseInt(currentUserId) == listPending.get(i)){
-                        eventJoinTextView.setText("Pending");
-                    }else{
-                        eventJoinTextView.setText("Join Now");
-                    }
-                }
                 eventDetailsTextView.setLinkText(allEventResult.getDetails());
                 eventDetailsTitleTextView.setText(allEventResult.getTitle());
                 eventLocationTextView.setText(allEventResult.getLocation());
@@ -232,6 +333,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 pay1Method = allEventResult.getPay1Method();
                 pay2Method = allEventResult.getPay1Method();
                 cost = allEventResult.getCost();
+
+                getAllEvent(allEventResult.getLocation());
+
             }
 
             @Override

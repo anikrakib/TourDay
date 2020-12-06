@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/goingEventItemLayout"
     android:layout_width="220dp"
     android:layout_height="270dp"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,7 +20,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            android:src="@drawable/chattogram"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
@@ -75,6 +75,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_marginStart="-3dp"
                     android:layout_gravity="left|center"
                     android:src="@drawable/ic_baseline_location_on_24"
                     app:tint="@color/colorPrimary"
@@ -115,13 +116,13 @@
                 android:layout_marginTop="5dp">
 
                 <TextView
-                    android:id="@+id/shareEvent"
+                    android:id="@+id/eventGoingOrPending"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
-                    android:text="Going"
                     android:textColor="@color/white"
                     android:gravity="center"
                     android:textStyle="bold"
+                    android:text="Join Now"
                     android:layout_weight="2"
                     android:background="@drawable/button_background"
                     android:layout_marginBottom="5dp"
@@ -130,6 +131,7 @@
                     tools:ignore="ContentDescription,HardcodedText" />
 
                 <ImageView
+                    android:id="@+id/shareEvent"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_baseline_share_24"
