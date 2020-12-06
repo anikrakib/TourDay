@@ -1,7 +1,10 @@
 package com.anikrakib.tourday.Adapter.Event;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +13,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Activity.Event.EventDetailsActivity;
+import com.anikrakib.tourday.Activity.Event.YourEventDetailsActivity;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
@@ -68,15 +74,30 @@ public class AdapterGoingEvent extends RecyclerView.Adapter<RecyclerView.ViewHol
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         AllEventResult result = allEventResults.get(position);
 
         final AdapterGoingEvent.EventVH eventVH = (AdapterGoingEvent.EventVH) holder;
 
+        SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String userId = userPref.getString("id","");
+
         eventVH.eventTitle.setText(result.getTitle());
         eventVH.eventLocation.setText(result.getLocation());
         eventVH.eventDate.setText(result.getDate());
+        if(Integer.parseInt(userId) == result.getHost()){
+//            //eventVH.itemView.setVisibility(View.GONE);
+//            eventVH.goingEventLayout.setVisibility(View.GONE);
+            //remove(result);
+            int a = result.getGoing().size()-1;
+            if(a == 0){
+                eventVH.totalGoing.setText("Only You Going");
+            }else{
+                eventVH.totalGoing.setText("You and "+(result.getGoing().size()-1)+" others going");
+            }
+        }
 
         // load event thumbnail
         Glide.with(context)
@@ -87,41 +108,31 @@ public class AdapterGoingEvent extends RecyclerView.Adapter<RecyclerView.ViewHol
                 .transforms(new CenterCrop(),new RoundedCorners(16))
                 .into(eventVH.eventImage); // destination path
 
-//        eventVH.linearLayOutEventItem.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final Intent intent;
-//                intent =  new Intent(context, EventDetailsActivity.class);
-//                intent.putExtra("eventId",result.getId());
-//                intent.putExtra("eventTitle",result.getTitle());
-//                intent.putExtra("eventLocation",result.getLocation());
-//                intent.putExtra("eventDate",result.getDate());
-//                intent.putExtra("eventDetails",result.getDetails());
-//                intent.putExtra("eventPay1",result.getPay1());
-//                intent.putExtra("eventPay1Method",result.getPay1Method());
-//                intent.putExtra("eventPay2",result.getPay2());
-//                intent.putExtra("eventPay2Method",result.getPay2Method());
-//                intent.putExtra("eventImageUrl",result.getImage());
-//                intent.putExtra("eventCapacity",result.getCapacity());
-//                intent.putExtra("eventCost",result.getCost());
-//                intent.putExtra("eventHostId",result.getHost());
-//                intent.putExtra("eventTotalGoing",result.getGoing().size());
-//                intent.putExtra("eventTotalPending",result.getPending().size());
-////                intent.putExtra("goingList", (Parcelable) result.getGoing());
-////                intent.putExtra("pendingList", (Parcelable) result.getPending());
-//                context.startActivity(intent);
-//            }
-//        });
-//
-//        //set Animation in recyclerView Item
-//        eventVH.linearLayOutEventItem.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
-
+        eventVH.goingEventLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Integer.parseInt(userId) == result.getHost()){
+                    Intent intent;
+                    intent =  new Intent(context, YourEventDetailsActivity.class);
+                    intent.putExtra("eventId",result.getId());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }else{
+                    Intent intent;
+                    intent =  new Intent(context, EventDetailsActivity.class);
+                    intent.putExtra("eventId",result.getId());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
 
     protected static class EventVH extends RecyclerView.ViewHolder {
         public TextView eventTitle, eventDate, eventLocation, totalGoing;
         public ImageButton shareEvent;
         public ImageView eventImage;
+        public CardView goingEventLayout;
 
         public EventVH(View itemView) {
             super(itemView);
@@ -132,6 +143,7 @@ public class AdapterGoingEvent extends RecyclerView.Adapter<RecyclerView.ViewHol
             eventLocation = itemView.findViewById(R.id.eventLocation);
             totalGoing = itemView.findViewById(R.id.totalGoing);
             shareEvent = itemView.findViewById(R.id.shareEvent);
+            goingEventLayout = itemView.findViewById(R.id.goingEventItemLayout);
         }
     }
 
@@ -147,7 +159,6 @@ public class AdapterGoingEvent extends RecyclerView.Adapter<RecyclerView.ViewHol
         return (position == allEventResults.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
 
     }
-
 
     public void add(AllEventResult r) {
         allEventResults.add(r);

@@ -21,7 +21,6 @@
 
         <com.flaviofaria.kenburnsview.KenBurnsView
             android:id="@+id/eventDetailsImage"
-            android:src="@drawable/chattogram"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -46,7 +45,6 @@
                 android:background="@drawable/event_details_title_background"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/google_io_2020"
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -76,7 +74,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Saintmartin,CoxBazar"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -132,7 +129,6 @@
                     android:layout_height="32dp"
                     android:background="@color/whiteIcon"
                     android:gravity="center"
-                    android:text="20"
                     android:textColor="@color/cameraIcon"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -174,7 +170,6 @@
                     android:layout_height="32dp"
                     android:background="@color/whiteIcon"
                     android:gravity="center"
-                    android:text="20"
                     android:textColor="@color/cameraIcon"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText"  />
@@ -216,7 +211,6 @@
                     android:layout_height="32dp"
                     android:background="@color/whiteIcon"
                     android:gravity="center"
-                    android:text="20"
                     android:textColor="@color/cameraIcon"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText"  />
@@ -273,7 +267,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"
                 android:fontFamily="sans-serif"
-                android:text="@string/bio"
                 android:textColor="@color/color_primary_text"
                 android:textSize="15sp"
                 app:emailColor="@color/flamingo.900"

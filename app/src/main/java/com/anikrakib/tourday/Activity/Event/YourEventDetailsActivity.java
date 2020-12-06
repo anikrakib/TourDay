@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingUserEvent;
 import com.anikrakib.tourday.Adapter.Event.AdapterPendingPayment;
+import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.R;
@@ -79,41 +81,17 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+        setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         intent = getIntent();
         Bundle bundle = intent.getExtras();
 
         assert bundle != null;
         eventId = bundle.getInt("eventId");
-        int capacity = bundle.getInt("eventCapacity");
-        int cost = bundle.getInt("eventCost");
-        int hostId = bundle.getInt("eventHostId");
-        int totalGoing = bundle.getInt("eventTotalGoing");
-        int totalPending = bundle.getInt("eventTotalPending");
-        ArrayList<Integer> list = bundle.getIntegerArrayList("list");
-
-        String title = bundle.getString("eventTitle");
-        String location = bundle.getString("eventLocation");
-        String date = bundle.getString("eventDate");
-        String details = bundle.getString("eventDetails");
-        String pay1 = bundle.getString("eventPay1");
-        String pay1Method = bundle.getString("eventPay1Method");
-        String pay2 = bundle.getString("eventPay2");
-        String pay2Method = bundle.getString("eventPay2Method");
-        String eventImageUrl = bundle.getString("eventImageUrl");
 
         //set Data
-        eventDetailsTextView.setLinkText(details);
-        eventDetailsTitleTextView.setText(title);
-        eventLocationTextView.setText(location);
-        eventTotalPendingTextView.setText(String.valueOf(totalPending));
-        eventTotalGoingTextView.setText(String.valueOf(totalGoing));
-        eventTotalCapacityTextView.setText(String.valueOf(capacity));
-        Picasso.get().load(ApiURL.IMAGE_BASE + eventImageUrl).fit().centerInside().into(eventDetailsImage);
+        getEventAllDate();
 
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -145,22 +123,51 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        //pendingUserList
-        pendingPayments = new ArrayList<>();
-        assert list != null;
-        for (int i : list) {
-            //pendingPayments.add(new PendingPayment(i));
-            showUserData(i);
-        }
 
         // goingUser List
         goingUserList = new ArrayList<>();
         goingUserList(eventId);
 
+    }
 
-        adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayments);
-        pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        pendingUserRecyclerView.setAdapter(adapterPendingPayment);
+    private void getEventAllDate() {
+        Call<AllEventResult> resultCall = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getEventDetails(eventId);
+        resultCall.enqueue(new Callback<AllEventResult>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<AllEventResult> call, @NonNull Response<AllEventResult> response) {
+                AllEventResult allEventResult = response.body();
+
+                eventDetailsTextView.setLinkText(allEventResult.getDetails());
+                eventDetailsTitleTextView.setText(allEventResult.getTitle());
+                eventLocationTextView.setText(allEventResult.getLocation());
+                eventTotalPendingTextView.setText(String.valueOf(allEventResult.getPending().size()));
+                eventTotalGoingTextView.setText(String.valueOf(allEventResult.getGoing().size()));
+                eventTotalCapacityTextView.setText(String.valueOf(allEventResult.getCapacity()));
+                Picasso.get().load(ApiURL.IMAGE_BASE + allEventResult.getImage()).fit().centerInside().into(eventDetailsImage);
+
+                //pendingUserList
+                ArrayList<Integer> list = (ArrayList<Integer>) allEventResult.getPending();
+                pendingPayments = new ArrayList<>();
+
+                for (int i = 0; i<list.size();i++){
+                    showUserData(list.get(i));
+                }
+
+                adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayments);
+                pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+                pendingUserRecyclerView.setAdapter(adapterPendingPayment);
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AllEventResult> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void goingUserList(int eventId){

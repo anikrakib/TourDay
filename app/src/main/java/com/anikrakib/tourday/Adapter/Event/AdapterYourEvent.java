@@ -60,23 +60,7 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
                 final Intent intent;
                 intent =  new Intent(mContext, YourEventDetailsActivity.class);
                 intent.putExtra("eventId",item.getEventId());
-                intent.putExtra("eventTitle",item.getTitle());
-                intent.putExtra("eventLocation",item.getLocation());
-                intent.putExtra("eventDate",item.getDate());
-                intent.putExtra("eventDetails",item.getDetails());
-                intent.putExtra("eventPay1",item.getPay1());
-                intent.putExtra("eventPay1Method",item.getPay1Method());
-                intent.putExtra("eventPay2",item.getPay2());
-                intent.putExtra("eventPay2Method",item.getPay2Method());
-                intent.putExtra("eventImageUrl",item.getEventImageUrl());
-                intent.putExtra("eventCapacity",item.getCapacity());
-                intent.putExtra("eventCost",item.getCost());
-                intent.putExtra("eventHostId",item.getHostId());
-                intent.putExtra("eventTotalGoing",item.getTotalGoing());
-                intent.putExtra("eventTotalPending",item.getTotalPending());
-                intent.putExtra("list",item.getTotalPendingUserList());
                 mContext.startActivity(intent);
-
             }
         });
 

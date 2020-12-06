@@ -230,7 +230,8 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
                 if (response.isSuccessful()) {
-
+                    SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+                    String userId = userPref.getString("id","");
                     List<AllEventResult> results = fetchResultsAllEvent(response);
                     adapterGoingEvent.addAll(results);
 //                    eventRefreshLayout.setRefreshing(false);

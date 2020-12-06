@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Adapter.Event;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -96,10 +98,21 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         eventVH.linearLayOutEventItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent;
-                intent =  new Intent(context, EventDetailsActivity.class);
-                intent.putExtra("eventId",result.getId());
-                context.startActivity(intent);
+                SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+                String userId = userPref.getString("id","");
+                if(Integer.parseInt(userId) == result.getHost()){
+                    Intent intent;
+                    intent =  new Intent(context, YourEventDetailsActivity.class);
+                    intent.putExtra("eventId",result.getId());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }else{
+                    Intent intent;
+                    intent =  new Intent(context, EventDetailsActivity.class);
+                    intent.putExtra("eventId",result.getId());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
             }
         });
 

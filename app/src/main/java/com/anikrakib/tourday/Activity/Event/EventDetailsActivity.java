@@ -71,7 +71,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     LinearLayout goingLinearLayout,pendingLinearLayout;
     RelativeLayout joinNow;
     Dialog myDialog;
-    TextView eventDetailsTitleTextView,eventLocationTextView,eventTotalGoingTextView,eventTotalPendingTextView,eventTotalCapacityTextView,eventAvailableTextView;
+    TextView eventDetailsTitleTextView,eventLocationTextView,eventTotalGoingTextView,eventTotalPendingTextView,eventTotalCapacityTextView,eventAvailableTextView,eventJoinTextView,hostUserName,eventPriceTextView;
     SocialTextView eventDetailsTextView;
     Intent intent;
     KenBurnsView eventDetailsImage;
@@ -85,10 +85,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     Circle curve;
     EditText txIdEditText;
     Spinner paymentTypeSpinner;
-    TextView eventJoinTextView,hostUserName;
     SocialTextView hostUserEmail;
     CircleImageView hostUserImage;
-
+    String currentUserId;
+    public static ArrayList<Integer> listPending,listGoing;
 
 
 
@@ -116,6 +116,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         hostUserEmail = findViewById(R.id.hostUserEmail);
         hostUserName = findViewById(R.id.hostUserName);
         hostUserImage = findViewById(R.id.hostUserImage);
+        eventPriceTextView = findViewById(R.id.eventPriceTextView);
 
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
@@ -123,6 +124,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
         setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
+
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        currentUserId = userPref.getString("id","");
 
         resources= getResources();
         paymentType = resources.getStringArray(R.array.paymentType);
@@ -132,9 +136,12 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
         assert bundle != null;
         eventId = bundle.getInt("eventId");
+        listGoing = new ArrayList<>();
+        listPending = new ArrayList<>();
 
         //set Data
-        getEventAllDate();
+        getEventAllData();
+        checkUserEventAction();
 
         goingLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,14 +160,13 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 int orientation = getApplicationContext().getResources().getConfiguration().orientation;
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                     // code for portrait mode
-                    showPaymentPopUp();
+                    if(eventJoinTextView.getText().toString().equals("Join Now")) showPaymentPopUp();
+                    else snackBar("You are already "+eventJoinTextView.getText().toString(),R.color.white);
 
                 } else {
                     // code for landscape mode
                     //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     snackBar("If You Want to Payment, Make sure your screen is Portrait Mode",R.color.white);
-
-
                 }
             }
         });
@@ -171,7 +177,12 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
     }
 
-    private void getEventAllDate() {
+    @SuppressLint("SetTextI18n")
+    private void checkUserEventAction() {
+
+    }
+
+    private void getEventAllData() {
         Call<AllEventResult> resultCall = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -182,12 +193,32 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
             public void onResponse(@NonNull Call<AllEventResult> call, @NonNull Response<AllEventResult> response) {
                 AllEventResult allEventResult = response.body();
 
+                assert allEventResult != null;
+                listPending = (ArrayList<Integer>) allEventResult.getPending();
+                listGoing = (ArrayList<Integer>) allEventResult.getGoing();
+
+                for (int i = 0; i<listGoing.size();i++){
+                    if(Integer.parseInt(currentUserId) == listGoing.get(i)){
+                        eventJoinTextView.setText("Going");
+                    }else{
+                        eventJoinTextView.setText("Join Now");
+                    }
+                }
+
+                for (int i = 0; i<listPending.size();i++){
+                    if(Integer.parseInt(currentUserId) == listPending.get(i)){
+                        eventJoinTextView.setText("Pending");
+                    }else{
+                        eventJoinTextView.setText("Join Now");
+                    }
+                }
                 eventDetailsTextView.setLinkText(allEventResult.getDetails());
                 eventDetailsTitleTextView.setText(allEventResult.getTitle());
                 eventLocationTextView.setText(allEventResult.getLocation());
                 eventTotalPendingTextView.setText(String.valueOf(allEventResult.getPending().size()));
                 eventTotalGoingTextView.setText(String.valueOf(allEventResult.getGoing().size()));
                 eventTotalCapacityTextView.setText(String.valueOf(allEventResult.getCapacity()));
+                eventPriceTextView.setText(String.valueOf(allEventResult.getCost()));
                 if(!(allEventResult.getCapacity() - allEventResult.getGoing().size() == 0)){
                     eventAvailableTextView.setText(String.valueOf(allEventResult.getCapacity() - allEventResult.getGoing().size()));
                 }else{
@@ -195,7 +226,12 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 }
                 Picasso.get().load(ApiURL.IMAGE_BASE + allEventResult.getImage()).fit().centerInside().into(eventDetailsImage);
                 setHostData(allEventResult.getHost());
-
+                // setPayment Info
+                pay1 = allEventResult.getPay1();
+                pay2 = allEventResult.getPay2();
+                pay1Method = allEventResult.getPay1Method();
+                pay2Method = allEventResult.getPay1Method();
+                cost = allEventResult.getCost();
             }
 
             @Override
@@ -243,10 +279,8 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
 
     private void showPaymentPopUp() {
-        TextView payment1,payment2,eventPrice,infoText;
-        Button proceedButton;
+        TextView payment1,payment2,eventPrice;
         LinearLayout taplayout;
-        Context context;
 
         //android:screenOrientation = "portrait"
 
