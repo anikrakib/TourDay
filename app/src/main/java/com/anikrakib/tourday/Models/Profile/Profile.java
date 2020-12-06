@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Profile {
+    @SerializedName("username")
+    @Expose
+    private String username;
     @SerializedName("name")
     @Expose
     private String name;
@@ -80,5 +83,13 @@ public class Profile {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

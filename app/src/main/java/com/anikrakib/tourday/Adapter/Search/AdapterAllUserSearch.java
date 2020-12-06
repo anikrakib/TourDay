@@ -80,7 +80,12 @@ public class AdapterAllUserSearch extends RecyclerView.Adapter<RecyclerView.View
 
         userProfileVH.userFullNAme.setText(profile.getName());
 
-        userProfileVH.userLocation.setText(profile.getCity());
+        if(profile.getCity() != null){
+            userProfileVH.userLocation.setText(profile.getCity());
+        }else{
+            userProfileVH.locationLayout.setVisibility(View.GONE);
+        }
+
         userProfileVH.userEmail.setText(profile.getEmail());
         Glide.with(context)
                 .load(ApiURL.IMAGE_BASE+profile.getPicture())
@@ -95,7 +100,7 @@ public class AdapterAllUserSearch extends RecyclerView.Adapter<RecyclerView.View
             public void onClick(View v) {
                 final Intent intent;
                 intent =  new Intent(context, OthersUserProfile.class);
-                intent.putExtra("userName","admin");
+                intent.putExtra("userName",profile.getUsername());
                 context.startActivity(intent);
             }
         });

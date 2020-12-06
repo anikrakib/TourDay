@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.anikrakib.tourday.Fragment.Event.Event;
 import com.anikrakib.tourday.Fragment.Event.YourEvent;
 import com.anikrakib.tourday.Fragment.Search.BlogSearchAll;
+import com.anikrakib.tourday.Fragment.Search.EventSearchAll;
 import com.anikrakib.tourday.Fragment.Search.ProductSearchAll;
 import com.anikrakib.tourday.Fragment.Search.UserSearchAll;
 
@@ -26,6 +27,8 @@ public class ViewSearchPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new BlogSearchAll();
             case 2:
+                return new EventSearchAll();
+            case 3:
                 return new ProductSearchAll();
             default:
                 return null;
@@ -34,7 +37,7 @@ public class ViewSearchPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -45,6 +48,8 @@ public class ViewSearchPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return "Blog";
             case 2:
+                return "Event";
+            case 3:
                 return "Product";
             default:
                 return null;
