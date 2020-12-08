@@ -12,7 +12,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/pendingUserProfilePic"
-        android:layout_width="40dp"
+        android:layout_width="35dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
         android:src="@drawable/profile"
@@ -26,7 +26,7 @@
         android:id="@+id/linearLayout7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="3dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pendingUserProfilePic"
@@ -36,9 +36,9 @@
             android:id="@+id/pendingUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:text="username"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary_text"
             android:textSize="10sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText,SmallSp" />
@@ -47,42 +47,54 @@
             android:id="@+id/pendingUserEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:text="example@gmail.com"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/color_primary_text"
             android:textSize="10sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText,RtlHardcoded,SmallSp" />
 
+        <TextView
+            android:id="@+id/pendingUserTransactionId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="Tr-ID : 14311351430543"
+            android:textColor="@color/dividerColor"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,SmallSp" />
+
     </LinearLayout>
+
 
     <Button
         android:id="@+id/yesButton"
-        android:layout_width="65dp"
-        android:layout_height="30dp"
+        android:layout_width="50dp"
+        android:layout_height="20dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/popup_button_background"
         android:text="Accept"
         android:textColor="@color/dark_green"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/noButton"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText,SmallSp" />
 
     <Button
         android:id="@+id/noButton"
-        android:layout_width="65dp"
-        android:layout_height="30dp"
+        android:layout_width="50dp"
+        android:layout_height="20dp"
         android:background="@drawable/popup_button_background"
         android:text="Reject"
         android:textColor="@color/dark_red"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText,SmallSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
