@@ -17,7 +17,7 @@
     <color name="color_primary_text">#00284e</color>
     <color name="color_secondary_text">#bac0d3</color>
     <color name="color_third_text">#393648</color>
-    <color name="whiteIcon">#000000</color>
+    <color name="whiteIcon">#1C1C1C</color>
     <color name="cameraIcon">#FFFFFF</color>
     <color name="color_fourd_text">#EC6539</color>
     <color name="switch_color">#ff7346</color>

@@ -5,9 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
@@ -15,16 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anikrakib.tourday.Activity.SearchAllActivity;
-import com.anikrakib.tourday.Adapter.Search.AdapterAllEventSearch;
 import com.anikrakib.tourday.Adapter.Search.AdapterAllProductSearch;
-import com.anikrakib.tourday.Models.Event.AllEventResponse;
-import com.anikrakib.tourday.Models.Event.AllEventResult;
-import com.anikrakib.tourday.Models.ProductResponse;
-import com.anikrakib.tourday.Models.ProductResult;
-import com.anikrakib.tourday.Models.SearchResponse;
+import com.anikrakib.tourday.Models.Shop.ProductResponse;
+import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.PaginationScrollListener;
 import com.anikrakib.tourday.WebService.RetrofitClient;

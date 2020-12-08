@@ -33,9 +33,12 @@ import android.widget.Toast;
 import com.anikrakib.tourday.Activity.Authentication.SignInActivity;
 import com.anikrakib.tourday.Activity.Blog.BlogActivity;
 import com.anikrakib.tourday.Activity.Event.EventActivity;
+import com.anikrakib.tourday.Activity.Profile.ChangePasswordActivity;
 import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.R;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.kishandonga.csbx.CustomSnackbar;
 
 public class ExploreActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -100,7 +103,11 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExploreActivity.this,SearchAllActivity.class).putExtra("keyword",keyWord.getText().toString()));
+                if(!search.getText().toString().isEmpty()){
+                    startActivity(new Intent(ExploreActivity.this,SearchAllActivity.class).putExtra("keyword",keyWord.getText().toString()));
+                }else {
+                    snackBar("Write Something For Explore",R.color.white);
+                }
             }
         });
 
@@ -122,6 +129,16 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
     }
 
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(ExploreActivity.this);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
+    }
 
     @SuppressLint("NonConstantResourceId")
     @Override

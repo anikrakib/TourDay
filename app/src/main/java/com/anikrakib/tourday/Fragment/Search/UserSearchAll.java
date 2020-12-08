@@ -12,26 +12,17 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anikrakib.tourday.Activity.SearchAllActivity;
-import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
 import com.anikrakib.tourday.Adapter.Search.AdapterAllUserSearch;
-import com.anikrakib.tourday.Adapter.Search.ViewSearchPagerAdapter;
-import com.anikrakib.tourday.Models.Blog.AllBlogResponse;
-import com.anikrakib.tourday.Models.Blog.AllBlogResult;
-import com.anikrakib.tourday.Models.Event.AllEventResponse;
-import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Profile.Profile;
-import com.anikrakib.tourday.Models.SearchResponse;
+import com.anikrakib.tourday.Models.Shop.SearchResponse;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.PaginationScrollListener;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.github.ybq.android.spinkit.SpinKitView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;

@@ -6,11 +6,11 @@ import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Event.GoingUser;
-import com.anikrakib.tourday.Models.ProductResponse;
+import com.anikrakib.tourday.Models.Shop.ProductResponse;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
-import com.anikrakib.tourday.Models.SearchResponse;
+import com.anikrakib.tourday.Models.Shop.SearchResponse;
 
 import java.util.List;
 import java.util.Map;

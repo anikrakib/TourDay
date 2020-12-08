@@ -19,4 +19,40 @@
         android:src="@drawable/ic_arrow_back_black_24dp"
         tools:ignore="ContentDescription" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="start"
+        android:layout_toEndOf="@id/searchAllBackButton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:background="@color/backgroundColor">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search Results for"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/color_primary_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/searchKeyWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="5dp"
+            android:singleLine="true"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 </RelativeLayout>

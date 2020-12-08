@@ -1,12 +1,11 @@
-package com.anikrakib.tourday.Models;
+package com.anikrakib.tourday.Models.Shop;
 
-import com.anikrakib.tourday.Models.Profile.Profile;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class SearchResponse {
+public class ProductResponse {
     @SerializedName("count")
     @Expose
     private Integer count;
@@ -18,7 +17,7 @@ public class SearchResponse {
     private String previous;
     @SerializedName("results")
     @Expose
-    private List<Profile> profiles = null;
+    private List<ProductResult> productResults = null;
 
     public Integer getCount() {
         return count;
@@ -44,12 +43,12 @@ public class SearchResponse {
         this.previous = previous;
     }
 
-    public List<Profile> getProfiles() {
-        return profiles;
+    public List<ProductResult> getProfiles() {
+        return productResults;
     }
 
-    public void setProfiles(List<Profile> profiles) {
-        this.profiles = profiles;
+    public void setProfiles(List<ProductResult> profiles) {
+        this.productResults = profiles;
     }
 
 }

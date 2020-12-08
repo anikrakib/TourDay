@@ -1,4 +1,4 @@
-package com.anikrakib.tourday.Models;
+package com.anikrakib.tourday.Models.Shop;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

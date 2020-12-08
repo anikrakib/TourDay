@@ -8,26 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.anikrakib.tourday.Activity.Event.EventDetailsActivity;
-import com.anikrakib.tourday.Activity.Event.YourEventDetailsActivity;
-import com.anikrakib.tourday.Models.Event.AllEventResult;
-import com.anikrakib.tourday.Models.ProductResult;
+import com.anikrakib.tourday.Activity.Blog.YourBlogDetailsActivity;
+import com.anikrakib.tourday.Activity.Shop.ProductDetails;
+import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.Utils.PaginationAdapterCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +78,7 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
         SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String userId = userPref.getString("id",String.valueOf(0));
 
-        productVH.productPrice.setText(productResult.getPrice()+"");
+        productVH.productPrice.setText("৳ "+productResult.getPrice());
         productVH.productName.setText(productResult.getName());
         Glide.with(context)
                 .load(ApiURL.IMAGE_BASE+productResult.getImg())
@@ -95,8 +91,25 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
             productVH.productStockOrNot.setBackgroundResource(R.drawable.out_stock_bg);
             productVH.productStockOrNot.setText("Out of Stock");
         }else{
+            productVH.productStockOrNot.setText("In Stock");
             productVH.productStockOrNot.setBackgroundResource(R.drawable.in_stock_bg);
         }
+
+        productVH.productLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent;
+                intent =  new Intent(context, ProductDetails.class);
+                intent.putExtra("name",productResult.getName());
+                intent.putExtra("imageUrl",productResult.getImg());
+                intent.putExtra("price",productResult.getPrice());
+                intent.putExtra("stock",productResult.getDigital());
+                intent.putExtra("category",productResult.getProductType());
+                intent.putExtra("qty","0");
+                intent.putExtra("details",R.string.bio);
+                context.startActivity(intent);
+            }
+        });
     }
 
     protected static class ProductVH extends RecyclerView.ViewHolder {
