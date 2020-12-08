@@ -6,6 +6,7 @@ import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Event.GoingUser;
+import com.anikrakib.tourday.Models.ProductResponse;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
@@ -251,6 +252,12 @@ public interface Api {
     @GET("search/event/{query}")
     Call<AllEventResponse> getAllSearchEvent(
             @Path("query") String searchKeyword,
+            @Query("limit") int limit,
+            @Query("offset") int offSet);
+
+    @GET("search/product/{product_keyword}")
+    Call<ProductResponse> getAllSearchProduct(
+            @Path("product_keyword") String searchKeyword,
             @Query("limit") int limit,
             @Query("offset") int offSet);
 
