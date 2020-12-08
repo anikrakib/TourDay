@@ -523,6 +523,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/image1"
                     app:layout_constraintStart_toEndOf="@+id/image1"
                     app:layout_constraintTop_toTopOf="@+id/image1"
+                    app:theme="@style/ColorSwitchStyle"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                 <ImageView
@@ -547,6 +548,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/image2"
                     app:layout_constraintStart_toEndOf="@+id/image2"
                     app:layout_constraintTop_toTopOf="@+id/image2"
+                    app:theme="@style/ColorSwitchStyle"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                 <View

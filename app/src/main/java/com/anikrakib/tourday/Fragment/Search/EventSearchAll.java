@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Fragment.Search;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,12 +32,13 @@ import retrofit2.Response;
 
 public class EventSearchAll extends Fragment {
 
-    RecyclerView userSearchAllRecyclerView;
+    RecyclerView eventSearchAllRecyclerView;
     LinearLayoutManager layoutManager;
-    AdapterAllEventSearch adapterAllUserSearch;
+    AdapterAllEventSearch adapterAllEventSearchSearch;
     SwipeRefreshLayout swipeRefreshLayout;
     SpinKitView spinKitView;
     TextView noMoreResult;
+    CardView notFound;
 
     private static final int LIMIT = 10;
     private static final int OFFSET = 0;
@@ -58,24 +60,24 @@ public class EventSearchAll extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_event_search_all, container, false);
 
-        userSearchAllRecyclerView = view.findViewById(R.id.searchAllUserRecyclerView);
+        eventSearchAllRecyclerView = view.findViewById(R.id.searchAllUserRecyclerView);
         swipeRefreshLayout = view.findViewById(R.id.searchAllUserSwipeRefreshLayout);
         spinKitView = view.findViewById(R.id.spin_kit);
         noMoreResult = view.findViewById(R.id.noMoreResult);
+        notFound = view.findViewById(R.id.emptyCardView);
 
         swipeRefreshLayout.setRefreshing(true);
 
-        adapterAllUserSearch = new AdapterAllEventSearch(getContext());
-        userSearchAllRecyclerView.setHasFixedSize(true);
-//        adapterAllUserSearch.getAllProfileResults();
+        adapterAllEventSearchSearch = new AdapterAllEventSearch(getContext());
+        eventSearchAllRecyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
-        userSearchAllRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        userSearchAllRecyclerView.setLayoutManager(layoutManager);
-        userSearchAllRecyclerView.setAdapter(adapterAllUserSearch);
+        eventSearchAllRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        eventSearchAllRecyclerView.setLayoutManager(layoutManager);
+        eventSearchAllRecyclerView.setAdapter(adapterAllEventSearchSearch);
         keyword = SearchAllActivity.keyWordText;
 
 
-        userSearchAllRecyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+        eventSearchAllRecyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoadingAllUser = true;
@@ -109,8 +111,8 @@ public class EventSearchAll extends Fragment {
                 currentOffset = 0;
                 isLastPageAllUser = false;
                 isLoadingAllUser = false;
-                adapterAllUserSearch.getAllProfileResults().clear();
-                adapterAllUserSearch.notifyDataSetChanged();
+                adapterAllEventSearchSearch.getAllProfileResults().clear();
+                adapterAllEventSearchSearch.notifyDataSetChanged();
                 getAllUSerFirstPage();
 
             }
@@ -141,16 +143,18 @@ public class EventSearchAll extends Fragment {
                     AllEventResponse searchResponse = response.body();
                     TOTAL_PAGES_ALL_User = searchResponse.getCount();
 
-                    List<AllEventResult> profiles = fetchResultsAllUser(response);
-                    adapterAllUserSearch.addAll(profiles);
-                    swipeRefreshLayout.setRefreshing(false);
-                    //showLoadingIndicator(false);
+                    List<AllEventResult> allEventResults = fetchResultsAllUser(response);
+                    if(allEventResults.isEmpty()) notFound.setVisibility(View.VISIBLE);
+                    else {
+                        adapterAllEventSearchSearch.addAll(allEventResults);
+                        swipeRefreshLayout.setRefreshing(false);
+                        //showLoadingIndicator(false);
 
 
-                    if (!(currentOffset <= TOTAL_PAGES_ALL_User)) isLastPageAllUser = true;
+                        if (!(currentOffset <= TOTAL_PAGES_ALL_User)) isLastPageAllUser = true;
 
-                    if(isLastPageAllUser) handlerNoMoreResult();
-
+                        if(isLastPageAllUser) handlerNoMoreResult();
+                    }
                 }
             }
             @Override
@@ -171,9 +175,8 @@ public class EventSearchAll extends Fragment {
                 if (response.isSuccessful()) {
 
                     isLoadingAllUser = false;
-
-                    List<AllEventResult> profiles = fetchResultsAllUser(response);
-                    adapterAllUserSearch.addAll(profiles);
+                    List<AllEventResult> allEventResults = fetchResultsAllUser(response);
+                    adapterAllEventSearchSearch.addAll(allEventResults);
                     swipeRefreshLayout.setRefreshing(false);
                     spinKitView.setVisibility(View.GONE);
                     noMoreResult.setVisibility(View.GONE);
@@ -182,8 +185,6 @@ public class EventSearchAll extends Fragment {
                     if (!(currentOffset <= TOTAL_PAGES_ALL_User)) isLastPageAllUser = true;
 
                     if(isLastPageAllUser) handlerNoMoreResult();
-
-
                 }
             }
             @Override

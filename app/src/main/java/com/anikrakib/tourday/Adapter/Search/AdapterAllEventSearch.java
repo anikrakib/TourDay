@@ -36,7 +36,7 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int ITEM = 0;
     private static final int LOADING = 1;
 
-    private List<AllEventResult> allProfileResults;
+    private List<AllEventResult> allEventResults;
     private Context context;
 
     private boolean isLoadingAdded = false;
@@ -48,15 +48,15 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
 
     public AdapterAllEventSearch(Context context) {
         this.context = context;
-        allProfileResults = new ArrayList<>();
+        allEventResults = new ArrayList<>();
     }
 
     public List<AllEventResult> getAllProfileResults() {
-        return allProfileResults;
+        return allEventResults;
     }
 
     public void setMovies(List<AllEventResult> allProfileResults) {
-        this.allProfileResults = allProfileResults;
+        this.allEventResults = allProfileResults;
     }
 
     @NonNull
@@ -66,7 +66,7 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         View viewItem = inflater.inflate(R.layout.list_item_event_search_item, parent, false);
-        viewHolder = new UserProfileVH(viewItem);
+        viewHolder = new AllEventVH(viewItem);
 
         return viewHolder;
     }
@@ -74,38 +74,38 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AllEventResult profile = allProfileResults.get(position);
+        AllEventResult allEventResult = allEventResults.get(position);
 
-        final UserProfileVH userProfileVH = (UserProfileVH) holder;
+        final AllEventVH allEventVH = (AllEventVH) holder;
         SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String userId = userPref.getString("id",String.valueOf(0));
 
-        userProfileVH.eventTitle.setText(profile.getTitle());
-        userProfileVH.eventLocation.setText(profile.getLocation());
-        userProfileVH.eventDate.setText(profile.getDate());
-        userProfileVH.eventGoing.setText(profile.getGoing().size()+" People Going");
+        allEventVH.eventTitle.setText(allEventResult.getTitle());
+        allEventVH.eventLocation.setText(allEventResult.getLocation());
+        allEventVH.eventDate.setText(allEventResult.getDate());
+        allEventVH.eventGoing.setText(allEventResult.getGoing().size()+" People Going");
 
         Glide.with(context)
-                .load(ApiURL.IMAGE_BASE+profile.getImage())
+                .load(ApiURL.IMAGE_BASE+allEventResult.getImage())
                 .placeholder(R.drawable.loading)
                 .error(Glide.with(context)
                         .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
                 .transforms(new CenterCrop(),new RoundedCorners(16))
-                .into(userProfileVH.eventImage);
+                .into(allEventVH.eventImage);
 
-        userProfileVH.cardView.setOnClickListener(new View.OnClickListener() {
+        allEventVH.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Integer.parseInt(userId) == profile.getHost()){
+                if(Integer.parseInt(userId) == allEventResult.getHost()){
                     Intent intent;
                     intent =  new Intent(context, YourEventDetailsActivity.class);
-                    intent.putExtra("eventId",profile.getId());
+                    intent.putExtra("eventId",allEventResult.getId());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }else{
                     Intent intent;
                     intent =  new Intent(context, EventDetailsActivity.class);
-                    intent.putExtra("eventId",profile.getId());
+                    intent.putExtra("eventId",allEventResult.getId());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
@@ -114,13 +114,13 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
 
     }
 
-    protected static class UserProfileVH extends RecyclerView.ViewHolder {
+    protected static class AllEventVH extends RecyclerView.ViewHolder {
         RoundedImageView eventImage;
         TextView eventDate,eventTitle,eventGoing,eventLocation;
         LinearLayout locationLayout;
         CardView cardView;
 
-        public UserProfileVH(View itemView) {
+        public AllEventVH(View itemView) {
             super(itemView);
             eventDate = itemView.findViewById(R.id.eventDate);
             eventTitle = itemView.findViewById(R.id.eventTitle);
@@ -135,20 +135,20 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return allProfileResults == null ? 0 : allProfileResults.size();
+        return allEventResults == null ? 0 : allEventResults.size();
     }
 
     @Override
     public int getItemViewType(int position) {
 
-        return (position == allProfileResults.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
+        return (position == allEventResults.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
 
     }
 
 
     public void add(AllEventResult r) {
-        allProfileResults.add(r);
-        notifyItemInserted(allProfileResults.size() - 1);
+        allEventResults.add(r);
+        notifyItemInserted(allEventResults.size() - 1);
     }
 
     public void addAll(List<AllEventResult> profileResults) {
@@ -158,9 +158,9 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public void remove(AllEventResult r) {
-        int position = allProfileResults.indexOf(r);
+        int position = allEventResults.indexOf(r);
         if (position > -1) {
-            allProfileResults.remove(position);
+            allEventResults.remove(position);
             notifyItemRemoved(position);
         }
     }
@@ -185,23 +185,23 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     public void removeLoadingFooter() {
         isLoadingAdded = false;
 
-        int position = allProfileResults.size() - 1;
+        int position = allEventResults.size() - 1;
         AllEventResult profile = getItem(position);
 
         if (profile != null) {
-            allProfileResults.remove(position);
+            allEventResults.remove(position);
             notifyItemRemoved(position);
         }
     }
 
     public AllEventResult getItem(int position) {
-        return allProfileResults.get(position);
+        return allEventResults.get(position);
     }
 
 
     public void showRetry(boolean show, @Nullable String errorMsg) {
         retryPageLoad = show;
-        notifyItemChanged(allProfileResults.size() - 1);
+        notifyItemChanged(allEventResults.size() - 1);
 
         if (errorMsg != null) this.errorMsg = errorMsg;
     }

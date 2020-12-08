@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.anikrakib.tourday.Adapter.Profile.ViewProfilePagerAdapter;
@@ -32,6 +33,7 @@ public class SearchAllActivity extends AppCompatActivity {
     TextView keyWord;
     Intent intent;
     public static String keyWordText;
+    ImageButton backButton;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -41,6 +43,7 @@ public class SearchAllActivity extends AppCompatActivity {
 
         keyWord = findViewById(R.id.searchKeyWord);
         viewPager = findViewById(R.id.viewPagerSearchAll);
+        backButton = findViewById(R.id.searchAllBackButton);
 
         if(loadNightModeState()){
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
@@ -78,6 +81,12 @@ public class SearchAllActivity extends AppCompatActivity {
         searchAllTabLayout.setupWithViewPager(viewPager);
         searchAllTabLayout.setTabRippleColor(null);
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 

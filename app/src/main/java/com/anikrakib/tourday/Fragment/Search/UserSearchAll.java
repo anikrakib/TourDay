@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Fragment.Search;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +37,7 @@ public class UserSearchAll extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     SpinKitView spinKitView;
     TextView noMoreResult;
+    CardView notFound;
 
     private static final int LIMIT = 10;
     private static final int OFFSET = 0;
@@ -56,6 +58,7 @@ public class UserSearchAll extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.searchAllUserSwipeRefreshLayout);
         spinKitView = view.findViewById(R.id.spin_kit);
         noMoreResult = view.findViewById(R.id.noMoreResult);
+        notFound = view.findViewById(R.id.emptyCardView);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -135,15 +138,17 @@ public class UserSearchAll extends Fragment {
                     TOTAL_PAGES_ALL_User = searchResponse.getCount();
 
                     List<Profile> profiles = fetchResultsAllUser(response);
-                    adapterAllUserSearch.addAll(profiles);
-                    swipeRefreshLayout.setRefreshing(false);
-                    //showLoadingIndicator(false);
+                    if(profiles.isEmpty()) notFound.setVisibility(View.VISIBLE);
+                    else {
+                        adapterAllUserSearch.addAll(profiles);
+                        swipeRefreshLayout.setRefreshing(false);
+                        //showLoadingIndicator(false);
 
 
-                    if (!(currentOffset <= TOTAL_PAGES_ALL_User)) isLastPageAllUser = true;
+                        if (!(currentOffset <= TOTAL_PAGES_ALL_User)) isLastPageAllUser = true;
 
-                    if(isLastPageAllUser) handlerNoMoreResult();
-
+                        if(isLastPageAllUser) handlerNoMoreResult();
+                    }
                 }
             }
             @Override
@@ -175,8 +180,6 @@ public class UserSearchAll extends Fragment {
                     if (!(currentOffset <= TOTAL_PAGES_ALL_User)) isLastPageAllUser = true;
 
                     if(isLastPageAllUser) handlerNoMoreResult();
-
-
                 }
             }
             @Override

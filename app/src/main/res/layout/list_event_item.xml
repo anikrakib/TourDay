@@ -49,7 +49,6 @@
                 android:layout_marginTop="5dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/event_pic2"
                 app:riv_corner_radius="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +64,6 @@
                 android:maxLines="5"
                 android:minHeight="50dp"
                 android:padding="5dp"
-                android:text="@string/bio"
                 android:textColor="#99a7b4"
                 android:textSize="10sp"
                 android:textStyle="bold"

@@ -67,7 +67,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/color_primary_text"
                 tools:ignore="UseSwitchCompatOrMaterialXml"
-                app:theme="@style/Color1SwitchStyle"/>
+                app:theme="@style/ColorSwitchStyle"/>
 
         </LinearLayout>
 

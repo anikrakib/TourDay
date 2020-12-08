@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Fragment.Search;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.anikrakib.tourday.Activity.SearchAllActivity;
 import com.anikrakib.tourday.Adapter.Search.AdapterAllBlogSearch;
+import com.anikrakib.tourday.Fragment.Blog.Blog;
 import com.anikrakib.tourday.Models.Blog.AllBlogResponse;
 import com.anikrakib.tourday.Models.Blog.AllBlogResult;
 import com.anikrakib.tourday.R;
@@ -36,9 +38,10 @@ public class BlogSearchAll extends Fragment {
     SpinKitView spinKitView;
     TextView noMoreResult;
     AdapterAllBlogSearch adapterSearchBlog;
+    CardView notFound;
 
     private static final int PAGE = 1;
-    private static int BLOG_ITEM = 1;
+    private static int BLOG_ITEM = 0;
     private boolean isLoadingAllBlog = false;
     private boolean isLastPageAllBlog = false;
     private static int TOTAL_ITEM_ALL_BLOG;
@@ -55,6 +58,7 @@ public class BlogSearchAll extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.searchAllBlogSwipeRefreshLayout);
         spinKitView = view.findViewById(R.id.spin_kit);
         noMoreResult = view.findViewById(R.id.noMoreResult);
+        notFound = view.findViewById(R.id.emptyCardView);
 
         adapterSearchBlog = new AdapterAllBlogSearch(getContext());
         blogSearchAllRecyclerView.setHasFixedSize(true);
@@ -70,6 +74,7 @@ public class BlogSearchAll extends Fragment {
             protected void loadMoreItems() {
                 isLoadingAllBlog = true;
                 currentPage += 1;
+                BLOG_ITEM += 10;
                 spinKitView.setVisibility(View.VISIBLE);
                 if (BLOG_ITEM == TOTAL_ITEM_ALL_BLOG) handlerNoMoreResult();
                 getAllUserNextPage();
@@ -97,6 +102,7 @@ public class BlogSearchAll extends Fragment {
                 spinKitView.setVisibility(View.GONE);
                 noMoreResult.setVisibility(View.GONE);
                 currentPage = 1;
+                BLOG_ITEM = 0;
                 isLastPageAllBlog = false;
                 isLoadingAllBlog = false;
                 adapterSearchBlog.getAllProfileResults().clear();
@@ -132,13 +138,16 @@ public class BlogSearchAll extends Fragment {
                     TOTAL_ITEM_ALL_BLOG = allBlogResponse.getCount();
 
                     List<AllBlogResult> allBlogResults = fetchResultsAllUser(response);
-                    adapterSearchBlog.addAll(allBlogResults);
-                    swipeRefreshLayout.setRefreshing(false);
-                    BLOG_ITEM = adapterSearchBlog.getAllProfileResults().size();
-                    //showLoadingIndicator(false);
+                    if(allBlogResults.isEmpty()) notFound.setVisibility(View.VISIBLE);
+                    else {
+                        adapterSearchBlog.addAll(allBlogResults);
+                        swipeRefreshLayout.setRefreshing(false);
+                        BLOG_ITEM = adapterSearchBlog.getAllProfileResults().size();
+                        //showLoadingIndicator(false);
 
-                    if (BLOG_ITEM == TOTAL_ITEM_ALL_BLOG) handlerNoMoreResult();
+                        if (BLOG_ITEM == TOTAL_ITEM_ALL_BLOG) handlerNoMoreResult();
 
+                    }
                 }
             }
             @Override
@@ -160,15 +169,14 @@ public class BlogSearchAll extends Fragment {
                 if (response.isSuccessful()) {
                     isLoadingAllBlog = false;
 
-                    List<AllBlogResult> profiles = fetchResultsAllUser(response);
-                    adapterSearchBlog.addAll(profiles);
+                    List<AllBlogResult> allBlogResults = fetchResultsAllUser(response);
+                    adapterSearchBlog.addAll(allBlogResults);
                     swipeRefreshLayout.setRefreshing(false);
                     spinKitView.setVisibility(View.GONE);
                     noMoreResult.setVisibility(View.GONE);
                     BLOG_ITEM = BLOG_ITEM + adapterSearchBlog.getAllProfileResults().size();
 
                     if (BLOG_ITEM == TOTAL_ITEM_ALL_BLOG) handlerNoMoreResult();
-
                 }
             }
             @Override
@@ -180,6 +188,7 @@ public class BlogSearchAll extends Fragment {
 
     public void handlerNoMoreResult(){
         noMoreResult.setVisibility(View.VISIBLE);
+        spinKitView.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

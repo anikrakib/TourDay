@@ -78,8 +78,6 @@ public class SearchActivity extends AppCompatActivity {
     RelativeLayout searchHistoryLayout;
     LinearLayout resultLayout;
     CardView cardView;
-    GifImageView noResultGifView;
-
 
     private AdapterSearchBlog adapterSearchBlog;
     private AdapterSearchBlogHistory adapterSearchBlogHistory;
@@ -104,19 +102,12 @@ public class SearchActivity extends AppCompatActivity {
         clearSearch = findViewById(R.id.clearSearch);
         cardView = findViewById(R.id.emptyCardView);
         resultLayout = findViewById(R.id.resultLayout);
-        noResultGifView = findViewById(R.id.noResultGifView);
 
         if(loadNightModeState()){
-            noResultGifView.setImageResource(R.drawable.not_found_dark);
-            if (Build.VERSION.SDK_INT >= 23) {
-                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
-            }
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
         }else{
-            noResultGifView.setImageResource(R.drawable.not_found_light);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
 
@@ -212,13 +203,6 @@ public class SearchActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(0,R.anim.left_to_right);
     }
-
-//    @Override
-//    public boolean onQueryTextSubmit(String query) {
-//        // Your search methods
-//
-//        return true;
-//    }
 
     private void searchBlog(String url) {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,

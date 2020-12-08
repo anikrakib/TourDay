@@ -103,7 +103,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!search.getText().toString().isEmpty()){
+                if(!keyWord.getText().toString().isEmpty()){
                     startActivity(new Intent(ExploreActivity.this,SearchAllActivity.class).putExtra("keyword",keyWord.getText().toString()));
                 }else {
                     snackBar("Write Something For Explore",R.color.white);
