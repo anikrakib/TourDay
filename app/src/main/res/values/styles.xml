@@ -31,7 +31,7 @@
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="Color1SwitchStyle">
+    <style name="ColorSwitchStyle">
         <item name="colorControlActivated">@color/switch_color</item>
     </style>
 
