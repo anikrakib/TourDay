@@ -21,13 +21,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Activity.Event.EventDetailsActivity;
 import com.anikrakib.tourday.Activity.Event.YourEventDetailsActivity;
+import com.anikrakib.tourday.Activity.Profile.ChangePasswordActivity;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.RoomDatabse.FavouriteEventDatabaseTable;
+import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.Utils.PaginationAdapterCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.google.android.material.snackbar.Snackbar;
+import com.kishandonga.csbx.CustomSnackbar;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
@@ -77,10 +82,19 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         AllEventResult result = allEventResults.get(position);
+        MyDatabase myDatabase = MyDatabase.getInstance(context);
 
         final EventVH eventVH = (EventVH) holder;
         SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String userId = userPref.getString("id",String.valueOf(0));
+
+        // check favourite or not
+        if (myDatabase.favouriteEventDatabaseDao().isAddToCart(result.getId()) == 1){
+            eventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
+        }else {
+            eventVH.bLike.setImageResource(R.drawable.ic_un_bookmark);
+        }
+
 
         eventVH.txTitle.setText(result.getTitle());
         eventVH.txtBody.setText(result.getDetails());
@@ -113,6 +127,28 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     intent.putExtra("eventId",result.getId());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
+                }
+            }
+        });
+
+        eventVH.bLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
+                FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
+                favouriteEventDatabaseTable.setId(result.getId());
+                favouriteEventDatabaseTable.setImage(result.getImage());
+                favouriteEventDatabaseTable.setName(result.getTitle());
+                favouriteEventDatabaseTable.setDetails(result.getDetails());
+                favouriteEventDatabaseTable.setLocation(result.getLocation());
+                favouriteEventDatabaseTable.setPrice(String.valueOf(result.getCost()));
+                favouriteEventDatabaseTable.setHost(String.valueOf(result.getHost()));
+
+                if (myDatabase.favouriteEventDatabaseDao().isAddToCart(result.getId())!=1){
+                    myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
+                    snackBar("Event Bookmarked ",R.color.white);
+                }else {
+                    snackBar("It Already Bookmarked!",R.color.white);
                 }
             }
         });
@@ -215,5 +251,15 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemChanged(allEventResults.size() - 1);
 
         if (errorMsg != null) this.errorMsg = errorMsg;
+    }
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(context);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
     }
 }

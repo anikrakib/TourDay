@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.room.Room;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,9 +17,9 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 
 public class MainActivity extends AppCompatActivity{
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,9 @@ public class MainActivity extends AppCompatActivity{
         }else{
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+
+        //myDatabase= Room.databaseBuilder(getApplicationContext(),MyDatabase.class,"Favourite_Event").allowMainThreadQueries().build();
+
 
         handler();
 

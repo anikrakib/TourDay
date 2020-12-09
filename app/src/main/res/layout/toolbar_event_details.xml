@@ -44,19 +44,19 @@
         </LinearLayout>
         <!-- Check Done   -->
         <ImageButton
-            android:id="@+id/shareEventImageButton"
+            android:id="@+id/favouriteButton"
             android:layout_width="30dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/favouriteButton"
+            android:layout_toStartOf="@+id/shareEventImageButton"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_unlike"
+            android:src="@drawable/ic_un_bookmark"
             app:tint="@color/white"
             tools:ignore="ContentDescription"
             android:layout_marginEnd="15dp"/>
 
         <ImageButton
-            android:id="@+id/favouriteButton"
+            android:id="@+id/shareEventImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

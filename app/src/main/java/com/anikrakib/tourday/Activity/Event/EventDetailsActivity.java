@@ -35,6 +35,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Activity.FavouriteActivity;
+import com.anikrakib.tourday.Activity.MainActivity;
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingUserEvent;
 import com.anikrakib.tourday.Adapter.Event.AdapterSuggestedEvent;
@@ -44,6 +46,8 @@ import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.RoomDatabse.FavouriteEventDatabaseTable;
+import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.Utils.PaginationScrollListener;
 import com.anikrakib.tourday.Utils.TapToProgress.Circle;
@@ -82,11 +86,11 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     SocialTextView eventDetailsTextView;
     Intent intent;
     KenBurnsView eventDetailsImage;
-    ImageButton backButton;
+    ImageButton backButton,favouriteButton,shareButton;
     String[] paymentType;
     Resources resources;
     String pay1Method,pay2Method,pay1,pay2;
-    int cost,eventId;
+    int eventCost,eventId,eventHost;
     List<GoingUser> goingUserList;
     boolean cancel =false;
     Circle curve;
@@ -94,8 +98,10 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     Spinner paymentTypeSpinner;
     SocialTextView hostUserEmail;
     CircleImageView hostUserImage;
-    String currentUserId;
+    String currentUserId,eventImage;
     public static ArrayList<Integer> listPending,listGoing;
+
+    MyDatabase myDatabase;
 
     private static final int LIMIT = 10;
     private static final int OFFSET = 0;
@@ -131,6 +137,8 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         hostUserName = findViewById(R.id.hostUserName);
         hostUserImage = findViewById(R.id.hostUserImage);
         eventPriceTextView = findViewById(R.id.eventPriceTextView);
+        favouriteButton = findViewById(R.id.favouriteButton);
+        shareButton = findViewById(R.id.shareEventImageButton);
 
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
@@ -148,6 +156,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         myDialog = new Dialog(this);
         intent = getIntent();
         Bundle bundle = intent.getExtras();
+        myDatabase = MyDatabase.getInstance(this);
 
         assert bundle != null;
         eventId = bundle.getInt("eventId");
@@ -156,6 +165,12 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
         //set Data
         getEventAllData();
+
+        if (myDatabase.favouriteEventDatabaseDao().isAddToCart(eventId) == 1){
+            favouriteButton.setImageResource(R.drawable.ic_bookmarked);
+        }else {
+            favouriteButton.setImageResource(R.drawable.ic_un_bookmark);
+        }
 
         adapterSuggestedEvent = new AdapterSuggestedEvent(getApplicationContext(),eventId);
         suggestedEventRecyclerView.setHasFixedSize(true);
@@ -213,6 +228,36 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                     //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     snackBar("If You Want to Payment, Make sure your screen is Portrait Mode",R.color.white);
                 }
+            }
+        });
+
+        favouriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favouriteButton.setImageResource(R.drawable.ic_bookmarked);
+                FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
+                favouriteEventDatabaseTable.setId(eventId);
+                favouriteEventDatabaseTable.setImage(eventImage);
+                favouriteEventDatabaseTable.setName(eventDetailsTitleTextView.getText().toString().trim());
+                favouriteEventDatabaseTable.setDetails(eventDetailsTextView.getText().toString().trim());
+                favouriteEventDatabaseTable.setLocation(eventLocationTextView.getText().toString().trim());
+                favouriteEventDatabaseTable.setPrice(String.valueOf(eventCost));
+                favouriteEventDatabaseTable.setHost(String.valueOf(eventCost));
+
+                if (myDatabase.favouriteEventDatabaseDao().isAddToCart(eventId)!=1){
+                    myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
+                    snackBar("Event Bookmarked ",R.color.white);
+                }else {
+                    snackBar("It Already Bookmarked!",R.color.white);
+                }
+
+            }
+        });
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -332,8 +377,9 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 pay2 = allEventResult.getPay2();
                 pay1Method = allEventResult.getPay1Method();
                 pay2Method = allEventResult.getPay1Method();
-                cost = allEventResult.getCost();
-
+                eventCost = allEventResult.getCost();
+                eventHost = allEventResult.getHost();
+                eventImage = allEventResult.getImage();
                 getAllEvent(allEventResult.getLocation());
 
             }
@@ -425,7 +471,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
 
         payment1.setText(pay1Method+" - "+pay1);
         payment2.setText(pay2Method+" - "+pay2);
-        eventPrice.setText(String.valueOf(cost));
+        eventPrice.setText(String.valueOf(eventCost));
 
         // set value in district spinner
         ArrayAdapter<String> arrayAdapterPaymentType = new ArrayAdapter<String>(this,R.layout.custom_spinner_item,R.id.districtNameTextView,paymentType);

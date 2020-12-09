@@ -70,7 +70,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="5dp"
-                android:src="@drawable/ic_un_bookmark"
+                android:src="@drawable/ic_bookmarked"
                 android:background="@android:color/transparent"
                 tools:ignore="ContentDescription" />
 

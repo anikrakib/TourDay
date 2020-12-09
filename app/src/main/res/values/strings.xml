@@ -234,5 +234,6 @@
     <string name="sorry_no_result_found_msg2">We can not find the item you are searching for,maybe a little spelling mistake</string>
     <string name="explore_your_desire">explore your desire</string>
     <string name="no_more_result">No More Result</string>
+    <string name="favourite">Favourite</string>
 
 </resources>

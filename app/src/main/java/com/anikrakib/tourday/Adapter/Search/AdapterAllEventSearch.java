@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import com.anikrakib.tourday.Activity.Event.YourEventDetailsActivity;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Profile.Profile;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.RoomDatabse.FavouriteEventDatabaseTable;
+import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.Utils.PaginationAdapterCallback;
 import com.bumptech.glide.Glide;
@@ -37,10 +40,13 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int LOADING = 1;
 
     private List<AllEventResult> allEventResults;
+    private List<FavouriteEventDatabaseTable> favouriteEventDatabaseTables;
     private Context context;
+    private CardView empty;
+    TextView textView,textView2;
 
     private boolean isLoadingAdded = false;
-    private boolean retryPageLoad = false;
+    private boolean isFavouriteActivity = false;
 
     private PaginationAdapterCallback mCallback;
 
@@ -49,6 +55,16 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     public AdapterAllEventSearch(Context context) {
         this.context = context;
         allEventResults = new ArrayList<>();
+    }
+
+    public AdapterAllEventSearch(List<FavouriteEventDatabaseTable> favouriteEventDatabaseTables, Context context, boolean isFavouriteActivity, CardView empty, TextView textView, TextView textView2) {
+        this.favouriteEventDatabaseTables = favouriteEventDatabaseTables;
+        this.context = context;
+        this.isFavouriteActivity = isFavouriteActivity;
+        this.empty = empty;
+        this.textView = textView;
+        this.textView2 = textView2;
+        notifyDataSetChanged();
     }
 
     public List<AllEventResult> getAllProfileResults() {
@@ -74,50 +90,113 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AllEventResult allEventResult = allEventResults.get(position);
-
-        final AllEventVH allEventVH = (AllEventVH) holder;
         SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String userId = userPref.getString("id",String.valueOf(0));
+        final AllEventVH allEventVH = (AllEventVH) holder;
+        MyDatabase myDatabase = MyDatabase.getInstance(context);
 
-        allEventVH.eventTitle.setText(allEventResult.getTitle());
-        allEventVH.eventLocation.setText(allEventResult.getLocation());
-        allEventVH.eventDate.setText(allEventResult.getDate());
-        allEventVH.eventGoing.setText(allEventResult.getGoing().size()+" People Going");
+        if(isFavouriteActivity){
+            FavouriteEventDatabaseTable favouriteEventDatabaseTable = favouriteEventDatabaseTables.get(position);
 
-        Glide.with(context)
-                .load(ApiURL.IMAGE_BASE+allEventResult.getImage())
-                .placeholder(R.drawable.loading)
-                .error(Glide.with(context)
-                        .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
-                .transforms(new CenterCrop(),new RoundedCorners(16))
-                .into(allEventVH.eventImage);
+            allEventVH.eventTitle.setText(favouriteEventDatabaseTable.getName());
+            allEventVH.eventLocation.setText(favouriteEventDatabaseTable.getLocation());
+            allEventVH.eventDate.setText(favouriteEventDatabaseTable.getDate());
+            allEventVH.eventGoing.setText(favouriteEventDatabaseTable.getPrice()+"");
+            allEventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
 
-        allEventVH.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Integer.parseInt(userId) == allEventResult.getHost()){
-                    Intent intent;
-                    intent =  new Intent(context, YourEventDetailsActivity.class);
-                    intent.putExtra("eventId",allEventResult.getId());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }else{
-                    Intent intent;
-                    intent =  new Intent(context, EventDetailsActivity.class);
-                    intent.putExtra("eventId",allEventResult.getId());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+            Glide.with(context)
+                    .load(ApiURL.IMAGE_BASE+favouriteEventDatabaseTable.getImage())
+                    .placeholder(R.drawable.loading)
+                    .error(Glide.with(context)
+                            .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
+                    .transforms(new CenterCrop(),new RoundedCorners(16))
+                    .into(allEventVH.eventImage);
+
+            allEventVH.bLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myDatabase.favouriteEventDatabaseDao().delete(favouriteEventDatabaseTable);
+                    favouriteEventDatabaseTables.remove(position);
+                    notifyItemRemoved(position);
+                    if(favouriteEventDatabaseTables.isEmpty()){
+                        empty.setVisibility(View.VISIBLE);
+                        textView2.setText("Tap The Bookmark Icon And Save it Bookmark List");
+                        textView.setText("No Bookmarked Item Yet");
+                    }else {
+                        empty.setVisibility(View.GONE);
+                    }
                 }
-            }
-        });
+            });
 
+            allEventVH.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(Integer.parseInt(userId) == Integer.parseInt(favouriteEventDatabaseTable.getHost())){
+                        Intent intent;
+                        intent =  new Intent(context, YourEventDetailsActivity.class);
+                        intent.putExtra("eventId",favouriteEventDatabaseTable.getId());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }else{
+                        Intent intent;
+                        intent =  new Intent(context, EventDetailsActivity.class);
+                        intent.putExtra("eventId",favouriteEventDatabaseTable.getId());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                }
+            });
+        }else {
+
+            AllEventResult allEventResult = allEventResults.get(position);
+
+
+            allEventVH.eventTitle.setText(allEventResult.getTitle());
+            allEventVH.eventLocation.setText(allEventResult.getLocation());
+            allEventVH.eventDate.setText(allEventResult.getDate());
+            allEventVH.eventGoing.setText(allEventResult.getGoing().size()+" People Going");
+
+            Glide.with(context)
+                    .load(ApiURL.IMAGE_BASE+allEventResult.getImage())
+                    .placeholder(R.drawable.loading)
+                    .error(Glide.with(context)
+                            .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
+                    .transforms(new CenterCrop(),new RoundedCorners(16))
+                    .into(allEventVH.eventImage);
+
+            // check favourite or not
+            if (myDatabase.favouriteEventDatabaseDao().isAddToCart(allEventResult.getId()) == 1){
+                allEventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
+            }else {
+                allEventVH.bLike.setImageResource(R.drawable.ic_un_bookmark);
+            }
+
+            allEventVH.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(Integer.parseInt(userId) == allEventResult.getHost()){
+                        Intent intent;
+                        intent =  new Intent(context, YourEventDetailsActivity.class);
+                        intent.putExtra("eventId",allEventResult.getId());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }else{
+                        Intent intent;
+                        intent =  new Intent(context, EventDetailsActivity.class);
+                        intent.putExtra("eventId",allEventResult.getId());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                }
+            });
+
+        }
     }
 
     protected static class AllEventVH extends RecyclerView.ViewHolder {
         RoundedImageView eventImage;
         TextView eventDate,eventTitle,eventGoing,eventLocation;
-        LinearLayout locationLayout;
+        ImageButton bLike;
         CardView cardView;
 
         public AllEventVH(View itemView) {
@@ -128,6 +207,7 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
             eventImage = itemView.findViewById(R.id.eventImage);
             eventLocation = itemView.findViewById(R.id.eventLocation);
             cardView = itemView.findViewById(R.id.searchUserCardView);
+            bLike = itemView.findViewById(R.id.favouriteItemImageButton);
 
         }
     }
@@ -135,13 +215,21 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return allEventResults == null ? 0 : allEventResults.size();
+        if(isFavouriteActivity){
+            return favouriteEventDatabaseTables == null ? 0 : favouriteEventDatabaseTables.size();
+        }else{
+            return allEventResults == null ? 0 : allEventResults.size();
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
 
-        return (position == allEventResults.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
+        if(isFavouriteActivity){
+            return (position == favouriteEventDatabaseTables.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
+        }else{
+            return (position == allEventResults.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
+        }
 
     }
 
@@ -200,7 +288,7 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
 
 
     public void showRetry(boolean show, @Nullable String errorMsg) {
-        retryPageLoad = show;
+       // retryPageLoad = show;
         notifyItemChanged(allEventResults.size() - 1);
 
         if (errorMsg != null) this.errorMsg = errorMsg;

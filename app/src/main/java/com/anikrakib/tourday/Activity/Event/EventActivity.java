@@ -46,6 +46,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Activity.FavouriteActivity;
 import com.anikrakib.tourday.Adapter.Event.AdapterAllEvent;
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
 import com.anikrakib.tourday.Adapter.Event.ViewEventPagerAdapter;
@@ -86,7 +87,7 @@ public class EventActivity extends AppCompatActivity {
     ViewEventPagerAdapter viewEventPagerAdapter;
     FloatingActionButton createEvent;
     Dialog myDialog, mDialog;
-    ImageButton profileBackButton, refreshLocation;
+    ImageButton profileBackButton, favouriteItemImageButton;
     FusedLocationProviderClient fusedLocationProviderClient;
     EditText editTextLocation,eventPopUpTitle,eventPopUpDescription;
     int totalCapacity;
@@ -125,6 +126,7 @@ public class EventActivity extends AppCompatActivity {
         profileBackButton = findViewById(R.id.backButtonEvent);
         viewPagerEvent = (ViewPager) findViewById(R.id.viewPagerEventActivity);
         viewAllEvent =  findViewById(R.id.viewAllEvent);
+        favouriteItemImageButton =  findViewById(R.id.favouriteItemImageButton);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goingEventRecyclerView);
 
 
@@ -203,6 +205,12 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        favouriteItemImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), FavouriteActivity.class));
             }
         });
 
