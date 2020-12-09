@@ -28,14 +28,14 @@ public interface FavouriteEventDatabaseDao {
 //    @Query("select COUNT (*) from FavouriteEvent")
 //    int countCart();
 //
-//    @Query("DELETE FROM FavouriteEvent WHERE id=:id ")
-//    int deleteItem(int id);
+    @Query("DELETE FROM favourite_event WHERE id=:id ")
+    int delete(int id);
 
     @Insert(onConflict = REPLACE)
     void insert(FavouriteEventDatabaseTable favouriteEventDatabaseTable);
 
-    @Delete
-    void delete(FavouriteEventDatabaseTable favouriteEventDatabaseTable);
+//    @Delete
+//    void delete(FavouriteEventDatabaseTable favouriteEventDatabaseTable);
 
     @Delete
     void deleteAll(List<FavouriteEventDatabaseTable> favouriteEventDatabaseTables);

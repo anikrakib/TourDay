@@ -139,7 +139,7 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 favouriteEventDatabaseTable.setId(result.getId());
                 favouriteEventDatabaseTable.setImage(result.getImage());
                 favouriteEventDatabaseTable.setName(result.getTitle());
-                favouriteEventDatabaseTable.setDetails(result.getDetails());
+                favouriteEventDatabaseTable.setDate(result.getDate());
                 favouriteEventDatabaseTable.setLocation(result.getLocation());
                 favouriteEventDatabaseTable.setPrice(String.valueOf(result.getCost()));
                 favouriteEventDatabaseTable.setHost(String.valueOf(result.getHost()));

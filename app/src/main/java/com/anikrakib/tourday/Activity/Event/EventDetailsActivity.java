@@ -98,7 +98,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     Spinner paymentTypeSpinner;
     SocialTextView hostUserEmail;
     CircleImageView hostUserImage;
-    String currentUserId,eventImage;
+    String currentUserId,eventImage,eventDate;
     public static ArrayList<Integer> listPending,listGoing;
 
     MyDatabase myDatabase;
@@ -239,7 +239,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 favouriteEventDatabaseTable.setId(eventId);
                 favouriteEventDatabaseTable.setImage(eventImage);
                 favouriteEventDatabaseTable.setName(eventDetailsTitleTextView.getText().toString().trim());
-                favouriteEventDatabaseTable.setDetails(eventDetailsTextView.getText().toString().trim());
+                favouriteEventDatabaseTable.setDate(eventDate);
                 favouriteEventDatabaseTable.setLocation(eventLocationTextView.getText().toString().trim());
                 favouriteEventDatabaseTable.setPrice(String.valueOf(eventCost));
                 favouriteEventDatabaseTable.setHost(String.valueOf(eventCost));
@@ -380,6 +380,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 eventCost = allEventResult.getCost();
                 eventHost = allEventResult.getHost();
                 eventImage = allEventResult.getImage();
+                eventDate = allEventResult.getDate();
                 getAllEvent(allEventResult.getLocation());
 
             }

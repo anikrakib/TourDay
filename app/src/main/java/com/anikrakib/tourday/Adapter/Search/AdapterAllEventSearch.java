@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Activity.Event.EventDetailsActivity;
 import com.anikrakib.tourday.Activity.Event.YourEventDetailsActivity;
+import com.anikrakib.tourday.Activity.Profile.ChangePasswordActivity;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Profile.Profile;
 import com.anikrakib.tourday.R;
@@ -28,6 +30,8 @@ import com.anikrakib.tourday.Utils.PaginationAdapterCallback;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.google.android.material.snackbar.Snackbar;
+import com.kishandonga.csbx.CustomSnackbar;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
@@ -44,6 +48,8 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     private Context context;
     private CardView empty;
     TextView textView,textView2;
+    FavouriteEventDatabaseTable favouriteEventDatabaseTable;
+
 
     private boolean isLoadingAdded = false;
     private boolean isFavouriteActivity = false;
@@ -71,9 +77,6 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
         return allEventResults;
     }
 
-    public void setMovies(List<AllEventResult> allProfileResults) {
-        this.allEventResults = allProfileResults;
-    }
 
     @NonNull
     @Override
@@ -96,12 +99,13 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
         MyDatabase myDatabase = MyDatabase.getInstance(context);
 
         if(isFavouriteActivity){
-            FavouriteEventDatabaseTable favouriteEventDatabaseTable = favouriteEventDatabaseTables.get(position);
+            favouriteEventDatabaseTable = favouriteEventDatabaseTables.get(position);
+            int id = favouriteEventDatabaseTable.getId();
 
             allEventVH.eventTitle.setText(favouriteEventDatabaseTable.getName());
             allEventVH.eventLocation.setText(favouriteEventDatabaseTable.getLocation());
             allEventVH.eventDate.setText(favouriteEventDatabaseTable.getDate());
-            allEventVH.eventGoing.setText(favouriteEventDatabaseTable.getPrice()+"");
+            allEventVH.eventGoing.setText("৳ "+favouriteEventDatabaseTable.getPrice()+" "+id);
             allEventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
 
             Glide.with(context)
@@ -115,9 +119,10 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
             allEventVH.bLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myDatabase.favouriteEventDatabaseDao().delete(favouriteEventDatabaseTable);
+                    myDatabase.favouriteEventDatabaseDao().delete(id);
                     favouriteEventDatabaseTables.remove(position);
                     notifyItemRemoved(position);
+                    notifyDataSetChanged();
                     if(favouriteEventDatabaseTables.isEmpty()){
                         empty.setVisibility(View.VISIBLE);
                         textView2.setText("Tap The Bookmark Icon And Save it Bookmark List");
@@ -134,22 +139,21 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
                     if(Integer.parseInt(userId) == Integer.parseInt(favouriteEventDatabaseTable.getHost())){
                         Intent intent;
                         intent =  new Intent(context, YourEventDetailsActivity.class);
-                        intent.putExtra("eventId",favouriteEventDatabaseTable.getId());
+                        intent.putExtra("eventId",id);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }else{
                         Intent intent;
                         intent =  new Intent(context, EventDetailsActivity.class);
-                        intent.putExtra("eventId",favouriteEventDatabaseTable.getId());
+                        intent.putExtra("eventId",id);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
                 }
             });
-        }else {
-
+        }
+        else {
             AllEventResult allEventResult = allEventResults.get(position);
-
 
             allEventVH.eventTitle.setText(allEventResult.getTitle());
             allEventVH.eventLocation.setText(allEventResult.getLocation());
@@ -171,9 +175,32 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
                 allEventVH.bLike.setImageResource(R.drawable.ic_un_bookmark);
             }
 
+            allEventVH.bLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    allEventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
+                    FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
+                    favouriteEventDatabaseTable.setId(allEventResult.getId());
+                    favouriteEventDatabaseTable.setImage(allEventResult.getImage());
+                    favouriteEventDatabaseTable.setName(allEventResult.getTitle());
+                    favouriteEventDatabaseTable.setDate(allEventResult.getDate());
+                    favouriteEventDatabaseTable.setLocation(allEventResult.getLocation());
+                    favouriteEventDatabaseTable.setPrice(String.valueOf(allEventResult.getCost()));
+                    favouriteEventDatabaseTable.setHost(String.valueOf(allEventResult.getHost()));
+
+                    if (myDatabase.favouriteEventDatabaseDao().isAddToCart(allEventResult.getId())!=1){
+                        myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
+                        snackBar("Event Bookmarked ",R.color.white);
+                    }else {
+                        snackBar("It Already Bookmarked!",R.color.white);
+                    }
+                }
+            });
+
             allEventVH.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    assert userId != null;
                     if(Integer.parseInt(userId) == allEventResult.getHost()){
                         Intent intent;
                         intent =  new Intent(context, YourEventDetailsActivity.class);
@@ -292,5 +319,16 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
         notifyItemChanged(allEventResults.size() - 1);
 
         if (errorMsg != null) this.errorMsg = errorMsg;
+    }
+
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(context);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
     }
 }
