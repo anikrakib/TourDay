@@ -113,5 +113,8 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     //lottie animation
     implementation "com.airbnb.android:lottie:$lottieVersion"
+    //room databse
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
 }
