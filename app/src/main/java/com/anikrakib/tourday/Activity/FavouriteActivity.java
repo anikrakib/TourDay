@@ -62,15 +62,26 @@ public class FavouriteActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String userId = userPref.getString("id","");
+        boolean isLoggedIn = userPref.getBoolean("isLoggedIn",false);
+
         myDatabase = MyDatabase.getInstance(this);
 
-        allEventResults = myDatabase.favouriteEventDatabaseDao().getAll();
-        if(allEventResults.isEmpty()){
+        if(isLoggedIn){
+            assert userId != null;
+            allEventResults = myDatabase.favouriteEventDatabaseDao().getAll(userId);
+            if(allEventResults.isEmpty()){
+                notFound.setVisibility(View.VISIBLE);
+                emptyPostTextView2.setText("Tap The Bookmark Icon And Save it Bookmark List");
+                emptyPostTextView1.setText("No Bookmarked Item Yet");
+            }
+            else notFound.setVisibility(View.GONE);
+        }else{
             notFound.setVisibility(View.VISIBLE);
-            emptyPostTextView2.setText("Tap The Bookmark Icon And Save it Bookmark List");
-            emptyPostTextView1.setText("No Bookmarked Item Yet");
+            emptyPostTextView2.setText("If you have no account, then create an account");
+            emptyPostTextView1.setText("Sign In Required");
         }
-        else notFound.setVisibility(View.GONE);
 
         eventSearchAllRecyclerView.setHasFixedSize(true);
         eventSearchAllRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -80,15 +91,22 @@ public class FavouriteActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                notFound.setVisibility(View.GONE);
-                allEventResults = myDatabase.favouriteEventDatabaseDao().getAll();
-                if(allEventResults.isEmpty()) {
+                if(isLoggedIn){
+                    notFound.setVisibility(View.GONE);
+                    allEventResults = myDatabase.favouriteEventDatabaseDao().getAll(userId);
+                    if(allEventResults.isEmpty()) {
+                        notFound.setVisibility(View.VISIBLE);
+                        emptyPostTextView2.setText("Tap The Bookmark Icon And Save it Bookmark List");
+                        emptyPostTextView1.setText("No Bookmarked Item Yet");
+                    }
+                    else notFound.setVisibility(View.GONE);
+                    swipeRefreshLayout.setRefreshing(false);
+                }else{
                     notFound.setVisibility(View.VISIBLE);
-                    emptyPostTextView2.setText("Tap The Bookmark Icon And Save it Bookmark List");
-                    emptyPostTextView1.setText("No Bookmarked Item Yet");
+                    emptyPostTextView2.setText("If you have no account, then create an account");
+                    emptyPostTextView1.setText("Sign In Required");
                 }
-                else notFound.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(false);
+
             }
         });
 
@@ -104,7 +122,7 @@ public class FavouriteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 myDatabase.favouriteEventDatabaseDao().deleteAll(allEventResults);
                 allEventResults.clear();
-                allEventResults.addAll(myDatabase.favouriteEventDatabaseDao().getAll());
+                allEventResults.addAll(myDatabase.favouriteEventDatabaseDao().getAll(userId));
                 adapterAllEventSearchSearch = new AdapterAllEventSearch(allEventResults,getApplicationContext(),true,notFound,emptyPostTextView1,emptyPostTextView2);
                 eventSearchAllRecyclerView.setAdapter(adapterAllEventSearchSearch);
                 adapterAllEventSearchSearch.notifyDataSetChanged();

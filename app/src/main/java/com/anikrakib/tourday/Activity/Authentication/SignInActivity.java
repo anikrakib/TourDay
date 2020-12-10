@@ -140,12 +140,13 @@ public class SignInActivity extends AppCompatActivity {
 
         return true;
     }
-    public void setTimeForRunLoder(){
+    public void setTimeForRunLoder(String toast){
         Handler handler = null;
         handler = new Handler();
         handler.postDelayed(new Runnable(){
             public void run(){
-
+                DynamicToast.makeSuccess(getApplicationContext(), toast).show();
+                //postDialog.dismiss();
             }
         }, 1500);
     }
@@ -171,7 +172,7 @@ public class SignInActivity extends AppCompatActivity {
         postDialog.setContentView(R.layout.gif_view);
         postDialog.setCancelable(false);
         Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        setTimeForRunLoder();
+        //setTimeForRunLoder();
         postDialog.show();
 
         if(validateEmail()) accessDataUsingEmail();
@@ -181,101 +182,103 @@ public class SignInActivity extends AppCompatActivity {
     private void accessDataUsingEmail() {
         if(!isConnected(SignInActivity.this)){
             showNoInternetPopUp();
-            return;
         }else{
-            setTimeForRunLoder();
-        }
-        Call<Token> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .logInUsingEmail(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
-        call.enqueue(new Callback<Token>() {
-            @Override
-            public void onResponse(@NonNull Call<Token> call, @NonNull Response<Token> response) {
-                if(response.isSuccessful()){
-                    //make shared preference user
-                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = userPref.edit();
-                    assert response.body() != null;
-                    editor.putString("token",response.body().getKey());
-                    editor.putBoolean("isLoggedIn",true);
-                    editor.putBoolean("firstTime",true);
-                    editor.putString("password",getHash(inputPassword.getText().toString()));
-                    editor.apply();
-                    startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
-                    DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
-                    token=response.body().getKey();
-                    finish();
-                }else{
-                    try {
-                        assert response.errorBody() != null;
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            //setTimeForRunLoder();
+            Call<Token> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .logInUsingEmail(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
+            call.enqueue(new Callback<Token>() {
+                @Override
+                public void onResponse(@NonNull Call<Token> call, @NonNull Response<Token> response) {
+                    if(response.isSuccessful()){
+                        //make shared preference user
+                        SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = userPref.edit();
+                        assert response.body() != null;
+                        editor.putString("token",response.body().getKey());
+                        editor.putBoolean("isLoggedIn",true);
+                        editor.putBoolean("firstTime",true);
+                        editor.putString("password",getHash(inputPassword.getText().toString()));
+                        editor.apply();
+                        startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
+//                        DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
+                        token=response.body().getKey();
+                        setTimeForRunLoder("Log In Success");
+                        //postDialog.dismiss();
+                        finish();
+                    }else{
+                        try {
+                            assert response.errorBody() != null;
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            //DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
+                            setTimeForRunLoder(jObjError.getJSONArray("non_field_errors").getString(0));
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                        inputUsername.setText("");
+                        inputPassword.setText("");
+                        requestFocus(inputUsername);
+                        //postDialog.dismiss();
                     }
-                    inputUsername.setText("");
-                    inputPassword.setText("");
-                    requestFocus(inputUsername);
-                    postDialog.dismiss();
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
+                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    //postDialog.dismiss();
+                }
+            });
+        }
     }
 
     private void accessDataUserName() {
         if(!isConnected(SignInActivity.this)){
             showNoInternetPopUp();
-            return;
         }else{
-            setTimeForRunLoder();
-        }
-        Call<Token> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .logInUsingUserName(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
-        call.enqueue(new Callback<Token>() {
-            @Override
-            public void onResponse(@NonNull Call<Token> call, @NonNull Response<Token> response) {
-                if(response.isSuccessful()){
-                    DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
-                    //make shared preference user
-                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = userPref.edit();
-                    assert response.body() != null;
-                    editor.putString("token",response.body().getKey());
-                    editor.putBoolean("isLoggedIn",true);
-                    editor.putBoolean("firstTime",true);
-                    editor.putString("password",getHash(inputPassword.getText().toString()));
-                    editor.apply();
-                    startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
-                    token=response.body().getKey();
-                    finish();
-                }else{
-                    try {
-                        assert response.errorBody() != null;
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            Call<Token> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .logInUsingUserName(inputUsername.getText().toString().trim(),inputPassword.getText().toString().trim());
+            call.enqueue(new Callback<Token>() {
+                @Override
+                public void onResponse(@NonNull Call<Token> call, @NonNull Response<Token> response) {
+                    if(response.isSuccessful()){
+                        //make shared preference user
+                        SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = userPref.edit();
+                        assert response.body() != null;
+                        editor.putString("token",response.body().getKey());
+                        editor.putBoolean("isLoggedIn",true);
+                        editor.putBoolean("firstTime",true);
+                        editor.putString("password",getHash(inputPassword.getText().toString()));
+                        editor.apply();
+                        startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
+                        token=response.body().getKey();
+                        setTimeForRunLoder("Log In Success");
+                        finish();
+                    }else{
+                        try {
+                            assert response.errorBody() != null;
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            //DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
+                            setTimeForRunLoder(jObjError.getJSONArray("non_field_errors").getString(0));
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                        inputUsername.setText("");
+                        inputPassword.setText("");
+                        requestFocus(inputUsername);
                     }
-                    inputUsername.setText("");
-                    inputPassword.setText("");
-                    requestFocus(inputUsername);
-                    postDialog.dismiss();
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
+                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                    //postDialog.dismiss();
+                }
+            });
+        }
     }
 
     private void requestFocus(View view) {
@@ -305,7 +308,7 @@ public class SignInActivity extends AppCompatActivity {
         postDialog.setContentView(R.layout.custom_no_internet_pop_up);
         postDialog.setCancelable(true);
         Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        setTimeForRunLoder();
+        //setTimeForRunLoder();
         postDialog.show();
     }
 

@@ -87,9 +87,11 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final EventVH eventVH = (EventVH) holder;
         SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String userId = userPref.getString("id",String.valueOf(0));
+        boolean isLoggedIn = userPref.getBoolean("isLoggedIn",false);
 
         // check favourite or not
-        if (myDatabase.favouriteEventDatabaseDao().isAddToCart(result.getId()) == 1){
+        assert userId != null;
+        if (myDatabase.favouriteEventDatabaseDao().addByUserId(userId,result.getId()) ==1){
             eventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
         }else {
             eventVH.bLike.setImageResource(R.drawable.ic_un_bookmark);
@@ -114,7 +116,6 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         eventVH.linearLayOutEventItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                assert userId != null;
                 if(Integer.parseInt(userId) == result.getHost()){
                     Intent intent;
                     intent =  new Intent(context, YourEventDetailsActivity.class);
@@ -134,21 +135,26 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         eventVH.bLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
-                FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
-                favouriteEventDatabaseTable.setId(result.getId());
-                favouriteEventDatabaseTable.setImage(result.getImage());
-                favouriteEventDatabaseTable.setName(result.getTitle());
-                favouriteEventDatabaseTable.setDate(result.getDate());
-                favouriteEventDatabaseTable.setLocation(result.getLocation());
-                favouriteEventDatabaseTable.setPrice(String.valueOf(result.getCost()));
-                favouriteEventDatabaseTable.setHost(String.valueOf(result.getHost()));
+                if(isLoggedIn){
+                    eventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
+                    FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
+                    favouriteEventDatabaseTable.setEventId(String.valueOf(result.getId()));
+                    favouriteEventDatabaseTable.setImage(result.getImage());
+                    favouriteEventDatabaseTable.setName(result.getTitle());
+                    favouriteEventDatabaseTable.setDate(result.getDate());
+                    favouriteEventDatabaseTable.setUser_id(userId);
+                    favouriteEventDatabaseTable.setLocation(result.getLocation());
+                    favouriteEventDatabaseTable.setPrice(String.valueOf(result.getCost()));
+                    favouriteEventDatabaseTable.setHost(String.valueOf(result.getHost()));
 
-                if (myDatabase.favouriteEventDatabaseDao().isAddToCart(result.getId())!=1){
-                    myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
-                    snackBar("Event Bookmarked ",R.color.white);
-                }else {
-                    snackBar("It Already Bookmarked!",R.color.white);
+                    if (myDatabase.favouriteEventDatabaseDao().addByUserId(userId,result.getId())!=1){
+                        myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
+                        snackBar("Event Bookmarked ",R.color.white);
+                    }else {
+                        snackBar("It Already Bookmarked!",R.color.white);
+                    }
+                }else{
+                    snackBar("Sign In Required !!",R.color.white);
                 }
             }
         });

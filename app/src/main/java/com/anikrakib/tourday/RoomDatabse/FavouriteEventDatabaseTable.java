@@ -2,14 +2,18 @@ package com.anikrakib.tourday.RoomDatabse;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "favourite_event")
+@Entity(tableName = "favourite_event", indices = @Index(value = {"event_id"}, unique = true))
 public class FavouriteEventDatabaseTable implements Serializable {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
+
+    @ColumnInfo(name = "event_id")
+    public String eventId;
 
     @ColumnInfo(name = "event_name")
     public String name;
@@ -20,8 +24,8 @@ public class FavouriteEventDatabaseTable implements Serializable {
     @ColumnInfo(name = "event_price")
     public String price;
 
-    @ColumnInfo(name = "event_details")
-    public String details;
+    @ColumnInfo(name = "user_id")
+    public String user_id;
 
     @ColumnInfo(name = "event_location")
     public String location;
@@ -31,14 +35,6 @@ public class FavouriteEventDatabaseTable implements Serializable {
 
     @ColumnInfo(name = "event_host")
     public String host;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -64,12 +60,12 @@ public class FavouriteEventDatabaseTable implements Serializable {
         this.price = price;
     }
 
-    public String getDetails() {
-        return details;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public String getLocation() {
@@ -94,5 +90,21 @@ public class FavouriteEventDatabaseTable implements Serializable {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

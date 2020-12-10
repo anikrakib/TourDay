@@ -166,7 +166,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         //set Data
         getEventAllData();
 
-        if (myDatabase.favouriteEventDatabaseDao().isAddToCart(eventId) == 1){
+        if (myDatabase.favouriteEventDatabaseDao().addByUserId(currentUserId,eventId) == 1){
             favouriteButton.setImageResource(R.drawable.ic_bookmarked);
         }else {
             favouriteButton.setImageResource(R.drawable.ic_un_bookmark);
@@ -234,23 +234,27 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         favouriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                favouriteButton.setImageResource(R.drawable.ic_bookmarked);
-                FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
-                favouriteEventDatabaseTable.setId(eventId);
-                favouriteEventDatabaseTable.setImage(eventImage);
-                favouriteEventDatabaseTable.setName(eventDetailsTitleTextView.getText().toString().trim());
-                favouriteEventDatabaseTable.setDate(eventDate);
-                favouriteEventDatabaseTable.setLocation(eventLocationTextView.getText().toString().trim());
-                favouriteEventDatabaseTable.setPrice(String.valueOf(eventCost));
-                favouriteEventDatabaseTable.setHost(String.valueOf(eventCost));
+                if(isLoggedIn){
+                    favouriteButton.setImageResource(R.drawable.ic_bookmarked);
+                    FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
+                    favouriteEventDatabaseTable.setEventId(String.valueOf(eventId));
+                    favouriteEventDatabaseTable.setImage(eventImage);
+                    favouriteEventDatabaseTable.setName(eventDetailsTitleTextView.getText().toString().trim());
+                    favouriteEventDatabaseTable.setDate(eventDate);
+                    favouriteEventDatabaseTable.setUser_id(currentUserId);
+                    favouriteEventDatabaseTable.setLocation(eventLocationTextView.getText().toString().trim());
+                    favouriteEventDatabaseTable.setPrice(String.valueOf(eventCost));
+                    favouriteEventDatabaseTable.setHost(String.valueOf(eventHost));
 
-                if (myDatabase.favouriteEventDatabaseDao().isAddToCart(eventId)!=1){
-                    myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
-                    snackBar("Event Bookmarked ",R.color.white);
+                    if (myDatabase.favouriteEventDatabaseDao().addByUserId(currentUserId,eventId)!=1){
+                        myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
+                        snackBar("Event Bookmarked ",R.color.white);
+                    }else {
+                        snackBar("It Already Bookmarked!",R.color.white);
+                    }
                 }else {
-                    snackBar("It Already Bookmarked!",R.color.white);
+                    snackBar("Sign In Required !!",R.color.white);
                 }
-
             }
         });
 

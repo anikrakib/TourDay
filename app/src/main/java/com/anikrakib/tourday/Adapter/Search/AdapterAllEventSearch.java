@@ -48,8 +48,6 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     private Context context;
     private CardView empty;
     TextView textView,textView2;
-    FavouriteEventDatabaseTable favouriteEventDatabaseTable;
-
 
     private boolean isLoadingAdded = false;
     private boolean isFavouriteActivity = false;
@@ -95,17 +93,19 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         String userId = userPref.getString("id",String.valueOf(0));
+        boolean isLoggedIn = userPref.getBoolean("isLoggedIn",false);
         final AllEventVH allEventVH = (AllEventVH) holder;
         MyDatabase myDatabase = MyDatabase.getInstance(context);
+        FavouriteEventDatabaseTable favouriteEventDatabaseTable;
+
 
         if(isFavouriteActivity){
             favouriteEventDatabaseTable = favouriteEventDatabaseTables.get(position);
-            int id = favouriteEventDatabaseTable.getId();
 
             allEventVH.eventTitle.setText(favouriteEventDatabaseTable.getName());
             allEventVH.eventLocation.setText(favouriteEventDatabaseTable.getLocation());
             allEventVH.eventDate.setText(favouriteEventDatabaseTable.getDate());
-            allEventVH.eventGoing.setText("৳ "+favouriteEventDatabaseTable.getPrice()+" "+id);
+            allEventVH.eventGoing.setText("৳ "+favouriteEventDatabaseTable.getPrice());
             allEventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
 
             Glide.with(context)
@@ -119,7 +119,8 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
             allEventVH.bLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    myDatabase.favouriteEventDatabaseDao().delete(id);
+                    assert userId != null;
+                    myDatabase.favouriteEventDatabaseDao().delete(userId,favouriteEventDatabaseTable.getEventId());
                     favouriteEventDatabaseTables.remove(position);
                     notifyItemRemoved(position);
                     notifyDataSetChanged();
@@ -136,16 +137,17 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
             allEventVH.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(Integer.parseInt(userId) == Integer.parseInt(favouriteEventDatabaseTable.getHost())){
+                    assert userId != null;
+                    if(userId.equals(favouriteEventDatabaseTable.getHost())){
                         Intent intent;
                         intent =  new Intent(context, YourEventDetailsActivity.class);
-                        intent.putExtra("eventId",id);
+                        intent.putExtra("eventId",Integer.parseInt(favouriteEventDatabaseTable.getEventId()));
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }else{
                         Intent intent;
                         intent =  new Intent(context, EventDetailsActivity.class);
-                        intent.putExtra("eventId",id);
+                        intent.putExtra("eventId",Integer.parseInt(favouriteEventDatabaseTable.getEventId()));
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
@@ -169,7 +171,7 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
                     .into(allEventVH.eventImage);
 
             // check favourite or not
-            if (myDatabase.favouriteEventDatabaseDao().isAddToCart(allEventResult.getId()) == 1){
+            if (myDatabase.favouriteEventDatabaseDao().addByUserId(userId,allEventResult.getId()) == 1){
                 allEventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
             }else {
                 allEventVH.bLike.setImageResource(R.drawable.ic_un_bookmark);
@@ -178,21 +180,26 @@ public class AdapterAllEventSearch extends RecyclerView.Adapter<RecyclerView.Vie
             allEventVH.bLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    allEventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
-                    FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
-                    favouriteEventDatabaseTable.setId(allEventResult.getId());
-                    favouriteEventDatabaseTable.setImage(allEventResult.getImage());
-                    favouriteEventDatabaseTable.setName(allEventResult.getTitle());
-                    favouriteEventDatabaseTable.setDate(allEventResult.getDate());
-                    favouriteEventDatabaseTable.setLocation(allEventResult.getLocation());
-                    favouriteEventDatabaseTable.setPrice(String.valueOf(allEventResult.getCost()));
-                    favouriteEventDatabaseTable.setHost(String.valueOf(allEventResult.getHost()));
+                    if (isLoggedIn){
+                        allEventVH.bLike.setImageResource(R.drawable.ic_bookmarked);
+                        FavouriteEventDatabaseTable favouriteEventDatabaseTable = new FavouriteEventDatabaseTable();
+                        favouriteEventDatabaseTable.setEventId(String.valueOf(allEventResult.getId()));
+                        favouriteEventDatabaseTable.setImage(allEventResult.getImage());
+                        favouriteEventDatabaseTable.setName(allEventResult.getTitle());
+                        favouriteEventDatabaseTable.setDate(allEventResult.getDate());
+                        favouriteEventDatabaseTable.setUser_id(userId);
+                        favouriteEventDatabaseTable.setLocation(allEventResult.getLocation());
+                        favouriteEventDatabaseTable.setPrice(String.valueOf(allEventResult.getCost()));
+                        favouriteEventDatabaseTable.setHost(String.valueOf(allEventResult.getHost()));
 
-                    if (myDatabase.favouriteEventDatabaseDao().isAddToCart(allEventResult.getId())!=1){
-                        myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
-                        snackBar("Event Bookmarked ",R.color.white);
-                    }else {
-                        snackBar("It Already Bookmarked!",R.color.white);
+                        if (myDatabase.favouriteEventDatabaseDao().addByUserId(userId,allEventResult.getId()) != 1){
+                            myDatabase.favouriteEventDatabaseDao().insert(favouriteEventDatabaseTable);
+                            snackBar("Event Bookmarked ",R.color.white);
+                        }else {
+                            snackBar("It Already Bookmarked!",R.color.white);
+                        }
+                    }else{
+                        snackBar("Sign In Required !!",R.color.white);
                     }
                 }
             });

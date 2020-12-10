@@ -53,6 +53,8 @@ import com.anikrakib.tourday.Activity.ExploreActivity;
 import com.anikrakib.tourday.Activity.LocationActivity;
 import com.anikrakib.tourday.Adapter.Profile.ViewProfilePagerAdapter;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.RoomDatabse.MyDatabase;
+import com.anikrakib.tourday.RoomDatabse.TourDayUserDatabaseTable;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.bumptech.glide.Glide;
@@ -123,6 +125,7 @@ public class MyProfileActivity extends AppCompatActivity{
     CircleImageView userImageInPopUp;
     TextView userBioInPopUp,userFullNameInPopUp;
     SwipeRefreshLayout swipeRefreshLayout;
+    MyDatabase myDatabase;
 
 
 
@@ -163,6 +166,7 @@ public class MyProfileActivity extends AppCompatActivity{
 
         myDialog = new Dialog(this);
         myDialog2 = new Dialog(this);
+        myDatabase = MyDatabase.getInstance(this);
 
         // show current login user all data
         showUserData();
@@ -1048,6 +1052,9 @@ public class MyProfileActivity extends AppCompatActivity{
                                         .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
                                 .transforms(new CenterCrop(),new RoundedCorners(16))
                                 .into(userProfilePic);
+                        // set user info in roomdatabase
+
+                        insertUserInfoInRoomDatabase(jsonObject.getInt("id"),jsonObject.getString("username"));
 
                         /////*     Check SocialMediaLink is null or not   */////
                         if(!(facebookLink.getText().toString().equals("null") || facebookLink.getText().toString().isEmpty())){
@@ -1074,9 +1081,18 @@ public class MyProfileActivity extends AppCompatActivity{
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
-
             }
         });
+    }
+
+    public void insertUserInfoInRoomDatabase(int userId, String userName){
+        TourDayUserDatabaseTable tourDayUserDatabaseTable = new TourDayUserDatabaseTable();
+        tourDayUserDatabaseTable.setId(userId);
+        tourDayUserDatabaseTable.setName(userName);
+
+        if (myDatabase.favouriteEventDatabaseDao().addUser(userId)!=1){
+            myDatabase.favouriteEventDatabaseDao().insert(tourDayUserDatabaseTable);
+        }
     }
 
     //show user bdMap Profile in Popup
