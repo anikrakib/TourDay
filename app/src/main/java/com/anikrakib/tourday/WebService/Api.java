@@ -6,6 +6,7 @@ import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Event.GoingUser;
+import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.Models.Shop.ProductResponse;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.Models.Profile.Token;
@@ -212,6 +213,11 @@ public interface Api {
 
     @GET("going_users/{event_id}")
     Call<List<GoingUser>> getAllGoingUser(
+            @Path("event_id") int userName);
+
+    @GET("event/transactions/{event_id}")
+    Call<List<PendingPayment>> getAllPendingUser(
+            @Header("Authorization") String authToken,
             @Path("event_id") int userName);
 
     @GET("going-events/{username}")

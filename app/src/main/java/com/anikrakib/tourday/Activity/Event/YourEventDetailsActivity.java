@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -54,6 +57,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
     KenBurnsView eventDetailsImage;
     ArrayList<PendingPayment> pendingPayments;
     List<GoingUser> goingUserList;
+    List<PendingPayment> pendingPayment;
     ImageButton backButton;
     AdapterGoingUserEvent adapterGoingUserEvent;
     LinearLayout goingLinearLayout;
@@ -126,7 +130,10 @@ public class YourEventDetailsActivity extends AppCompatActivity {
 
         // goingUser List
         goingUserList = new ArrayList<>();
+        pendingPayment = new ArrayList<>();
         goingUserList(eventId);
+        getPendingList(eventId);
+
 
     }
 
@@ -149,23 +156,51 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                 eventTotalCapacityTextView.setText(String.valueOf(allEventResult.getCapacity()));
                 Picasso.get().load(ApiURL.IMAGE_BASE + allEventResult.getImage()).fit().centerInside().into(eventDetailsImage);
 
-                //pendingUserList
-                ArrayList<Integer> list = (ArrayList<Integer>) allEventResult.getPending();
-                pendingPayments = new ArrayList<>();
-
-                for (int i = 0; i<list.size();i++){
-                    showUserData(list.get(i));
-                }
-
-                adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayments);
-                pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
-                pendingUserRecyclerView.setAdapter(adapterPendingPayment);
+//                //pendingUserList
+//                ArrayList<Integer> list = (ArrayList<Integer>) allEventResult.getPending();
+//                pendingPayments = new ArrayList<>();
+//
+//                for (int i = 0; i<list.size();i++){
+//                    showUserData(list.get(i));
+//                }
+//
+//                adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayments);
+//                pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+//                pendingUserRecyclerView.setAdapter(adapterPendingPayment);
 
             }
 
             @Override
             public void onFailure(@NonNull Call<AllEventResult> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void getPendingList(int eventId){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        pendingPayment = new ArrayList<>();
+        Call<List<PendingPayment>> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getAllPendingUser("Token "+token,eventId);
+        call.enqueue(new Callback<List<PendingPayment>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<PendingPayment>> call, @NonNull Response<List<PendingPayment>> response) {
+                if (response.isSuccessful()) {
+                    pendingPayment = response.body();
+                }else{
+                    Toast.makeText(getApplicationContext(),"Sign In Required",Toast.LENGTH_LONG).show();
+                }
+                adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayment);
+                pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
+                pendingUserRecyclerView.setAdapter(adapterPendingPayment);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<PendingPayment>> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -184,45 +219,12 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                 adapterGoingUserEvent = new AdapterGoingUserEvent(YourEventDetailsActivity.this,goingUserList);
                 goingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false));
                 goingUserRecyclerView.setAdapter(adapterGoingUserEvent);
+
             }
 
             @Override
             public void onFailure(@NonNull Call<List<GoingUser>> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    public void showUserData(int userId){
-
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .getUserInfoByUserId(userId);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    JSONObject jsonObject = null;
-                    try {
-                        assert response.body() != null;
-                        jsonObject = new JSONObject(response.body().string());
-                        JSONObject profile = jsonObject.getJSONObject("profile");
-
-                        pendingPayments.add(new PendingPayment(profile.getString("picture"),profile.getString("name"),profile.getString("email")));
-
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
-
             }
         });
     }
