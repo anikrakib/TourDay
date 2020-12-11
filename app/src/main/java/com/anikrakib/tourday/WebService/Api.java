@@ -267,4 +267,13 @@ public interface Api {
             @Query("limit") int limit,
             @Query("offset") int offSet);
 
+    @FormUrlEncoded
+    @POST("event/transactions/action/{event_id}")
+    Call<ResponseBody> eventPaymentAction(
+            @Path("event_id") Integer eventId,
+            @Header("Authorization") String authToken,
+            @Field("user_id") Integer blogTitle,
+            @Field("tr_id") String transactionID,
+            @Field("action") int action);
+
 }

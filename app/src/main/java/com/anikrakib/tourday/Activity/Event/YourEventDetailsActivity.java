@@ -193,7 +193,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(getApplicationContext(),"Sign In Required",Toast.LENGTH_LONG).show();
                 }
-                adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayment);
+                adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayment,eventTotalPendingTextView,eventTotalGoingTextView);
                 pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
                 pendingUserRecyclerView.setAdapter(adapterPendingPayment);
             }

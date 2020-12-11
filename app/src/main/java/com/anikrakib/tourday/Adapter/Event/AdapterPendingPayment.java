@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Adapter.Event;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.google.android.material.snackbar.Snackbar;
+import com.kishandonga.csbx.CustomSnackbar;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -34,11 +37,15 @@ public class AdapterPendingPayment extends RecyclerView.Adapter<AdapterPendingPa
 
     Context context ;
     List<PendingPayment> mData;
+    TextView eventTotalPendingTextView;
+    TextView eventTotalGoingTextView;
 
 
-    public AdapterPendingPayment(Context context, List<PendingPayment> mData) {
+    public AdapterPendingPayment(Context context, List<PendingPayment> mData, TextView eventTotalPendingTextView, TextView eventTotalGoingTextView) {
         this.context = context;
         this.mData = mData;
+        this.eventTotalPendingTextView = eventTotalPendingTextView;
+        this.eventTotalGoingTextView = eventTotalGoingTextView;
     }
 
 
@@ -58,6 +65,19 @@ public class AdapterPendingPayment extends RecyclerView.Adapter<AdapterPendingPa
 
         showUserData(mData.get(i).getUser(),myViewHolder.pendingUserName,myViewHolder.pendingEmail,myViewHolder.userImage);
 
+        myViewHolder.accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paymentAction(mData.get(i).getEvent(),mData.get(i).getUser(),mData.get(i).getTr(),1,i);
+            }
+        });
+
+        myViewHolder.reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paymentAction(mData.get(i).getEvent(),mData.get(i).getUser(),mData.get(i).getTr(),0,i);
+            }
+        });
     }
 
     @Override
@@ -99,6 +119,7 @@ public class AdapterPendingPayment extends RecyclerView.Adapter<AdapterPendingPa
 
         }
     }
+
     public void showUserData(int userId, TextView pendingUserName, TextView pendingEmail, CircleImageView userImage){
 
         Call<ResponseBody> call = RetrofitClient
@@ -134,5 +155,50 @@ public class AdapterPendingPayment extends RecyclerView.Adapter<AdapterPendingPa
 
             }
         });
+    }
+
+    public void paymentAction(int event, int user, String tr, int action, int position){
+        SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .eventPaymentAction(event,"Token "+token,user,tr,action);
+        call.enqueue(new Callback<ResponseBody>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    mData.remove(position);
+                    notifyItemRemoved(position);
+                    notifyDataSetChanged();
+                    eventTotalPendingTextView.setText(mData.size()+"");
+                    if(action == 1){
+                        int a = Integer.parseInt(eventTotalGoingTextView.getText().toString());
+                        eventTotalGoingTextView.setText((a+1)+"");
+                        snackBar("Accepted",R.color.white);
+                    }else{
+                        snackBar("Rejected",R.color.dark_red);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(context,"Fail!",Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(context);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
     }
 }
