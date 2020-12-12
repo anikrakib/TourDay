@@ -61,7 +61,6 @@ public class YourEventDetailsActivity extends AppCompatActivity {
     TextView eventDetailsTitleTextView,eventLocationTextView,eventTotalGoingTextView,eventTotalPendingTextView,eventTotalCapacityTextView;
     SocialTextView eventDetailsTextView;
     KenBurnsView eventDetailsImage;
-    ArrayList<PendingPayment> pendingPayments;
     List<GoingUser> goingUserList;
     List<PendingPayment> pendingPayment;
     ImageButton backButton,deleteEventButton,bookmarkButton;
@@ -196,9 +195,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<DeleteEventResponse> call, @NonNull Response<DeleteEventResponse> response) {
                 DeleteEventResponse message = response.body();
                 if(response.isSuccessful()){
-
                     DynamicToast.makeSuccess(getApplicationContext(), message.getMessage()).show();
-
                 }else{
                     DynamicToast.makeError(getApplicationContext(), message.getMessage()).show();
                 }
@@ -222,31 +219,24 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<AllEventResult> call, @NonNull Response<AllEventResult> response) {
                 AllEventResult allEventResult = response.body();
 
-                eventDetailsTextView.setLinkText(allEventResult.getDetails());
-                eventDetailsTitleTextView.setText(allEventResult.getTitle());
-                eventLocationTextView.setText(allEventResult.getLocation());
-                eventTotalPendingTextView.setText(String.valueOf(allEventResult.getPending().size()));
-                eventTotalGoingTextView.setText(String.valueOf(allEventResult.getGoing().size()));
-                eventTotalCapacityTextView.setText(String.valueOf(allEventResult.getCapacity()));
-                Picasso.get().load(ApiURL.IMAGE_BASE + allEventResult.getImage()).fit().centerInside().into(eventDetailsImage);
-
-//                //pendingUserList
-//                ArrayList<Integer> list = (ArrayList<Integer>) allEventResult.getPending();
-//                pendingPayments = new ArrayList<>();
-//
-//                for (int i = 0; i<list.size();i++){
-//                    showUserData(list.get(i));
-//                }
-//
-//                adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayments);
-//                pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
-//                pendingUserRecyclerView.setAdapter(adapterPendingPayment);
+                try {
+                    eventDetailsTextView.setLinkText(allEventResult.getDetails());
+                    eventDetailsTitleTextView.setText(allEventResult.getTitle());
+                    eventLocationTextView.setText(allEventResult.getLocation());
+                    eventTotalPendingTextView.setText(String.valueOf(allEventResult.getPending().size()));
+                    eventTotalGoingTextView.setText(String.valueOf(allEventResult.getGoing().size()));
+                    eventTotalCapacityTextView.setText(String.valueOf(allEventResult.getCapacity()));
+                    Picasso.get().load(ApiURL.IMAGE_BASE + allEventResult.getImage()).fit().centerInside().into(eventDetailsImage);
+                }catch (Exception exception){
+                    Toast.makeText(getApplicationContext(),"May be This Event Removed!!",Toast.LENGTH_LONG).show();
+                    finish();
+                }
 
             }
 
             @Override
             public void onFailure(@NonNull Call<AllEventResult> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -265,7 +255,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     pendingPayment = response.body();
                 }else{
-                    Toast.makeText(getApplicationContext(),"Sign In Required",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Sign In Required",Toast.LENGTH_SHORT).show();
                 }
                 adapterPendingPayment = new AdapterPendingPayment(YourEventDetailsActivity.this,pendingPayment,eventTotalPendingTextView,eventTotalGoingTextView);
                 pendingUserRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
@@ -274,7 +264,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<List<PendingPayment>> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -298,7 +288,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<List<GoingUser>> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
