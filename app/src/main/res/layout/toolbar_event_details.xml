@@ -56,6 +56,19 @@
             android:layout_marginEnd="15dp"/>
 
         <ImageButton
+            android:id="@+id/deleteEvent"
+            android:layout_width="30dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/shareEventImageButton"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_baseline_delete_24"
+            app:tint="@color/white"
+            tools:ignore="ContentDescription"
+            android:layout_marginEnd="15dp"
+            android:visibility="gone"/>
+
+        <ImageButton
             android:id="@+id/shareEventImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

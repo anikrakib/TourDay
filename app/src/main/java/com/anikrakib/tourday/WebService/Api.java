@@ -5,6 +5,7 @@ import com.anikrakib.tourday.Models.Blog.AllBlogResponse;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
+import com.anikrakib.tourday.Models.Event.DeleteEventResponse;
 import com.anikrakib.tourday.Models.Event.GoingUser;
 import com.anikrakib.tourday.Models.Event.PendingPayment;
 import com.anikrakib.tourday.Models.Shop.ProductResponse;
@@ -248,6 +249,11 @@ public interface Api {
             @Field("pay2") String pay2,
             @Field("capacity") String blogCapacity,
             @Field("cost") String blogCost);
+
+    @POST("event/delete/{event_id}")
+    Call<DeleteEventResponse> deleteEvent(
+            @Header("Authorization") String authToken,
+            @Path("event_id") int eventId);
 
     @GET("search/user/{search_keyword}")
     Call<SearchResponse> getAllSearchUser(
