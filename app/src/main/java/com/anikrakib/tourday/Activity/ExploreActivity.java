@@ -232,7 +232,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 editor.putString("token","");
                 editor.putString("userName","");
                 editor.putString("userProfilePicture","");
-                editor.putString("id","");
+                editor.putString("id",String.valueOf(0));
                 editor.putString("password","");
                 editor.putString("userFullName","");
                 editor.apply();

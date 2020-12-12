@@ -116,18 +116,22 @@ public class AdapterAllEvent extends RecyclerView.Adapter<RecyclerView.ViewHolde
         eventVH.linearLayOutEventItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Integer.parseInt(userId) == result.getHost()){
-                    Intent intent;
-                    intent =  new Intent(context, YourEventDetailsActivity.class);
-                    intent.putExtra("eventId",result.getId());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                }else{
-                    Intent intent;
-                    intent =  new Intent(context, EventDetailsActivity.class);
-                    intent.putExtra("eventId",result.getId());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                try{
+                    if(Integer.parseInt(userId) == result.getHost()){
+                        Intent intent;
+                        intent =  new Intent(context, YourEventDetailsActivity.class);
+                        intent.putExtra("eventId",result.getId());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }else{
+                        Intent intent;
+                        intent =  new Intent(context, EventDetailsActivity.class);
+                        intent.putExtra("eventId",result.getId());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                } catch(NumberFormatException ex){
+                    snackBar(ex.getMessage(),R.color.dark_red);
                 }
             }
         });

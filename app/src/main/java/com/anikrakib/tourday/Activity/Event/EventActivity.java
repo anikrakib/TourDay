@@ -53,6 +53,7 @@ import com.anikrakib.tourday.Adapter.Event.ViewEventPagerAdapter;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.Utils.PaginationScrollListener;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -61,6 +62,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.marozzi.roundbutton.RoundButton;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -70,6 +72,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -107,6 +110,8 @@ public class EventActivity extends AppCompatActivity {
     private static int TOTAL_PAGES_ALL_EVENT;
     private int currentOffset = OFFSET;
     String userName;
+    boolean isLoggedIn;
+    SharedPreferences userPref;
 
 
     @Override
@@ -129,6 +134,8 @@ public class EventActivity extends AppCompatActivity {
         favouriteItemImageButton =  findViewById(R.id.favouriteItemImageButton);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goingEventRecyclerView);
 
+        userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+
 
         adapterGoingEvent = new AdapterGoingEvent(getApplicationContext());
         recyclerView.setHasFixedSize(true);
@@ -136,6 +143,47 @@ public class EventActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapterGoingEvent);
+
+        SharedPreferences userPref = Objects.requireNonNull(getApplicationContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+        userName = userPref.getString("userName","");
+        isLoggedIn = userPref.getBoolean("isLoggedIn",false);
+
+        myDialog = new Dialog(this);
+        mDialog = new Dialog(this);
+        resources= getResources();
+        paymentType = resources.getStringArray(R.array.paymentType);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        /////*     initialize ViewPager   */////
+        viewEventPagerAdapter = new ViewEventPagerAdapter(getSupportFragmentManager());
+
+        /////*     add adapter to ViewPager  */////
+        viewPagerEvent.setAdapter(viewEventPagerAdapter);
+        tabLayoutEvent = (TabLayout) findViewById(R.id.slidingTabsEventActivity);
+        tabLayoutEvent.setupWithViewPager(viewPagerEvent);
+        tabLayoutEvent.setTabRippleColor(null);
+
+        if(!isLoggedIn) createEvent.setVisibility(View.GONE);
+
+        /*     on click listener   */
+        createEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createEventPopUp();
+            }
+        });
+        profileBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        favouriteItemImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), FavouriteActivity.class));
+            }
+        });
 
         recyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
             @Override
@@ -172,45 +220,6 @@ public class EventActivity extends AppCompatActivity {
                     recyclerView.setVisibility(View.GONE);
                     viewAllEvent.setText("View All");
                 }
-            }
-        });
-
-        SharedPreferences userPref = Objects.requireNonNull(getApplicationContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
-        userName = userPref.getString("userName","");
-
-        myDialog = new Dialog(this);
-        mDialog = new Dialog(this);
-        resources= getResources();
-        paymentType = resources.getStringArray(R.array.paymentType);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        /////*     initialize ViewPager   */////
-        viewEventPagerAdapter = new ViewEventPagerAdapter(getSupportFragmentManager());
-
-        /////*     add adapter to ViewPager  */////
-        viewPagerEvent.setAdapter(viewEventPagerAdapter);
-        tabLayoutEvent = (TabLayout) findViewById(R.id.slidingTabsEventActivity);
-        tabLayoutEvent.setupWithViewPager(viewPagerEvent);
-        tabLayoutEvent.setTabRippleColor(null);
-
-
-        /*     on click listener   */
-        createEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createEventPopUp();
-            }
-        });
-        profileBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        favouriteItemImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), FavouriteActivity.class));
             }
         });
 
@@ -288,6 +297,7 @@ public class EventActivity extends AppCompatActivity {
         final ConstraintLayout createEventLayout;
         Spinner paymentTypeSpinner1,paymentTypeSpinner2;
         RoundButton createEventButton;
+        CircleImageView userImage;
 
         myDialog.setContentView(R.layout.create_event);
         postCloseButton = myDialog.findViewById(R.id.createEventCloseButton);
@@ -305,6 +315,7 @@ public class EventActivity extends AppCompatActivity {
         eventDate = myDialog.findViewById(R.id.eventStartDate);
         createEventButton = myDialog.findViewById(R.id.uploadButton);
         cost = myDialog.findViewById(R.id.eventCost);
+        userImage = myDialog.findViewById(R.id.popup_user_image);
 
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
         bottom_to_top = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top);
@@ -316,6 +327,7 @@ public class EventActivity extends AppCompatActivity {
 
         // Retrieve and set Event Title and Description from SharedPreferences when again open CreateEvent PopUp
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String userProfilePicture = userPref.getString("userProfilePicture","");
         String eventTitle = sharedPreferences.getString("eventTitle","");
         String eventDescription = sharedPreferences.getString("eventDescription","");
 
@@ -324,7 +336,7 @@ public class EventActivity extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedDate = df.format(date);
         eventDate.setText(formattedDate);
-
+        Picasso.get().load(ApiURL.IMAGE_BASE+userProfilePicture).into(userImage);
         eventPopUpTitle.setText(eventTitle);
         eventPopUpDescription.setText(eventDescription);
 
@@ -332,9 +344,7 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Save Event Title and Description in SharedPreferences when close CreateEvent PopUp
-
                 createEventLayout.startAnimation(bottom_to_top);
-
 
                 eventTitleSave[0] = eventPopUpTitle.getText().toString();
                 eventDescriptionSave[0] = eventPopUpDescription.getText().toString();
@@ -428,7 +438,6 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void createEvent(String blogTitle, String blogLocation, String blogDate, String blogDetails, String blogPay1, String blogPay1Method, String blogPay2, String blogPay2Method, String blogCapacity, String blogCost){
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String token = userPref.getString("token","");
 
         Call<ResponseBody> call = RetrofitClient

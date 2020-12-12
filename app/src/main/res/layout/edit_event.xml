@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:numberpicker="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/createEventLayout"
+        android:background="@drawable/dialog_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_margin="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/popup_user_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                app:civ_border_color="@color/color_primary_text"
+                android:src="@color/color_primary_text"
+                app:civ_border_width="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/createEventCloseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_baseline_close_24"
+                app:tint="@color/color_primary_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:textColor="@color/color_primary_text"
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/enter_event_title"
+            android:paddingStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout2"
+            tools:ignore="RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/popupEventTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/popup_create_post_and_event_edittext_style"
+            android:ems="10"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            tools:ignore="Autofill,LabelFor" />
+
+        <TextView
+            android:textColor="@color/color_primary_text"
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_event_description"
+            android:paddingStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/popupEventTitle"
+            tools:ignore="RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/popupEventDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/popup_create_post_and_event_edittext_style"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:maxLines="10"
+            android:minLines="6"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:scrollbars="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            tools:ignore="Autofill,LabelFor,RtlHardcoded" />
+
+        <LinearLayout
+            android:id="@+id/eventDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/popupEventDescription">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_date_range_black_24dp"
+                    app:tint="@color/color_primary_text"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/event_date"
+                    android:textColor="@color/color_primary_text"
+                    android:textStyle="bold"
+                    tools:ignore="RtlSymmetry" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/eventStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@null"
+                android:paddingLeft="3dp"
+                android:paddingTop="1dp"
+                android:paddingRight="3dp"
+                android:text="29/07/2020"
+                android:textColor="@color/color_secondary_text"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/moreAboutRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/eventDate"
+            tools:layout_editor_absoluteX="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="More About Event"
+                android:textColor="@color/color_primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/upDownMoreLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_down"
+                app:tint="@color/color_primary_text"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/eventMoreLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/moreAboutRelativeLayout"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/linearLayout14"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventDate">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cost"
+                        android:textColor="@color/color_primary_text"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                    <LinearLayout
+                        android:id="@+id/eventPrice"
+                        android:layout_width="150dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/primary_background"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/eventImage"
+                        app:layout_constraintTop_toBottomOf="@+id/eventDateLayout">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/taka"
+                            app:tint="@color/colorPrimary"
+                            tools:ignore="ContentDescription" />
+
+                        <EditText
+                            android:id="@+id/eventCost"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@null"
+                            android:paddingStart="3dp"
+                            android:paddingTop="1dp"
+                            android:text="1000"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:ignore="Autofill,HardcodedText,RtlSymmetry" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Capacity"
+                        android:textColor="@color/color_primary_text"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                    <include layout="@layout/number_picker_custom_layout" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/paymentDetails"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout14">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingStart="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+                    tools:ignore="RtlSymmetry">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:paddingStart="3dp"
+                        android:paddingTop="1dp"
+                        android:text="Payment Method"
+                        android:textColor="@color/color_primary_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                    <Spinner
+                        android:id="@+id/paymentTypeSpinner1"
+                        android:layout_width="100dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/primary_background"
+                        android:popupBackground="@drawable/primary_background"
+                        android:spinnerMode="dropdown"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:listitem="@layout/custom_spinner_item" />
+
+                    <Spinner
+                        android:id="@+id/paymentTypeSpinner2"
+                        android:layout_width="100dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/primary_background"
+                        android:popupBackground="@drawable/primary_background"
+                        android:spinnerMode="dropdown"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:listitem="@layout/custom_spinner_item" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/linearLayout5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+                    app:layout_constraintTop_toTopOf="@+id/linearLayout5">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:background="@null"
+                        android:paddingStart="3dp"
+                        android:text="Account No"
+                        android:textColor="@color/color_primary_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText,RtlSymmetry" />
+
+                    <EditText
+                        android:id="@+id/numberEditText1"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_margin="2dp"
+                        android:background="@drawable/primary_background"
+                        android:gravity="center"
+                        android:hint="Enter Number"
+                        android:inputType="number"
+                        android:paddingStart="3dp"
+                        android:paddingTop="1dp"
+                        android:singleLine="true"
+                        android:textColor="#0B0B0B"
+                        android:textColorHint="@color/grayColor"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:ignore="Autofill,HardcodedText,RtlSymmetry,TextFields" />
+
+                    <EditText
+                        android:id="@+id/numberEditText2"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="7dp"
+                        android:background="@drawable/primary_background"
+                        android:gravity="center"
+                        android:hint="Enter Number"
+                        android:inputType="number"
+                        android:paddingStart="3dp"
+                        android:paddingTop="1dp"
+                        android:singleLine="true"
+                        android:textColor="#0B0B0B"
+                        android:textColorHint="@color/grayColor"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:ignore="Autofill,HardcodedText,RtlSymmetry,TextFields" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/eventImageRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/eventMoreLayout"
+            tools:layout_editor_absoluteX="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Event Image"
+                android:textColor="@color/color_primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/upDownMoreEventImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_down"
+                app:tint="@color/color_primary_text"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/eventLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/eventDate"
+            app:layout_constraintEnd_toStartOf="@+id/eventDate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/popupEventDescription">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:src="@drawable/ic_baseline_location_on_24"
+                app:tint="@color/color_primary_text"
+                tools:ignore="ContentDescription,RtlHardcoded" />
+
+            <EditText
+                android:id="@+id/createEventLocationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:ems="10"
+                android:hint="Event Location"
+                android:paddingStart="5dp"
+                android:singleLine="true"
+                android:textColor="@color/color_primary_text"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="Autofill,HardcodedText,RtlSymmetry,TextFields" />
+
+        </LinearLayout>
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/eventImage"
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventImageRelativeLayout"
+            app:riv_corner_radius="15dp" />
+
+        <com.marozzi.roundbutton.RoundButton
+            android:id="@+id/updateButton"
+            android:layout_width="88dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="Update Event"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventImage"
+            app:rb_animation_alpha="false"
+            app:rb_animation_corner_radius="6dp"
+            app:rb_animation_duration="500"
+            app:rb_animation_progress_color="@color/colorAccent"
+            app:rb_animation_progress_padding="8dp"
+            app:rb_animation_progress_width="2dp"
+            app:rb_background_color="@android:color/transparent"
+            app:rb_background_color_pressed="@color/color_primary_text"
+            app:rb_corner_color="@color/color_primary_text"
+            app:rb_corner_color_pressed="@color/color_primary_text"
+            app:rb_corner_radius="6dp"
+            app:rb_corner_width="1dp"
+            app:rb_text_color="@color/color_primary_text"
+            app:rb_text_color_pressed="@color/colorPrimary"
+            tools:ignore="HardcodedText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>
