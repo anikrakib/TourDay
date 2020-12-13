@@ -5,22 +5,27 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -28,6 +33,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -40,9 +46,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Activity.Blog.YourBlogDetailsActivity;
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingUserEvent;
 import com.anikrakib.tourday.Adapter.Event.AdapterPendingPayment;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
+import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Event.DeleteEventResponse;
 import com.anikrakib.tourday.Models.Event.GoingUser;
@@ -61,15 +69,24 @@ import com.tylersuehr.socialtextview.SocialTextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,11 +109,16 @@ public class YourEventDetailsActivity extends AppCompatActivity {
     Dialog myDialog,mDialog;
     SharedPreferences userPref;
     EditText capacity,cost,accountNumber1,accountNumber2,editTextLocation,eventPopUpTitle,eventPopUpDescription;
-    String eventDateString,eventUrl,account1,account2;
+    String eventDateString,eventUrl,account1,account2,paymentType1String,paymentType2String;
     TextView eventDate;
     String[] paymentType;
     Resources resources;
     FloatingActionButton editEvent;
+    InputStream blogPostInputStream;
+    private static final int INTENT_REQUEST_CODE = 100;
+    Uri selectedImage;
+    RoundedImageView eventImage;
+
 
 
 
@@ -144,7 +166,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         eventId = bundle.getInt("eventId");
 
         //set Data
-        getEventAllDate();
+        getEventAllData();
 
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -210,8 +232,8 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         CircleImageView userImage;
         RelativeLayout moreAboutEvent,eventImageLayout;
         LinearLayout eventMoreLayout;
-        RoundedImageView eventImage;
         ImageView upDownMore1,upDownMore2;
+        TextView paymentType1,paymentType2;
 
         myDialog.setContentView(R.layout.edit_event);
         postCloseButton = myDialog.findViewById(R.id.createEventCloseButton);
@@ -236,6 +258,8 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         eventImage = myDialog.findViewById(R.id.eventImage);
         upDownMore1 = myDialog.findViewById(R.id.upDownMoreLayout);
         upDownMore2 = myDialog.findViewById(R.id.upDownMoreEventImage);
+        paymentType1 = myDialog.findViewById(R.id.paymentType1);
+        paymentType2 = myDialog.findViewById(R.id.paymentType2);
 
         top_to_bottom = AnimationUtils.loadAnimation(this, R.anim.top_to_bottom);
         bottom_to_top = AnimationUtils.loadAnimation(this, R.anim.bottom_to_top);
@@ -257,7 +281,12 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         cost.setText(String.valueOf(eventCost));
         capacity.setText(eventTotalCapacityTextView.getText().toString());
         accountNumber1.setText(account1);
-        accountNumber1.setText(account2);
+        accountNumber2.setText(account2);
+        paymentType1.setText(paymentType1String);
+        paymentType2.setText(paymentType2String);
+
+        //getImageFromUrl(ApiURL.IMAGE_BASE+eventUrl);
+
 
         postCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,6 +295,39 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                 createEventLayout.startAnimation(bottom_to_top);
                 handlerForCustomDialog();
             }
+        });
+
+        paymentType1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paymentTypeSpinner1.setVisibility(View.VISIBLE);
+                paymentTypeSpinner2.setVisibility(View.GONE);
+            }
+        });
+
+        paymentType2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paymentTypeSpinner2.setVisibility(View.VISIBLE);
+                paymentTypeSpinner1.setVisibility(View.GONE);
+            }
+        });
+
+        paymentTypeSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+                paymentType1.setText(paymentTypeSpinner1.getSelectedItem().toString());
+                paymentTypeSpinner1.setVisibility(View.GONE);
+            }
+            public void onNothingSelected(AdapterView<?> arg0) { }
+        });
+
+        paymentTypeSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+                paymentType2.setText(paymentTypeSpinner2.getSelectedItem().toString());
+            }
+            public void onNothingSelected(AdapterView<?> arg0) { }
         });
 
         moreAboutEvent.setOnClickListener(new View.OnClickListener() {
@@ -312,10 +374,42 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             }
         });
 
+        eventImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ActivityCompat.checkSelfPermission(YourEventDetailsActivity.this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                    Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, 100);
+                } else {
+                    ActivityCompat.requestPermissions(YourEventDetailsActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 44);
+                }
+
+            }
+        });
+
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (blogPostInputStream == null)
+                {
+                    updateEventWithoutImage(eventPopUpDescription.getText().toString(),
+                            eventPopUpTitle.getText().toString(),eventDate.getText().toString(),editTextLocation.getText().toString(),
+                            cost.getText().toString(),capacity.getText().toString(),paymentType1.getText().toString(),
+                            accountNumber1.getText().toString(),paymentType2.getText().toString(),accountNumber2.getText().toString());
+                }
+                else
+                {
+                    try {
+                        updateEvent(getBytes(blogPostInputStream),eventPopUpDescription.getText().toString(),
+                                eventPopUpTitle.getText().toString(),eventDate.getText().toString(),editTextLocation.getText().toString(),
+                                cost.getText().toString(),capacity.getText().toString(),paymentType1.getText().toString(),
+                                accountNumber1.getText().toString(),paymentType2.getText().toString(),accountNumber2.getText().toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -344,6 +438,158 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.setCancelable(false);
         myDialog.show();
+    }
+
+    private void updateEventWithoutImage(String description, String title, String date, String location, String cost, String capacity, String pay1Method, String pay1Number, String pay2Method, String pay2Number) {
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+
+        //File file = new File(bitmapToString(bitmap));
+
+        RequestBody descriptionRB = RequestBody.create(MediaType.parse("text/plain"),description );
+        RequestBody locationRb = RequestBody.create(MediaType.parse("text/plain"),location );
+        RequestBody titleRb = RequestBody.create(MediaType.parse("text/plain"),title );
+        RequestBody dateRb = RequestBody.create(MediaType.parse("text/plain"),date );
+        RequestBody costRb = RequestBody.create(MediaType.parse("text/plain"),cost );
+        RequestBody capacityRb = RequestBody.create(MediaType.parse("text/plain"),capacity );
+        RequestBody pay1MethodRb = RequestBody.create(MediaType.parse("text/plain"),pay1Method );
+        RequestBody pay1NumbRb = RequestBody.create(MediaType.parse("text/plain"),pay1Number );
+        RequestBody pay2MethodRb = RequestBody.create(MediaType.parse("text/plain"),pay2Method );
+        RequestBody pay2NumbRb = RequestBody.create(MediaType.parse("text/plain"),pay2Number );
+
+
+        HashMap<String,RequestBody> map = new HashMap<>();
+        map.put("title",titleRb);
+        map.put("location",locationRb);
+        map.put("date",dateRb);
+        map.put("details",descriptionRB);
+        map.put("pay1",pay1NumbRb);
+        map.put("pay1_method",pay1MethodRb);
+        map.put("pay2",pay2NumbRb);
+        map.put("pay2_method",pay2MethodRb);
+        map.put("capacity",capacityRb);
+        map.put("cost",costRb);
+
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .editEvent("Token "+token,eventId,map);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    DynamicToast.makeSuccess(getApplicationContext(), "Event Updated").show();
+                    getEventAllData();
+                    myDialog.dismiss();
+                } else {
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong").show();
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    public void updateEvent(byte[] imageBytes,String description, String title, String date, String location, String cost, String capacity, String pay1Method, String pay1Number, String pay2Method, String pay2Number){
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        String token = userPref.getString("token","");
+
+        //File file = new File(bitmapToString(bitmap));
+
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), imageBytes);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image.jpg", reqFile);
+        RequestBody descriptionRB = RequestBody.create(MediaType.parse("text/plain"),description );
+        RequestBody locationRb = RequestBody.create(MediaType.parse("text/plain"),location );
+        RequestBody titleRb = RequestBody.create(MediaType.parse("text/plain"),title );
+        RequestBody dateRb = RequestBody.create(MediaType.parse("text/plain"),date );
+        RequestBody costRb = RequestBody.create(MediaType.parse("text/plain"),cost );
+        RequestBody capacityRb = RequestBody.create(MediaType.parse("text/plain"),capacity );
+        RequestBody pay1MethodRb = RequestBody.create(MediaType.parse("text/plain"),pay1Method );
+        RequestBody pay1NumbRb = RequestBody.create(MediaType.parse("text/plain"),pay1Number );
+        RequestBody pay2MethodRb = RequestBody.create(MediaType.parse("text/plain"),pay2Method );
+        RequestBody pay2NumbRb = RequestBody.create(MediaType.parse("text/plain"),pay2Number );
+
+
+        HashMap<String,RequestBody> map = new HashMap<>();
+        map.put("title",titleRb);
+        map.put("location",locationRb);
+        map.put("date",dateRb);
+        map.put("details",descriptionRB);
+        map.put("pay1",pay1NumbRb);
+        map.put("pay1_method",pay1MethodRb);
+        map.put("pay2",pay2NumbRb);
+        map.put("pay2_method",pay2MethodRb);
+        map.put("capacity",capacityRb);
+        map.put("cost",costRb);
+
+
+        Call<ResponseBody> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .editEvent("Token "+token,eventId,map,body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    DynamicToast.makeSuccess(getApplicationContext(), "Event Updated").show();
+                    getEventAllData();
+                    myDialog.dismiss();
+                } else {
+                    DynamicToast.makeError(getApplicationContext(), "Something Wrong").show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+//    // set bytes in InputStream
+    public byte[] getBytes(InputStream is) throws IOException {
+        ByteArrayOutputStream byteBuff = new ByteArrayOutputStream();
+
+        int buffSize = 1024;
+        byte[] buff = new byte[buffSize];
+
+        int len = 0;
+        while ((len = is.read(buff)) != -1) {
+            byteBuff.write(buff, 0, len);
+        }
+
+        return byteBuff.toByteArray();
+    }
+
+    private byte[] getImageFromUrl(String url) {
+
+        try {
+
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+
+            InputStream is = ucon.getInputStream();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int read = 0;
+
+            while ((read = is.read(buffer, 0, buffer.length)) != -1) {
+                baos.write(buffer, 0, read);
+            }
+
+            baos.flush();
+
+            return  baos.toByteArray();
+
+        } catch (Exception e) {
+            Log.d("ImageManager", "Error: " + e.toString());
+        }
+
+        return null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -433,7 +679,7 @@ public class YourEventDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void getEventAllDate() {
+    private void getEventAllData() {
         Call<AllEventResult> resultCall = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -447,8 +693,11 @@ public class YourEventDetailsActivity extends AppCompatActivity {
                 try {
                     eventDateString = allEventResult.getDate();
                     eventCost = allEventResult.getCost();
-                    account1 = allEventResult.getPay1Method();
-                    account2 = allEventResult.getPay2Method();
+                    account1 = allEventResult.getPay1();
+                    account2 = allEventResult.getPay2();
+                    paymentType1String = allEventResult.getPay1Method();
+                    paymentType2String = allEventResult.getPay2Method();
+                    account2 = allEventResult.getPay2();
                     eventUrl = allEventResult.getImage();
 
                     eventDetailsTextView.setLinkText(allEventResult.getDetails());
@@ -523,6 +772,24 @@ public class YourEventDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == INTENT_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                selectedImage = data.getData();
+                try {
+                    blogPostInputStream = getContentResolver().openInputStream(data.getData());
+                    eventImage.setImageURI(selectedImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     public static void setWindowFlag(Activity activity, final int bits, boolean on) {
         Window window = activity.getWindow();

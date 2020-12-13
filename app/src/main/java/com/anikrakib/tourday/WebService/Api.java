@@ -250,6 +250,21 @@ public interface Api {
             @Field("capacity") String blogCapacity,
             @Field("cost") String blogCost);
 
+    @Multipart
+    @POST("edit_event/{event_id}")
+    Call<ResponseBody> editEvent(
+            @Header("Authorization") String authToken,
+            @Path("event_id") int eventId,
+            @PartMap Map<String, RequestBody> map,
+            @Part MultipartBody.Part image);
+
+    @Multipart
+    @POST("edit_event/{event_id}")
+    Call<ResponseBody> editEvent(
+            @Header("Authorization") String authToken,
+            @Path("event_id") int eventId,
+            @PartMap Map<String, RequestBody> map);
+
     @POST("event/delete/{event_id}")
     Call<DeleteEventResponse> deleteEvent(
             @Header("Authorization") String authToken,

@@ -437,13 +437,13 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
-    public void createEvent(String blogTitle, String blogLocation, String blogDate, String blogDetails, String blogPay1, String blogPay1Method, String blogPay2, String blogPay2Method, String blogCapacity, String blogCost){
+    public void createEvent(String blogTitle, String blogLocation, String blogDate, String blogDetails, String blogPay1Method, String blogPay1, String blogPay2Method, String blogPay2, String blogCapacity, String blogCost){
         String token = userPref.getString("token","");
 
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
-                .createEvent("Token "+token,blogTitle,blogLocation,blogDate,blogDetails,blogPay1,blogPay1Method,blogPay2,blogPay2Method,blogCapacity,blogCost);
+                .createEvent("Token "+token,blogTitle,blogLocation,blogDate,blogDetails,blogPay1Method,blogPay1,blogPay2Method,blogPay2,blogCapacity,blogCost);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
