@@ -35,6 +35,7 @@ import com.anikrakib.tourday.Activity.Blog.BlogActivity;
 import com.anikrakib.tourday.Activity.Event.EventActivity;
 import com.anikrakib.tourday.Activity.Profile.ChangePasswordActivity;
 import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
+import com.anikrakib.tourday.Activity.Shop.ShopActivity;
 import com.anikrakib.tourday.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -163,7 +164,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
                 showPopup();
                 break;
             case R.id.ecom:
-                Toast.makeText(getApplicationContext(),"E commerce Comming Soon...",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(ExploreActivity.this, ShopActivity.class));
                 break;
             case R.id.bdmap:
                 startActivity(new Intent(ExploreActivity.this, BDMapViewActivity.class));

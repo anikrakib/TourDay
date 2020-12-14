@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".Activity.FavouriteActivity"></activity>
+        <activity android:name=".Activity.Shop.ShopActivity" />
+        <activity android:name=".Activity.FavouriteActivity" />
         <activity android:name=".Activity.Shop.ProductDetails" />
         <activity android:name=".Activity.SearchAllActivity" />
         <activity android:name=".Activity.SearchActivity" />

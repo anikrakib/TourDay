@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    tools:ignore="HardcodedText,UseCompoundDrawables"
+    android:background="@drawable/custom_bottom_app_bar_background"
+    android:baselineAligned="false">
+
+        <LinearLayout
+            android:id="@+id/homeLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables"
+            android:focusable="true"
+            android:focusedByDefault="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/homeIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/home"
+                tools:ignore="ContentDescription"
+                app:tint="#BDC3D2"/>
+
+            <TextView
+                android:id="@+id/homeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="#BDC3D2"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/wishListLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables"
+            android:focusable="true"
+            android:focusedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/wishListIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_unlike"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/wishListText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wish List"
+                android:textColor="#BDC3D2"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables"/>
+
+        <LinearLayout
+            android:id="@+id/myCartLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables"
+            android:focusable="true"
+            android:focusedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/catIcon"
+                android:layout_width="26dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="3dp"
+                android:src="@drawable/ic_cart"
+                tools:ignore="ContentDescription"
+                app:tint="#BDC3D2"/>
+
+            <TextView
+                android:id="@+id/myCartText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Cart"
+                android:textColor="#BDC3D2"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/myOrderLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables"
+            android:focusable="true"
+            android:focusedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/myOrderIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_basket"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/myOrderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Order"
+                android:textColor="#BDC3D2"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        </LinearLayout>
+
+</LinearLayout>

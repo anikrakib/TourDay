@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@android:color/transparent">
+
+        <!--  back  -->
+        <ImageButton
+            android:id="@+id/profileBackButton"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:layout_height="wrap_content"
+            app:tint="@color/color_primary_text"
+            tools:ignore="ContentDescription" />
+
+        <!--  Title icon  -->
+        <!--  Title Toolbar  -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:ignore="RelativeOverlap,UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ecom"
+                    tools:ignore="ContentDescription"
+                    android:layout_marginEnd="10dp"
+                    app:tint="@color/color_primary_text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Shop"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_primary_text"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/filter"
+            android:src="@drawable/ic_filter"
+            android:layout_alignEnd="@id/cart"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            app:tint="@color/color_primary_text"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription" />
+
+        <!-- Check Done   -->
+        <ImageButton
+            android:id="@+id/cart"
+            android:src="@drawable/ic_cart"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            app:tint="@color/color_primary_text"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription" />
+
+        <include
+            layout="@layout/counter_menuitem_layout"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_centerVertical="true"
+            android:layout_height="40dp" />
+
+</RelativeLayout>

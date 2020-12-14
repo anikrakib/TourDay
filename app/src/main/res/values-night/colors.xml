@@ -16,6 +16,7 @@
     <color name="whiteColor">#FAF8F8</color>
     <color name="color_primary_text">#FFFFFF</color>
     <color name="color_secondary_text">#6C6D6E</color>
+    <color name="iconColor">#BDC3D2</color>
     <color name="color_third_text">#393648</color>
     <color name="whiteIcon">#FFFFFF</color>
     <color name="cameraIcon">#000000</color>

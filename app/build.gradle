@@ -48,7 +48,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
+    // material design
     implementation 'com.google.android.material:material:1.3.0-alpha04'
+    implementation 'com.google.android.material:material:1.1.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:23.0.1'
     //noinspection GradleCompatible
