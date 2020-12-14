@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,21 +17,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Adapter.Shop.CategoryItemAdapter;
 import com.anikrakib.tourday.Fragment.Shop.ShopHomeFragment;
 import com.anikrakib.tourday.Fragment.Shop.WishListFragment;
+import com.anikrakib.tourday.Models.Shop.CategoryListItem;
 import com.anikrakib.tourday.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShopActivity extends AppCompatActivity {
     ImageView homeIcon,wishListIcon,cartIcon,orderIcon;
     TextView homeText,wishListText,myCartText,myOrderText;
     LinearLayout homeLayout,wishLayout,cartLayout,orderLayout;
     ImageView categoryView;
+    ImageButton backButton,filter;
+    RecyclerView categoryRecyclerView;
+    List<CategoryListItem> categoryListItems;
+    CategoryItemAdapter categoryItemAdapter;
 
     public static Fragment homeFragment,wishListFragment,active;
     public static FragmentManager fm = null;
@@ -53,6 +65,8 @@ public class ShopActivity extends AppCompatActivity {
         cartLayout = findViewById(R.id.myCartLayout);
         orderLayout = findViewById(R.id.myOrderLayout);
         categoryView = findViewById(R.id.categoryImageIcon);
+        backButton = findViewById(R.id.shopBackButton);
+        filter = findViewById(R.id.filter);
 
         homeText.setTextColor(Color.rgb(255, 115, 70));
         homeText.setTextSize(15);
@@ -176,12 +190,47 @@ public class ShopActivity extends AppCompatActivity {
                 );
                 View bottomSheetView = LayoutInflater.from(getApplicationContext())
                         .inflate(R.layout.bottom_sheet_layout,findViewById(R.id.bottomSheetContainer));
+
+                categoryRecyclerView = bottomSheetView.findViewById(R.id.categoryRecyclerView);
+                categoryRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),3));
+//
+                //Toast.makeText(getApplicationContext(),"Toast",Toast.LENGTH_SHORT).show();
+                categoryListItems = new ArrayList<>();
+                categoryListItems.add(new CategoryListItem(R.drawable.bag_icon,"Bag"));
+                categoryListItems.add(new CategoryListItem(R.drawable.sunglass,"Sun Glass"));
+                categoryListItems.add(new CategoryListItem(R.drawable.headphone,"Headphone"));
+                categoryListItems.add(new CategoryListItem(R.drawable.gadget,"Gadget Accessories"));
+                categoryListItems.add(new CategoryListItem(R.drawable.t_shirt,"T Shirt"));
+                categoryListItems.add(new CategoryListItem(R.drawable.cap,"Cap"));
+                categoryListItems.add(new CategoryListItem(R.drawable.sneaker,"Shoes"));
+
+                categoryItemAdapter = new CategoryItemAdapter(getApplicationContext(),categoryListItems);
+
+                categoryRecyclerView.setAdapter(categoryItemAdapter);
+//
                 //((View)bottomSheetView.getParent()).setBackgroundColor(Color.TRANSPARENT);
                 bottomSheetDialog.setContentView(bottomSheetView);
                 bottomSheetDialog.show();
             }
         });
 
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAllCategory();
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+    }
+
+    private void getAllCategory() {
     }
 
     public static void setWindowFlag(Activity activity, final int bits, boolean on) {

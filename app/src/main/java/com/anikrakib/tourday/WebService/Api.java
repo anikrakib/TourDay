@@ -187,7 +187,8 @@ public interface Api {
             @Part MultipartBody.Part image);
 
     @GET("blog/details/{post_id}")
-    Call<ResponseBody> getPostDetails(@Path("post_id") int postId);
+    Call<ResponseBody> getPostDetails(
+            @Path("post_id") int postId);
 
     @GET("blog/query?")
     Call<AllBlogResponse> getAllSearchBlog(
@@ -296,5 +297,8 @@ public interface Api {
             @Field("user_id") Integer blogTitle,
             @Field("tr_id") String transactionID,
             @Field("action") int action);
+
+    @GET("shop/allcategory/")
+    Call<ResponseBody> getAllCategory();
 
 }
