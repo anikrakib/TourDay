@@ -12,6 +12,7 @@ import com.anikrakib.tourday.Models.Shop.ProductResponse;
 import com.anikrakib.tourday.Models.Profile.EventPayment;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.Models.Blog.UpdateBlogRequest;
+import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.Models.Shop.SearchResponse;
 
 import java.util.List;
@@ -300,5 +301,13 @@ public interface Api {
 
     @GET("shop/allcategory/")
     Call<ResponseBody> getAllCategory();
+
+    @GET("shop/allproduct/")
+    Call<ProductResponse> getAllProduct(
+            @Query("page") int pageNumber);
+
+    @GET("shop/product/details/{product_id}")
+    Call<ProductResult> getProductView(
+            @Path("product_id") int productId);
 
 }

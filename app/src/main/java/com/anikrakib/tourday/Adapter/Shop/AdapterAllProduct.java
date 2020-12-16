@@ -1,4 +1,4 @@
-package com.anikrakib.tourday.Adapter.Search;
+package com.anikrakib.tourday.Adapter.Shop;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.anikrakib.tourday.Activity.Blog.YourBlogDetailsActivity;
 import com.anikrakib.tourday.Activity.Shop.ProductDetails;
 import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
@@ -28,7 +27,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterAllProduct extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // View Types
     private static final int ITEM = 0;
@@ -44,7 +43,7 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
 
     private String errorMsg;
 
-    public AdapterAllProductSearch(Context context) {
+    public AdapterAllProduct(Context context) {
         this.context = context;
         productResults = new ArrayList<>();
     }
@@ -63,7 +62,7 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        View viewItem = inflater.inflate(R.layout.list_shop_product_search_item, parent, false);
+        View viewItem = inflater.inflate(R.layout.list_item_all_product, parent, false);
         viewHolder = new ProductVH(viewItem);
 
         return viewHolder;
@@ -108,7 +107,7 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
 
     protected static class ProductVH extends RecyclerView.ViewHolder {
         ImageView productImage;
-        TextView productName,productPrice,addToCart,buyNow,productStockOrNot;
+        TextView productName,productPrice,productStockOrNot;
         CardView productLayout;
 
         public ProductVH(View itemView) {
@@ -116,8 +115,6 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
             productImage = itemView.findViewById(R.id.productImage);
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
-            addToCart = itemView.findViewById(R.id.addToCart);
-            buyNow = itemView.findViewById(R.id.buyNow);
             productLayout = itemView.findViewById(R.id.productItemLayout);
             productStockOrNot = itemView.findViewById(R.id.productStockORNot);
         }

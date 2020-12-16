@@ -21,7 +21,10 @@ public class ProductResult {
     private Boolean digital;
     @SerializedName("image")
     @Expose
-    private String img;
+    private String image;
+    @SerializedName("description")
+    @Expose
+    private String description;
 
     public Integer getId() {
         return id;
@@ -63,12 +66,20 @@ public class ProductResult {
         this.digital = digital;
     }
 
-    public String getImg() {
-        return img;
+    public String getImage() {
+        return image;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }
