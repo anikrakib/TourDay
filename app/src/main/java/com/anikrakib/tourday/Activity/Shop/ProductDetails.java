@@ -15,19 +15,29 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.anikrakib.tourday.Fragment.Search.ProductSearchAll;
+import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.ApiURL;
+import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductDetails extends AppCompatActivity {
     ImageView imageView;
     TextView nameTv,priceTv,stockTv,categoryTv,qtyTv,detailsTv;
     ImageButton inc,dec;
     Intent intent;
+    int productId;
+    ProgressBar progressBar;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -44,6 +54,7 @@ public class ProductDetails extends AppCompatActivity {
         detailsTv = findViewById(R.id.productDetails);
         inc = findViewById(R.id.btnaddqty);
         dec = findViewById(R.id.btnminusqty);
+        progressBar = findViewById(R.id.progressBar);
 
         if(loadNightModeState()){
             getWindow().setStatusBarColor(getResources().getColor(R.color.black));
@@ -57,35 +68,9 @@ public class ProductDetails extends AppCompatActivity {
         intent = getIntent();
         Bundle bundle = intent.getExtras();
 
-        String name = bundle.getString("name");
-        String category = bundle.getString("category");
-        String qty = bundle.getString("qty");
-        String details = bundle.getString("details");
-        String imageUrl = bundle.getString("imageUrl");
+        productId = bundle.getInt("productId");
 
-        int price = bundle.getInt("price");
-        boolean stock = bundle.getBoolean("stock");
-
-        // load event thumbnail
-        Glide.with(getApplicationContext())
-                .load(ApiURL.IMAGE_BASE+imageUrl)
-                .error(Glide.with(getApplicationContext())
-                        .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
-                .transforms(new CenterCrop(),new RoundedCorners(16))
-                .into(imageView);
-
-        nameTv.setText(name);
-        categoryTv.setText("Category : "+category);
-        if(!stock){
-            stockTv.setBackgroundResource(R.drawable.in_stock_bg);
-        }else {
-            stockTv.setText("Out of Stock");
-            stockTv.setBackgroundResource(R.drawable.out_stock_bg);
-        }
-
-        detailsTv.setText(R.string.bio+"\n\n\nThis T-Shirt for Men's comfortable and can be worn for regular use. It is a perfect wear for men like you. You will love to wear this luxurious and colorful shirt just for its versatile usability and diversified fashion sense. It is generally made of a light, great quality cotton fabrics and is easy to clean. It is perfect to wear with jeans and gabardine pant. Longsleevedesign with a regular fit for men. It is very versatile because it is useful on formal as well as casual occasion. It is designed to be comfortable and durable.");
-        priceTv.setText("৳ "+price);
-        qtyTv.setText(qty);
+        getProductDetails(productId);
 
         inc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +91,47 @@ public class ProductDetails extends AppCompatActivity {
                 }else{
                     qtyTv.setText(quantity+"");
                 }
+            }
+        });
+    }
+
+    public void getProductDetails(int productId){
+        Call<ProductResult> call = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getProductView(productId);
+        call.enqueue(new Callback<ProductResult>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
+                ProductResult productResult = response.body();
+
+//                // load event thumbnail
+                Glide.with(getApplicationContext())
+                        .load(ApiURL.IMAGE_BASE+productResult.getImage())
+                        .error(Glide.with(getApplicationContext())
+                                .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
+                        .transforms(new CenterCrop(),new RoundedCorners(16))
+                        .into(imageView);
+
+                nameTv.setText(productResult.getName());
+                categoryTv.setText("Category : "+productResult.getProductType());
+                if(!productResult.getDigital()){
+                    stockTv.setBackgroundResource(R.drawable.in_stock_bg);
+                }else {
+                    stockTv.setText("Out of Stock");
+                    stockTv.setBackgroundResource(R.drawable.out_stock_bg);
+                }
+
+                detailsTv.setText(productResult.getDescription());
+                priceTv.setText("৳ "+productResult.getPrice());
+                qtyTv.setText(1+"");
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<ProductResult> call, Throwable t) {
+
             }
         });
     }
