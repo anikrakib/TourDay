@@ -87,7 +87,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text="Favourite" />
+                            android:text="Add Wish List" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -105,8 +105,8 @@
 
                         <ImageView
                             android:id="@+id/imgshare"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             app:srcCompat="@drawable/ic_baseline_share_24" />
 
                         <TextView
@@ -272,6 +272,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:text="Product Details"
+                    android:textSize="18sp"
+                    android:layout_marginStart="10dp"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -296,11 +298,12 @@
                             android:layout_height="0dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginBottom="5dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_weight="1"
                             android:text="We provide quality bags which are trendy and fashionable at a cheap rate.Bag Biter BD"
                             android:textAlignment="gravity"
                             android:textColor="@color/color_primary_text"
-                            android:textSize="14sp" />
+                            android:textSize="18sp" />
 
                         <View
                             android:layout_width="match_parent"

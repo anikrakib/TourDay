@@ -21,11 +21,15 @@ import android.widget.TextView;
 import com.anikrakib.tourday.Fragment.Search.ProductSearchAll;
 import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.RoomDatabse.MyDatabase;
+import com.anikrakib.tourday.RoomDatabse.ProductWishListDatabaseTable;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.google.android.material.snackbar.Snackbar;
+import com.kishandonga.csbx.CustomSnackbar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +42,11 @@ public class ProductDetails extends AppCompatActivity {
     Intent intent;
     int productId;
     ProgressBar progressBar;
+    ImageView wishList;
+    String currentUserId;
+    boolean isLoggedIn;
+    MyDatabase myDatabase;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -55,6 +64,7 @@ public class ProductDetails extends AppCompatActivity {
         inc = findViewById(R.id.btnaddqty);
         dec = findViewById(R.id.btnminusqty);
         progressBar = findViewById(R.id.progressBar);
+        wishList = findViewById(R.id.imgFav);
 
         if(loadNightModeState()){
             getWindow().setStatusBarColor(getResources().getColor(R.color.black));
@@ -65,8 +75,13 @@ public class ProductDetails extends AppCompatActivity {
         setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
+        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        currentUserId = userPref.getString("id","");
+        isLoggedIn = userPref.getBoolean("isLoggedIn",false);
+
         intent = getIntent();
         Bundle bundle = intent.getExtras();
+        myDatabase = MyDatabase.getInstance(this);
 
         productId = bundle.getInt("productId");
 
@@ -90,6 +105,25 @@ public class ProductDetails extends AppCompatActivity {
                     qtyTv.setText("0");
                 }else{
                     qtyTv.setText(quantity+"");
+                }
+            }
+        });
+
+        wishList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProductWishListDatabaseTable productWishListDatabaseTable = new ProductWishListDatabaseTable();
+                productWishListDatabaseTable.setProductId(productId);
+                productWishListDatabaseTable.setUser_id(currentUserId);
+
+                if(myDatabase.favouriteEventDatabaseDao().addProductWishListByUserId(currentUserId,productId)!=1){
+                    myDatabase.favouriteEventDatabaseDao().insert(productWishListDatabaseTable);
+                    wishList.setImageResource(R.drawable.ic_like);
+                    snackBar("Product Added WishList",R.color.white);
+                }else{
+                    myDatabase.favouriteEventDatabaseDao().deleteFromProductWishList(currentUserId,productId);
+                    wishList.setImageResource(R.drawable.ic_unlike);
+                    snackBar("Product Removed WishList",R.color.white);
                 }
             }
         });
@@ -127,6 +161,13 @@ public class ProductDetails extends AppCompatActivity {
                 priceTv.setText("৳ "+productResult.getPrice());
                 qtyTv.setText(1+"");
                 progressBar.setVisibility(View.GONE);
+
+                if (myDatabase.favouriteEventDatabaseDao().addProductWishListByUserId(currentUserId,productId) == 1){
+                    wishList.setImageResource(R.drawable.ic_like);
+                }else {
+                    wishList.setImageResource(R.drawable.ic_unlike);
+                }
+
             }
 
             @Override
@@ -134,6 +175,17 @@ public class ProductDetails extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(this);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
     }
 
     public static void setWindowFlag(Activity activity, final int bits, boolean on) {

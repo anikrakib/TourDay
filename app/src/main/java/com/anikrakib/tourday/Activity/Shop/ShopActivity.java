@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -156,6 +157,8 @@ public class ShopActivity extends AppCompatActivity {
                 myOrderText.setTextColor(Color.rgb(189, 195, 210));
                 myOrderText.setTextSize(12);
                 orderIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.iconColor));
+
+                startActivity(new Intent(ShopActivity.this,ProductView.class));
             }
         });
 

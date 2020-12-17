@@ -39,6 +39,24 @@
         <item name="android:textColorSecondary">@color/color_primary_text</item>
     </style>
 
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/color_primary_text</item>
+        <item name="android:textColorSecondary">@color/color_primary_text</item>
+        <item name="actionMenuTextColor">@color/color_primary_text</item>
+    </style>
+
+    <style name="ExpandedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/color_primary_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/color_primary_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="MyCustomTheme" parent="Widget.AppCompat.SearchView">
         <item name="mt_searchBarColor">@color/searchBarPrimaryColor</item>
         <item name="mt_dividerColor">@color/searchBarDividerColor</item>
