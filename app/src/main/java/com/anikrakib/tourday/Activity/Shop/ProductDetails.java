@@ -116,14 +116,18 @@ public class ProductDetails extends AppCompatActivity {
                 productWishListDatabaseTable.setProductId(productId);
                 productWishListDatabaseTable.setUser_id(currentUserId);
 
-                if(myDatabase.favouriteEventDatabaseDao().addProductWishListByUserId(currentUserId,productId)!=1){
-                    myDatabase.favouriteEventDatabaseDao().insert(productWishListDatabaseTable);
-                    wishList.setImageResource(R.drawable.ic_like);
-                    snackBar("Product Added WishList",R.color.white);
+                if(isLoggedIn){
+                    if(myDatabase.favouriteEventDatabaseDao().addProductWishListByUserId(currentUserId,productId)!=1){
+                        myDatabase.favouriteEventDatabaseDao().insert(productWishListDatabaseTable);
+                        wishList.setImageResource(R.drawable.ic_like);
+                        snackBar("Product Added WishList",R.color.white);
+                    }else{
+                        myDatabase.favouriteEventDatabaseDao().deleteFromProductWishList(currentUserId,productId);
+                        wishList.setImageResource(R.drawable.ic_unlike);
+                        snackBar("Product Removed WishList",R.color.white);
+                    }
                 }else{
-                    myDatabase.favouriteEventDatabaseDao().deleteFromProductWishList(currentUserId,productId);
-                    wishList.setImageResource(R.drawable.ic_unlike);
-                    snackBar("Product Removed WishList",R.color.white);
+                    snackBar("Sign In Required",R.color.white);
                 }
             }
         });
