@@ -1,5 +1,6 @@
 package com.anikrakib.tourday.Fragment.Shop;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,7 @@ public class ShopHomeFragment extends Fragment {
     AdapterAllProduct adapterAllProduct;
     GridLayoutManager gridLayoutManager;
     RelativeLayout progressBar;
+    TextView totalProduct;
 
     private static final int PAGE = 1;
     private boolean isLoadingAllProduct = false;
@@ -58,13 +60,18 @@ public class ShopHomeFragment extends Fragment {
 
         allProductRecyclerView = view.findViewById(R.id.allProductRecyclerView);
         progressBar = view.findViewById(R.id.progressBar);
+        totalProduct = view.findViewById(R.id.totalProductCount);
 
         adapterAllProduct = new AdapterAllProduct(getContext());
         allProductRecyclerView.setHasFixedSize(true);
         gridLayoutManager = new GridLayoutManager(getContext(),2);
         allProductRecyclerView.setItemAnimator(new DefaultItemAnimator());
         allProductRecyclerView.setLayoutManager(gridLayoutManager);
+        //allProductRecyclerView.setNestedScrollingEnabled(false);
+
         allProductRecyclerView.setAdapter(adapterAllProduct);
+
+
 
         allProductRecyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
             @Override
@@ -107,11 +114,14 @@ public class ShopHomeFragment extends Fragment {
                 .getApi()
                 .getAllProduct(currentPage);
         call.enqueue(new Callback<ProductResponse>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<ProductResponse> call, retrofit2.Response<ProductResponse> response) {
                 if(response.isSuccessful()) {
                     ProductResponse productResponse = response.body();
                     TOTAL_PAGES_ALL_Product = productResponse.getCount();
+
+                    totalProduct.setText(productResponse.getCount()+" Products in our Shop");
 
                     List<ProductResult> results = fetchResultsAllProduct(response);
                     adapterAllProduct.addAll(results);

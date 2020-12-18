@@ -12,7 +12,7 @@
     <color name="black">#ffffff</color>
     <color name="dark_blue">#1976D2</color>
     <color name="dark_yellow">#FBC02D</color>
-    <color name="txtWhite">#FFFFFF</color>
+    <color name="txtWhite">#000000</color>
     <color name="whiteColor">#FAF8F8</color>
     <color name="color_primary_text">#FFFFFF</color>
     <color name="color_secondary_text">#6C6D6E</color>

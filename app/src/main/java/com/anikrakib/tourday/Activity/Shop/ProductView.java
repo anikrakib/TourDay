@@ -2,17 +2,32 @@ package com.anikrakib.tourday.Activity.Shop;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Adapter.Shop.AdapterAllProduct;
+import com.anikrakib.tourday.Models.Shop.ProductResponse;
+import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.PaginationScrollListener;
+import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+import java.util.List;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class ProductView extends AppCompatActivity {
     Toolbar toolbar;
@@ -23,6 +38,7 @@ public class ProductView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_view);
+
         appBarLayout = findViewById(R.id.appbar);
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         setupToolbar();
@@ -53,6 +69,7 @@ public class ProductView extends AppCompatActivity {
             }
         });
     }
+
 
     private void setupToolbar() {
         toolbar = findViewById(R.id.toolbar);
