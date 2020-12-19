@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anikrakib.tourday.Adapter.Shop.AdapterAllProduct;
+import com.anikrakib.tourday.Adapter.Shop.BannerPagerAdapter;
 import com.anikrakib.tourday.Fragment.Search.ProductSearchAll;
 import com.anikrakib.tourday.Models.Blog.AllBlogResponse;
 import com.anikrakib.tourday.Models.Blog.AllBlogResult;
@@ -25,8 +28,12 @@ import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.PaginationScrollListener;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +45,11 @@ public class ShopHomeFragment extends Fragment {
     GridLayoutManager gridLayoutManager;
     RelativeLayout progressBar;
     TextView totalProduct;
+    List<Integer> bannerList;
+    ViewPager viewPager;
+    CircleIndicator indicator;
+    Timer timer;
+    Handler handler;
 
     private static final int PAGE = 1;
     private boolean isLoadingAllProduct = false;
@@ -61,6 +73,8 @@ public class ShopHomeFragment extends Fragment {
         allProductRecyclerView = view.findViewById(R.id.allProductRecyclerView);
         progressBar = view.findViewById(R.id.progressBar);
         totalProduct = view.findViewById(R.id.totalProductCount);
+        viewPager = view.findViewById(R.id.bannerViwPager);
+        indicator = view.findViewById(R.id.indicator);
 
         adapterAllProduct = new AdapterAllProduct(getContext());
         allProductRecyclerView.setHasFixedSize(true);
@@ -68,9 +82,43 @@ public class ShopHomeFragment extends Fragment {
         allProductRecyclerView.setItemAnimator(new DefaultItemAnimator());
         allProductRecyclerView.setLayoutManager(gridLayoutManager);
         //allProductRecyclerView.setNestedScrollingEnabled(false);
-
         allProductRecyclerView.setAdapter(adapterAllProduct);
 
+        // banner pager and Adapter
+        bannerList = new ArrayList<>();
+        bannerList.add(R.drawable.banner_1);
+        bannerList.add(R.drawable.banner_2);
+        bannerList.add(R.drawable.banner_3);
+        bannerList.add(R.drawable.banner_4);
+        bannerList.add(R.drawable.banner_5);
+
+        BannerPagerAdapter bannerPagerAdapter = new BannerPagerAdapter(getContext(),bannerList);
+        viewPager.setAdapter(bannerPagerAdapter);
+        indicator.setViewPager(viewPager);
+        // optional
+        bannerPagerAdapter.registerDataSetObserver(indicator.getDataSetObserver());
+
+        timer = new Timer();
+        handler = new Handler();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int i = viewPager.getCurrentItem();
+                        if(i == bannerList.size() - 1){
+                            i = 0;
+                            viewPager.setCurrentItem(i,true);
+                        }else {
+                            i++;
+                            viewPager.setCurrentItem(i,true);
+                        }
+
+                    }
+                });
+            }
+        },4000,4000);
 
 
         allProductRecyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
