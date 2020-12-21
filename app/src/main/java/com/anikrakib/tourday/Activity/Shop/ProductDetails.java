@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.anikrakib.tourday.RoomDatabse.ProductWishListDatabaseTable;
+import com.anikrakib.tourday.RoomDatabse.ShopCartTable;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.bumptech.glide.Glide;
@@ -43,9 +45,11 @@ public class ProductDetails extends AppCompatActivity {
     int productId;
     ProgressBar progressBar;
     ImageView wishList;
-    String currentUserId;
+    String currentUserId,productType,productImage;
+    int productPrice;
     boolean isLoggedIn;
     MyDatabase myDatabase;
+    LinearLayout addToCart;
 
 
     @SuppressLint("SetTextI18n")
@@ -65,6 +69,7 @@ public class ProductDetails extends AppCompatActivity {
         dec = findViewById(R.id.btnminusqty);
         progressBar = findViewById(R.id.progressBar);
         wishList = findViewById(R.id.imgFav);
+        addToCart = findViewById(R.id.addToCart);
 
         if(loadNightModeState()){
             getWindow().setStatusBarColor(getResources().getColor(R.color.black));
@@ -131,6 +136,28 @@ public class ProductDetails extends AppCompatActivity {
                 }
             }
         });
+
+        addToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShopCartTable shopCartTable = new ShopCartTable();
+                shopCartTable.setProduct_id(productId);
+                shopCartTable.setProductName(nameTv.getText().toString());
+                shopCartTable.setProductQuantity(Integer.parseInt(qtyTv.getText().toString()));
+                shopCartTable.setProductPrice(productPrice);
+                shopCartTable.setProductType(productType);
+                shopCartTable.setProductImage(productImage);
+
+                if(myDatabase.favouriteEventDatabaseDao().addProductCartListByUserId(productId) != 0){
+                    myDatabase.favouriteEventDatabaseDao().insert(shopCartTable);
+                    snackBar("Product Updated",R.color.white);
+                }else{
+                    myDatabase.favouriteEventDatabaseDao().insert(shopCartTable);
+                    snackBar("Product Added In Cart",R.color.white);
+                }
+
+            }
+        });
     }
 
     public void getProductDetails(int productId){
@@ -153,6 +180,9 @@ public class ProductDetails extends AppCompatActivity {
                         .into(imageView);
 
                 nameTv.setText(productResult.getName());
+                productPrice = productResult.getPrice();
+                productType = productResult.getProductType();
+                productImage = productResult.getImage();
                 categoryTv.setText("Category : "+productResult.getProductType());
                 if(!productResult.getDigital()){
                     stockTv.setBackgroundResource(R.drawable.in_stock_bg);

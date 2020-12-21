@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:text="Find Amazing Products With Reasonable prices"
             android:textColor="@color/txtWhite"
             android:textSize="30sp"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@drawable/search_bar_background"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp">
 

@@ -29,7 +29,7 @@
                 android:padding="10dp"
                 android:layout_weight="1"
                 android:text="Shop Category"
-                android:textColor="@color/color_primary_text"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
@@ -41,7 +41,7 @@
                 android:padding="10dp"
                 android:layout_weight="1"
                 android:text="View All"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
