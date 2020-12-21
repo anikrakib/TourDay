@@ -71,7 +71,7 @@ public class OtherUsersGallery extends Fragment {
 
         galleryRecyclerView = view.findViewById(R.id.galleryRecyclerView);
         swipeRefreshLayout = view. findViewById(R.id.gallerySwipeRefreshLayout);
-        cardView = view. findViewById(R.id.emptyCardView);
+        cardView = view. findViewById(R.id.emptyPostCardView);
         emptyPostTextView = view. findViewById(R.id.emptyPostTextView);
 
         SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("otherUser", Context.MODE_PRIVATE);
@@ -155,7 +155,7 @@ public class OtherUsersGallery extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
 
             }
         });
@@ -211,7 +211,7 @@ public class OtherUsersGallery extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
 
             }
         });

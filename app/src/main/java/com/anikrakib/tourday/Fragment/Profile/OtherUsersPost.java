@@ -70,7 +70,7 @@ public class OtherUsersPost extends Fragment {
         /////*     initialize view   */////
         otherUsersPostRecyclerView = view. findViewById(R.id.otherUsersPostRecyclerView);
         swipeRefreshLayout = view. findViewById(R.id.swipeRefreshLayoutOthersUsers);
-        cardView = view. findViewById(R.id.emptyCardView);
+        cardView = view. findViewById(R.id.emptyPostCardView);
         emptyPostTextView = view. findViewById(R.id.emptyPostTextView);
 
 

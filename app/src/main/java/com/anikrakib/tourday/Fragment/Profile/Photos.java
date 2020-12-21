@@ -17,9 +17,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.anikrakib.tourday.Adapter.Profile.AdapterGalleryImage;
 import com.anikrakib.tourday.Models.Profile.PostItem;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.CheckInternet;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 
 import org.json.JSONArray;
@@ -41,11 +43,11 @@ public class Photos extends Fragment {
     AdapterGalleryImage adapterGalleryImage;
     SwipeRefreshLayout swipeRefreshLayout;
     int limit = 0, offSet = 0;
-    CardView cardView;
-    boolean firstTime;
+    CardView cardView,notFound;
+    boolean firstTime,checkInternet;
     String token,userName;
-    TextView emptyPostTextView;
-
+    TextView emptyPostTextView,emptyPostTextView1,emptyPostTextView2;
+    LottieAnimationView lottieAnimationView;
 
 
 
@@ -63,8 +65,14 @@ public class Photos extends Fragment {
 
         galleryRecyclerView = view.findViewById(R.id.postPhotosRecyclerView);
         swipeRefreshLayout = view. findViewById(R.id.swipeRefreshLayout);
-        cardView = view. findViewById(R.id.emptyCardView);
+        cardView = view. findViewById(R.id.emptyPostCardView);
         emptyPostTextView = view. findViewById(R.id.emptyPostTextView);
+        notFound = view. findViewById(R.id.emptyCardView);
+        lottieAnimationView = view. findViewById(R.id.noResultGifView);
+//        emptyPostTextView1 = view. findViewById(R.id.emptyPostTextView1);
+        emptyPostTextView2 = view. findViewById(R.id.emptyPostTextView2);
+
+        checkInternet = CheckInternet.isConnected(getContext());
 
 
         galleryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
@@ -93,134 +101,146 @@ public class Photos extends Fragment {
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private void getData() {
-        SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
-        String userName = userPref.getString("userName","");
-        swipeRefreshLayout.setRefreshing(true);
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .getPhoto(userName);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()) {
+        if(!checkInternet){
+            notFound.setVisibility(View.VISIBLE);
+            lottieAnimationView.setAnimation(R.raw.no_internet);
+            emptyPostTextView2.setText("Check You Data Connection or Wifi Connection");
+            emptyPostTextView.setText("Sorry Internet Not Connected");
+            swipeRefreshLayout.setRefreshing(false);
+        }else {
+            SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+            String userName = userPref.getString("userName", "");
+            swipeRefreshLayout.setRefreshing(true);
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .getPhoto(userName);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body().string());
-                        JSONArray jsonArray = jsonObject.getJSONArray("results");
-                        String next = jsonObject.getString("next");
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            JSONArray jsonArray = jsonObject.getJSONArray("results");
+                            String next = jsonObject.getString("next");
+                            for (int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject hit = jsonArray.getJSONObject(i);
-                            String post = hit.getString("post");
-                            String date = hit.getString("date");
-                            String location = hit.getString("location");
-                            String imageUrl = hit.getString("image");
-                            JSONArray likeArray = hit.getJSONArray("likes");
-                            int likeCount = likeArray.length();
-                            int user = hit.getInt("user");
-                            String id = hit.getString("id");
-                            boolean selfLike = false;
-                            for (int j = 0; j < likeArray.length(); j++)
-                                if (likeArray.getInt(j) == user) {
-                                    selfLike = true;
-                                    break;
-                                }
+                                JSONObject hit = jsonArray.getJSONObject(i);
+                                String post = hit.getString("post");
+                                String date = hit.getString("date");
+                                String location = hit.getString("location");
+                                String imageUrl = hit.getString("image");
+                                JSONArray likeArray = hit.getJSONArray("likes");
+                                int likeCount = likeArray.length();
+                                int user = hit.getInt("user");
+                                String id = hit.getString("id");
+                                boolean selfLike = false;
+                                for (int j = 0; j < likeArray.length(); j++)
+                                    if (likeArray.getInt(j) == user) {
+                                        selfLike = true;
+                                        break;
+                                    }
 
-                            postItems.add(new PostItem(imageUrl, post, location, date, likeCount, id, selfLike));
+                                postItems.add(new PostItem(imageUrl, post, location, date, likeCount, id, selfLike));
+                            }
+                            if (!next.isEmpty()) {
+                                limit = 10;
+                                offSet = 10;
+                                getDataNext(limit, offSet, userName);
+                            }
+
+                            adapterGalleryImage = new AdapterGalleryImage(getContext(), postItems);
+                            galleryRecyclerView.setAdapter(adapterGalleryImage);
+
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
                         }
-                        if(!next.isEmpty()){
-                            limit = 10;
-                            offSet = 10;
-                            getDataNext(limit,offSet,userName);
-                        }
 
-                        adapterGalleryImage = new AdapterGalleryImage(getContext(),postItems);
-                        galleryRecyclerView.setAdapter(adapterGalleryImage);
-
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
                     }
-
                     checkPostEmptyOrNot();
 
-                }else{
-                    checkPostEmptyOrNot();
                 }
 
-            }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(getContext(), "Fail!", Toast.LENGTH_LONG).show();
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
-
-            }
-        });
+                }
+            });
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     private void getDataFirstTime(String userName) {
-        swipeRefreshLayout.setRefreshing(true);
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .getPhoto(userName);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()) {
+        if(!checkInternet){
+            notFound.setVisibility(View.VISIBLE);
+            lottieAnimationView.setAnimation(R.raw.no_internet);
+            emptyPostTextView2.setText("Check You Data Connection or Wifi Connection");
+            emptyPostTextView1.setText("Sorry Internet Not Connected");
+            swipeRefreshLayout.setRefreshing(false);
+        }else {
+            swipeRefreshLayout.setRefreshing(true);
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .getPhoto(userName);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body().string());
-                        JSONArray jsonArray = jsonObject.getJSONArray("results");
-                        String next = jsonObject.getString("next");
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            JSONArray jsonArray = jsonObject.getJSONArray("results");
+                            String next = jsonObject.getString("next");
+                            for (int i = 0; i < jsonArray.length(); i++) {
 
-                            JSONObject hit = jsonArray.getJSONObject(i);
-                            String post = hit.getString("post");
-                            String date = hit.getString("date");
-                            String location = hit.getString("location");
-                            String imageUrl = hit.getString("image");
-                            JSONArray likeArray = hit.getJSONArray("likes");
-                            int likeCount = likeArray.length();
-                            int user = hit.getInt("user");
-                            String id = hit.getString("id");
-                            boolean selfLike = false;
-                            for (int j = 0; j < likeArray.length(); j++)
-                                if (likeArray.getInt(j) == user) {
-                                    selfLike = true;
-                                    break;
-                                }
+                                JSONObject hit = jsonArray.getJSONObject(i);
+                                String post = hit.getString("post");
+                                String date = hit.getString("date");
+                                String location = hit.getString("location");
+                                String imageUrl = hit.getString("image");
+                                JSONArray likeArray = hit.getJSONArray("likes");
+                                int likeCount = likeArray.length();
+                                int user = hit.getInt("user");
+                                String id = hit.getString("id");
+                                boolean selfLike = false;
+                                for (int j = 0; j < likeArray.length(); j++)
+                                    if (likeArray.getInt(j) == user) {
+                                        selfLike = true;
+                                        break;
+                                    }
 
-                            postItems.add(new PostItem(imageUrl, post, location, date, likeCount, id, selfLike));
+                                postItems.add(new PostItem(imageUrl, post, location, date, likeCount, id, selfLike));
+                            }
+                            if (!next.isEmpty()) {
+                                limit = 10;
+                                offSet = 10;
+                                getDataNext(limit, offSet, userName);
+                            }
+
+                            adapterGalleryImage = new AdapterGalleryImage(getContext(), postItems);
+                            galleryRecyclerView.setAdapter(adapterGalleryImage);
+
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
                         }
-                        if(!next.isEmpty()){
-                            limit = 10;
-                            offSet = 10;
-                            getDataNext(limit,offSet,userName);
-                        }
 
-                        adapterGalleryImage = new AdapterGalleryImage(getContext(),postItems);
-                        galleryRecyclerView.setAdapter(adapterGalleryImage);
-
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
                     }
-
                     checkPostEmptyOrNot();
 
-                }else{
-                    checkPostEmptyOrNot();
                 }
 
-            }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(getContext(), "Fail!", Toast.LENGTH_LONG).show();
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
-
-            }
-        });
+                }
+            });
+        }
     }
 
     private void getDataNext(int l,int o,String userName) {
@@ -273,8 +293,7 @@ public class Photos extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
-
+                //Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -308,7 +327,7 @@ public class Photos extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),"Fail!",Toast.LENGTH_LONG).show();
 
             }
         });
@@ -321,11 +340,10 @@ public class Photos extends Fragment {
         if(postItems.isEmpty()){
             cardView.setVisibility(View.VISIBLE);
             emptyPostTextView.setText("You Have No Photo !!");
-            swipeRefreshLayout.setRefreshing(false);
         }else{
             cardView.setVisibility(View.GONE);
-            swipeRefreshLayout.setRefreshing(false);
         }
+        swipeRefreshLayout.setRefreshing(false);
 
     }
 }
