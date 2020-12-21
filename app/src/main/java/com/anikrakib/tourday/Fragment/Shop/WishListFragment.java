@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class WishListFragment extends Fragment {
     MyDatabase myDatabase;
     CardView notFound;
     TextView emptyPostTextView1,emptyPostTextView2;
+    ImageView removeAll;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class WishListFragment extends Fragment {
         emptyPostTextView2 = view.findViewById(R.id.emptyPostTextView2);
         notFound = view.findViewById(R.id.emptyCardView);
         wishListMainLayout = view.findViewById(R.id.wishListMainLayout);
+        removeAll = view.findViewById(R.id.removeAllWishListItem);
 
         myDatabase = MyDatabase.getInstance(getContext());
 
@@ -86,8 +89,23 @@ public class WishListFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterAllWishList = new AdapterAllWishList(productWishListDatabaseTables,getContext());
+        adapterAllWishList = new AdapterAllWishList(productWishListDatabaseTables,getContext(),notFound,emptyPostTextView1,emptyPostTextView2);
         recyclerView.setAdapter(adapterAllWishList);
+
+        removeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDatabase.favouriteEventDatabaseDao().deleteAllWishListProduct(productWishListDatabaseTables);
+                productWishListDatabaseTables.clear();
+                if(productWishListDatabaseTables.isEmpty()){
+                    notFound.setVisibility(View.VISIBLE);
+                    emptyPostTextView2.setText("Tap the heart shape and add wish list");
+                    emptyPostTextView1.setText("You have no wish list item yet !!");
+                }else {
+                    notFound.setVisibility(View.GONE);
+                }
+            }
+        });
 
         return view;
     }

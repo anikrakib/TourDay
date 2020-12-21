@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Adapter.Shop;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Models.Shop.ProductResult;
@@ -35,10 +37,15 @@ public class AdapterAllWishList extends RecyclerView.Adapter<AdapterAllWishList.
 
     private List<ProductWishListDatabaseTable> productWishListDatabaseTables;
     private Context context;
+    CardView notFound;
+    TextView emptyPostTextView1,emptyPostTextView2;
 
-    public AdapterAllWishList(List<ProductWishListDatabaseTable> productWishListDatabaseTables, Context context) {
+    public AdapterAllWishList(List<ProductWishListDatabaseTable> productWishListDatabaseTables, Context context, CardView notFound, TextView emptyPostTextView1, TextView emptyPostTextView2) {
         this.productWishListDatabaseTables = productWishListDatabaseTables;
         this.context = context;
+        this.emptyPostTextView1 = emptyPostTextView1;
+        this.emptyPostTextView2 = emptyPostTextView2;
+        this.notFound = notFound;
     }
 
     @NonNull
@@ -50,10 +57,31 @@ public class AdapterAllWishList extends RecyclerView.Adapter<AdapterAllWishList.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String userId = userPref.getString("id",String.valueOf(0));
+        boolean isLoggedIn = userPref.getBoolean("isLoggedIn",false);
         MyDatabase myDatabase = MyDatabase.getInstance(context);
         ProductWishListDatabaseTable productWishListDatabaseTable = productWishListDatabaseTables.get(position);
 
         getProductDetails(productWishListDatabaseTable.getProductId(),holder.imageView,holder.name,holder.category,holder.stock,holder.price);
+
+        holder.removeWishList.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                myDatabase.favouriteEventDatabaseDao().deleteFromProductWishList(userId,productWishListDatabaseTable.productId);
+                productWishListDatabaseTables.remove(position);
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
+                if(productWishListDatabaseTables.isEmpty()){
+                    notFound.setVisibility(View.VISIBLE);
+                    emptyPostTextView2.setText("Tap the heart shape and add wish list");
+                    emptyPostTextView1.setText("You have no wish list item yet !!");
+                }else {
+                    notFound.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -62,7 +90,7 @@ public class AdapterAllWishList extends RecyclerView.Adapter<AdapterAllWishList.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView imageView;
+        ImageView imageView,removeWishList;
         TextView name,price,category,stock;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,6 +100,8 @@ public class AdapterAllWishList extends RecyclerView.Adapter<AdapterAllWishList.
             price = itemView.findViewById(R.id.txtprice);
             stock = itemView.findViewById(R.id.tvStock);
             category = itemView.findViewById(R.id.category);
+            removeWishList = itemView.findViewById(R.id.imgFav
+            );
         }
     }
 
