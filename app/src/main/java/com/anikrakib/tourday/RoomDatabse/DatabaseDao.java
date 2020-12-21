@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -16,42 +17,56 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface DatabaseDao {
 
-//    @Query("SELECT * FROM FavouriteEvent")
-//    public List<FavouriteEventDatabaseTable> getData();
-//
-    @Query("SELECT EXISTS (SELECT 1 FROM favourite_event WHERE user_id=:userId AND event_id=:eventID)")
-    public int addByUserId(String userId, int eventID);
-
-    @Query("SELECT EXISTS (SELECT 1 FROM wish_list_table WHERE user_id=:userId AND product_id=:productId)")
-    public int addProductWishListByUserId(String userId, int productId);
-
     @Query("SELECT EXISTS (SELECT 1 FROM user_info WHERE id=:id)")
     public int addUser(int id);
 
+    @Insert(onConflict = REPLACE)
+    void insert(TourDayUserDatabaseTable tourDayUserDatabaseTable);
+
+    ///////////////////////////////////////////////////////TourDay Event\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    @Query("SELECT EXISTS (SELECT 1 FROM favourite_event WHERE user_id=:userId AND event_id=:eventID)")
+    public int addByUserId(String userId, int eventID);
+
     @Query("DELETE FROM favourite_event WHERE user_id=:userId AND event_id=:eventID")
     int delete(String userId, String eventID);
+
+    @Insert(onConflict = REPLACE)
+    void insert(FavouriteEventDatabaseTable favouriteEventDatabaseTable);
+
+    @Delete
+    void deleteAll(List<FavouriteEventDatabaseTable> favouriteEventDatabaseTables);
+
+    @Query("SELECT * FROM favourite_event WHERE user_id=:userId")
+    List<FavouriteEventDatabaseTable> getAll(String userId);
+
+    ////////////////////////////////////////////////TourDay Shop\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    @Query("SELECT EXISTS (SELECT 1 FROM shop_cart WHERE cart_product_id=:productId)")
+    public int addProductCartListByUserId(int productId);
+
+    @Query("SELECT EXISTS (SELECT 1 FROM wish_list_table WHERE user_id=:userId AND product_id=:productId)")
+    public int addProductWishListByUserId(String userId, int productId);
 
     @Query("DELETE FROM wish_list_table WHERE user_id=:userId AND product_id=:productId")
     int deleteFromProductWishList(String userId, int productId);
 
     @Insert(onConflict = REPLACE)
-    void insert(FavouriteEventDatabaseTable favouriteEventDatabaseTable);
-
-    @Insert(onConflict = REPLACE)
-    void insert(TourDayUserDatabaseTable tourDayUserDatabaseTable);
-
-    @Insert(onConflict = REPLACE)
     void insert(ProductWishListDatabaseTable productWishListDatabaseTable);
 
-    @Delete
-    void deleteAll(List<FavouriteEventDatabaseTable> favouriteEventDatabaseTables);
+    @Insert(onConflict = REPLACE)
+    void insert(ShopCartTable shopCartTable);
 
     @Delete
     void deleteAllWishListProduct(List<ProductWishListDatabaseTable> productWishListDatabaseTables);
 
-    @Query("SELECT * FROM favourite_event WHERE user_id=:userId")
-    List<FavouriteEventDatabaseTable> getAll(String userId);
+    @Delete
+    void deleteAllCartListProduct(List<ShopCartTable> shopCartTables);
 
     @Query("SELECT * FROM wish_list_table WHERE user_id=:userId")
     List<ProductWishListDatabaseTable> getAllWishProduct(String userId);
+
+    @Query("SELECT * FROM shop_cart")
+    List<ShopCartTable> getAllCartProduct();
+
+    @Query("select COUNT (*) from shop_cart")
+    int countCart();
 }
