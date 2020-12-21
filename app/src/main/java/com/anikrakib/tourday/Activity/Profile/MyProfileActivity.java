@@ -20,6 +20,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,6 +51,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Activity.Authentication.SignInActivity;
 import com.anikrakib.tourday.Activity.ExploreActivity;
 import com.anikrakib.tourday.Activity.LocationActivity;
 import com.anikrakib.tourday.Adapter.Profile.ViewProfilePagerAdapter;
@@ -56,6 +59,7 @@ import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.anikrakib.tourday.RoomDatabse.TourDayUserDatabaseTable;
 import com.anikrakib.tourday.Utils.ApiURL;
+import com.anikrakib.tourday.Utils.CheckInternet;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -116,7 +120,9 @@ public class MyProfileActivity extends AppCompatActivity{
     InputStream postInputStream;
     Boolean createPostImageClick = false;
     ImageView postImageView;
-    String token,userOldPassword;
+    String token,userOldPassword,userProfilePictureSharedPref,userFullNameSharedPref;
+    SharedPreferences userPref;
+    SharedPreferences.Editor editor;
     public static String location = "";
     public static final Pattern USER_NAME = Pattern.compile("^([a-z])+([\\w.]{2,})+$");
 
@@ -126,6 +132,7 @@ public class MyProfileActivity extends AppCompatActivity{
     TextView userBioInPopUp,userFullNameInPopUp;
     SwipeRefreshLayout swipeRefreshLayout;
     MyDatabase myDatabase;
+    public boolean checkInternet;
 
 
 
@@ -157,9 +164,11 @@ public class MyProfileActivity extends AppCompatActivity{
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         token = userPref.getString("token","");
         userOldPassword = userPref.getString("password","");
+        userProfilePictureSharedPref = userPref.getString("userProfilePicture","");
+        userFullNameSharedPref = userPref.getString("userFullName","");
 
         resources= getResources();
         districtKeys = resources.getStringArray(R.array.bdDistrict);
@@ -167,6 +176,8 @@ public class MyProfileActivity extends AppCompatActivity{
         myDialog = new Dialog(this);
         myDialog2 = new Dialog(this);
         myDatabase = MyDatabase.getInstance(this);
+        checkInternet = CheckInternet.isConnected(this);
+
 
         // show current login user all data
         showUserData();
@@ -183,81 +194,52 @@ public class MyProfileActivity extends AppCompatActivity{
 
         /*    On Click Listener     */
 
-        chooseImage_ImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        chooseImage_ImageView.setOnClickListener(v -> {
 
-                if (ActivityCompat.checkSelfPermission(MyProfileActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(MyProfileActivity.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                    Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(i, 100);
-                } else {
-                    ActivityCompat.requestPermissions(MyProfileActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 44);
-                }
-
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, 100);
+            } else {
+                ActivityCompat.requestPermissions(MyProfileActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 44);
             }
+
         });
 
-        facebookLinkImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFacebookAppInstalled()) {
-                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
-                    String facebookUrl = getFacebookPageURL(getApplicationContext());
-                    facebookIntent.setData(Uri.parse(facebookUrl));
-                    startActivity(facebookIntent);
+        facebookLinkImageView.setOnClickListener(v -> {
+            if (isFacebookAppInstalled()) {
+                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+                String facebookUrl = getFacebookPageURL(getApplicationContext());
+                facebookIntent.setData(Uri.parse(facebookUrl));
+                startActivity(facebookIntent);
 
-                } else {
-                    showUserSocialMediaAccount("https://www.facebook.com/" + facebookLink.getText().toString());
-                }
-            }
-        });
-        instagramLinkImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isInstagramInstalled()) {
-                    Intent instagramIntent = new Intent(Intent.ACTION_VIEW);
-                    String facebookUrl = getInstragamPageURL(getApplicationContext());
-                    instagramIntent.setData(Uri.parse(facebookUrl));
-                    startActivity(instagramIntent);
-
-                } else {
-                    showUserSocialMediaAccount("https://www.instagram.com/" + instagramLink.getText().toString());
-                }
-            }
-        });
-        bangladeshImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showBdMap();
-            }
-        });
-        floatingActionButtonCreatePost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createPostPopUp();
+            } else {
+                showUserSocialMediaAccount("https://www.facebook.com/" + facebookLink.getText().toString());
             }
         });
 
-        profileBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
+        instagramLinkImageView.setOnClickListener(v -> {
+            if (isInstagramInstalled()) {
+                Intent instagramIntent = new Intent(Intent.ACTION_VIEW);
+                String facebookUrl = getInstragamPageURL(getApplicationContext());
+                instagramIntent.setData(Uri.parse(facebookUrl));
+                startActivity(instagramIntent);
+
+            } else {
+                showUserSocialMediaAccount("https://www.instagram.com/" + instagramLink.getText().toString());
             }
         });
-        editNameImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditNamePopUp(userFullName.getText().toString());
-            }
-        });
-        profileMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showProfileEditPopUp();
-            }
-        });
+
+        bangladeshImageView.setOnClickListener(v -> showBdMap());
+
+        floatingActionButtonCreatePost.setOnClickListener(view -> createPostPopUp());
+
+        profileBackButton.setOnClickListener(v -> onBackPressed());
+
+        editNameImageView.setOnClickListener(v -> showEditNamePopUp(userFullName.getText().toString()));
+
+        profileMoreButton.setOnClickListener(v -> showProfileEditPopUp());
 
     }
 
@@ -292,19 +274,11 @@ public class MyProfileActivity extends AppCompatActivity{
         showUserDataInMoreOptionPopUp();
 
 
-        locationLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MyProfileActivity.this, LocationActivity.class)
-                        .putExtra("recentLocation",location));
-            }
-        });
-        userBioInPopUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MyProfileActivity.this, EditBioActivity.class));
-            }
-        });
+        locationLayout.setOnClickListener(v -> startActivity(new Intent(MyProfileActivity.this, LocationActivity.class)
+                .putExtra("recentLocation",location)));
+
+        userBioInPopUp.setOnClickListener(v -> startActivity(new Intent(MyProfileActivity.this, EditBioActivity.class)));
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -382,40 +356,44 @@ public class MyProfileActivity extends AppCompatActivity{
     }
 
     public void showUserDataInMoreOptionPopUp(){
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .userProfile("Token "+token);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(response.body().string());
-                        JSONObject profile = jsonObject.getJSONObject("profile");
-                        userFullNameInPopUp.setText(profile.getString("name"));
-                        userNameInPopUp.setLinkText("@"+jsonObject.getString("username"));
-                        userBioInPopUp.setText(profile.getString("bio"));
-                        location = profile.getString("city");
-                        swipeRefreshLayout.setRefreshing(false);
-                        Picasso.get().load(ApiURL.IMAGE_BASE+profile.getString("picture")).into(userImageInPopUp);
+        if(!checkInternet){
+            Picasso.get().load(ApiURL.IMAGE_BASE+userProfilePictureSharedPref).into(userImageInPopUp);
+            userFullNameInPopUp.setText(userFullNameSharedPref);
+        }else {
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .userProfile("Token "+token);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.isSuccessful()){
+                        JSONObject jsonObject = null;
+                        try {
 
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
+                            jsonObject = new JSONObject(response.body().string());
+                            JSONObject profile = jsonObject.getJSONObject("profile");
+                            userFullNameInPopUp.setText(profile.getString("name"));
+                            userNameInPopUp.setLinkText("@"+jsonObject.getString("username"));
+                            userBioInPopUp.setText(profile.getString("bio"));
+                            location = profile.getString("city");
+                            swipeRefreshLayout.setRefreshing(false);
+                            Picasso.get().load(ApiURL.IMAGE_BASE+profile.getString("picture")).into(userImageInPopUp);
+
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public void deleteUserAccount(){
@@ -540,9 +518,13 @@ public class MyProfileActivity extends AppCompatActivity{
             public void onClick(View v) {
                 //rest of the work here about edit name
                 if(!TextUtils.isEmpty(nameEditTest.getText().toString())){
-                    updateName();
-                    myDialog2.dismiss();
-                    userFullName.setText(nameEditTest.getText().toString());
+                     if(!checkInternet){
+                        snackBar("No Internet Connected",R.color.dark_red);
+                     }else {
+                         updateName();
+                         myDialog2.dismiss();
+                         userFullName.setText(nameEditTest.getText().toString());
+                     }
                 }else{
                     DynamicToast.makeError(getApplicationContext(), "Name Can't Empty!").show();
                 }
@@ -565,41 +547,32 @@ public class MyProfileActivity extends AppCompatActivity{
             }
      */
     private void updateName() {
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .updateProfileName("Token "+token,nameEditTest.getText().toString().trim());
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    DynamicToast.makeSuccess(getApplicationContext(), "Name Update Successfully").show();
-                    JSONObject jsonObject = null;
-                    try {
-                        assert response.body() != null;
-                        jsonObject = new JSONObject(response.body().string());
-                        JSONObject profile = jsonObject.getJSONObject("profile");
-                        userFullName.setText(profile.getString("name"));
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .updateProfileName("Token "+token,nameEditTest.getText().toString().trim());
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if(response.isSuccessful()){
+                        DynamicToast.makeSuccess(getApplicationContext(), "Name Update Successfully").show();
+                        editor = userPref.edit();
+                        editor.putString("userFullName",nameEditTest.getText().toString());
+                        editor.apply();
+                    }else{
+                        DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
                     }
-                }else{
-                    DynamicToast.makeError(getApplicationContext(), "Something Wrong!").show();
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
     }
 
     private void updateInstagramLink(String link) {
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -624,8 +597,6 @@ public class MyProfileActivity extends AppCompatActivity{
     }
 
     private void updateFacebookLink(String link) {
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -649,8 +620,6 @@ public class MyProfileActivity extends AppCompatActivity{
         });
     }
     public void showSocialmediaLink(String linkType){
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
         Call<ResponseBody> call = RetrofitClient
                 .getInstance()
                 .getApi()
@@ -1021,68 +990,72 @@ public class MyProfileActivity extends AppCompatActivity{
             }
      */
     public void showUserData(){
-        SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String token = userPref.getString("token","");
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .userProfile("Token "+token);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    SharedPreferences.Editor editor = userPref.edit();
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(response.body().string());
-                        JSONObject profile = jsonObject.getJSONObject("profile");
-                        userFullName.setText(profile.getString("name"));
-                        facebookLink.setText(profile.getString("fb"));
-                        instagramLink.setText(profile.getString("insta"));
-                        editor.putString("userProfilePicture",profile.getString("picture"));
-                        editor.putString("userName",jsonObject.getString("username"));
-                        editor.putString("id",jsonObject.getString("id"));
-                        editor.putString("userFullName",profile.getString("name"));
-                        editor.apply();
-                        Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
-                        Glide.with(getApplicationContext())
-                                .load(ApiURL.IMAGE_BASE+profile.getString("picture"))
-                                .placeholder(R.drawable.loading)
-                                .error(Glide.with(getApplicationContext())
-                                        .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
-                                .transforms(new CenterCrop(),new RoundedCorners(16))
-                                .into(userProfilePic);
-                        // set user info in roomdatabase
 
-                        insertUserInfoInRoomDatabase(jsonObject.getInt("id"),jsonObject.getString("username"));
+        if(!checkInternet){
+            Picasso.get().load("https://tourday.team"+userProfilePictureSharedPref).into(userProfilePic);
+            userFullName.setText(userFullNameSharedPref);
+        }else{
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .userProfile("Token "+token);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.isSuccessful()){
+                        editor = userPref.edit();
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response.body().string());
+                            JSONObject profile = jsonObject.getJSONObject("profile");
+                            userFullName.setText(profile.getString("name"));
+                            facebookLink.setText(profile.getString("fb"));
+                            instagramLink.setText(profile.getString("insta"));
+                            editor.putString("userProfilePicture",profile.getString("picture"));
+                            editor.putString("userName",jsonObject.getString("username"));
+                            editor.putString("id",jsonObject.getString("id"));
+                            editor.putString("userFullName",profile.getString("name"));
+                            editor.apply();
+                            Picasso.get().load("https://tourday.team"+profile.getString("picture")).into(userProfilePic);
+                            Glide.with(getApplicationContext())
+                                    .load(ApiURL.IMAGE_BASE+profile.getString("picture"))
+                                    .placeholder(R.drawable.loading)
+                                    .error(Glide.with(getApplicationContext())
+                                            .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
+                                    .transforms(new CenterCrop(),new RoundedCorners(16))
+                                    .into(userProfilePic);
+                            // set user info in roomdatabase
 
-                        /////*     Check SocialMediaLink is null or not   */////
-                        if(!(facebookLink.getText().toString().equals("null") || facebookLink.getText().toString().isEmpty())){
-                            facebookLinkImageView.setVisibility(View.VISIBLE);
-                        }else{
-                            facebookLink.setText("");
-                            facebookLinkImageView.setVisibility(View.GONE);
+                            insertUserInfoInRoomDatabase(jsonObject.getInt("id"),jsonObject.getString("username"));
+
+                            /////*     Check SocialMediaLink is null or not   */////
+                            if(!(facebookLink.getText().toString().equals("null") || facebookLink.getText().toString().isEmpty())){
+                                facebookLinkImageView.setVisibility(View.VISIBLE);
+                            }else{
+                                facebookLink.setText("");
+                                facebookLinkImageView.setVisibility(View.GONE);
+                            }
+                            if(!(instagramLink.getText().toString().equals("null") || instagramLink.getText().toString().isEmpty())){
+                                instagramLinkImageView.setVisibility(View.VISIBLE);
+                            }else{
+                                instagramLink.setText("");
+                                instagramLinkImageView.setVisibility(View.GONE);
+                            }
+
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
                         }
-                        if(!(instagramLink.getText().toString().equals("null") || instagramLink.getText().toString().isEmpty())){
-                            instagramLinkImageView.setVisibility(View.VISIBLE);
-                        }else{
-                            instagramLink.setText("");
-                            instagramLinkImageView.setVisibility(View.GONE);
-                        }
-
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    Toast.makeText(getApplicationContext(),"Token Not Correct",Toast.LENGTH_LONG).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public void insertUserInfoInRoomDatabase(int userId, String userName){

@@ -37,6 +37,7 @@ import com.anikrakib.tourday.Activity.Profile.ChangePasswordActivity;
 import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.Activity.Shop.ShopActivity;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.CheckInternet;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.kishandonga.csbx.CustomSnackbar;
@@ -52,6 +53,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     SharedPreferences sharedPreferences = null;
     Button search;
     EditText keyWord;
+    public boolean checkInternet;
 
 
     @Override
@@ -59,6 +61,8 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
         myDialog = new Dialog(this);
+        checkInternet = CheckInternet.isConnected(this);
+
 
         if(loadNightModeState()){
             setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
@@ -226,18 +230,22 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
-                SharedPreferences.Editor editor = userPref.edit();
-                editor.putBoolean("isLoggedIn",false);
-                editor.putBoolean("firstTime",false);
-                editor.putString("token","");
-                editor.putString("userName","");
-                editor.putString("userProfilePicture","");
-                editor.putString("id",String.valueOf(0));
-                editor.putString("password","");
-                editor.putString("userFullName","");
-                editor.apply();
-                startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
+                if(!checkInternet){
+                    snackBar("Check Your Internet !!",R.color.dark_red);
+                }else{
+                    SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = userPref.edit();
+                    editor.putBoolean("isLoggedIn",false);
+                    editor.putBoolean("firstTime",false);
+                    editor.putString("token","");
+                    editor.putString("userName","");
+                    editor.putString("userProfilePicture","");
+                    editor.putString("id",String.valueOf(0));
+                    editor.putString("password","");
+                    editor.putString("userFullName","");
+                    editor.apply();
+                    startActivity(new Intent(ExploreActivity.this, ExploreActivity.class));
+                }
                 myDialog.dismiss();
             }
         });
