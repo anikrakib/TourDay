@@ -332,13 +332,11 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/backgroundColor"
         android:layout_alignParentBottom="true"
-
         android:orientation="horizontal"
         android:elevation="8dp">
 
-
         <LinearLayout
-            android:id="@+id/add_to_cart_btn"
+            android:id="@+id/addToCart"
             android:orientation="horizontal"
             android:layout_weight="1"
             android:gravity="center"
