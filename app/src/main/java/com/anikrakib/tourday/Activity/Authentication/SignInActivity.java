@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -24,11 +23,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.Models.Profile.Token;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.kishandonga.csbx.CustomSnackbar;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import org.json.JSONObject;
 
@@ -51,9 +53,7 @@ public class SignInActivity extends AppCompatActivity {
     private TextInputLayout inputLayoutUsername, inputLayoutPassword;
     Dialog postDialog ;
     Button signInButton;
-    private static String token;
     public static final Pattern USER_NAME = Pattern.compile("^([a-z])+([\\w.]{2,})+$");
-
 
 
     @Override
@@ -85,31 +85,15 @@ public class SignInActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
-                finish();
-            }
+        signUp.setOnClickListener(v -> {
+            startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+            finish();
         });
 
-        forgetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this,ForgetPassword.class));
-            }
-        });
+        forgetPassword.setOnClickListener(v -> startActivity(new Intent(SignInActivity.this,ForgetPassword.class)));
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if(isConnected(SignInActivity.this)){
-//                    submitForm();
-//                }else{
-//                    showNoInternetPopUp();
-//                }
-                submitForm();
-            }
+        signInButton.setOnClickListener((View v) -> {
+            submitForm();
         });
 
     }
@@ -119,7 +103,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void submitForm() {
-        if (!validateUsernameorEmail()) {
+        if (!validateUserNameOrEmail()) {
             return;
         }
         if (!validatePassword()) {
@@ -140,18 +124,27 @@ public class SignInActivity extends AppCompatActivity {
 
         return true;
     }
-    public void setTimeForRunLoder(String toast){
-        Handler handler = null;
+    public void setTimeForRunLoader(String toast, boolean succes){
+        Handler handler;
         handler = new Handler();
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                DynamicToast.makeSuccess(getApplicationContext(), toast).show();
-                //postDialog.dismiss();
+        handler.postDelayed(() -> {
+            try {
+                if(succes){
+                    DynamicToast.makeSuccess(getApplicationContext(), toast).show();
+                }else {
+                    inputUsername.setText("");
+                    inputPassword.setText("");
+                    requestFocus(inputUsername);
+                    snackBar(toast,R.color.dark_red);
+                }
+                postDialog.dismiss();
+            }catch (Exception e) {
+                e.printStackTrace();
             }
         }, 1500);
     }
 
-    private boolean validateUsernameorEmail() {
+    private boolean validateUserNameOrEmail() {
         if (!(isValidUserName() || validateEmail())) {
             inputLayoutUsername.setError(getString(R.string.err_msg_userName1));
             requestFocus(inputUsername);
@@ -172,15 +165,13 @@ public class SignInActivity extends AppCompatActivity {
         postDialog.setContentView(R.layout.gif_view);
         postDialog.setCancelable(false);
         Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //setTimeForRunLoder();
         postDialog.show();
-
         if(validateEmail()) accessDataUsingEmail();
         else accessDataUserName();
     }
 
     private void accessDataUsingEmail() {
-        if(!isConnected(SignInActivity.this)){
+        if(isConnected(SignInActivity.this)){
             showNoInternetPopUp();
         }else{
             //setTimeForRunLoder();
@@ -203,37 +194,32 @@ public class SignInActivity extends AppCompatActivity {
                         editor.apply();
                         startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
 //                        DynamicToast.makeSuccess(getApplicationContext(), "Login Success").show();
-                        token=response.body().getKey();
-                        setTimeForRunLoder("Log In Success");
-                        //postDialog.dismiss();
+                        setTimeForRunLoader("Log In Success",true);
                         finish();
                     }else{
                         try {
                             assert response.errorBody() != null;
                             JSONObject jObjError = new JSONObject(response.errorBody().string());
                             //DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
-                            setTimeForRunLoder(jObjError.getJSONArray("non_field_errors").getString(0));
+                            setTimeForRunLoader(jObjError.getJSONArray("non_field_errors").getString(0),false);
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            snackBar(e.getMessage(),R.color.dark_red);
+                            postDialog.dismiss();
                         }
-                        inputUsername.setText("");
-                        inputPassword.setText("");
-                        requestFocus(inputUsername);
-                        //postDialog.dismiss();
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
-                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                    //postDialog.dismiss();
+                    snackBar(t.getMessage(),R.color.dark_red);
+                    postDialog.dismiss();
                 }
             });
         }
     }
 
     private void accessDataUserName() {
-        if(!isConnected(SignInActivity.this)){
+        if(isConnected(SignInActivity.this)){
             showNoInternetPopUp();
         }else{
             Call<Token> call = RetrofitClient
@@ -254,28 +240,25 @@ public class SignInActivity extends AppCompatActivity {
                         editor.putString("password",getHash(inputPassword.getText().toString()));
                         editor.apply();
                         startActivity(new Intent(SignInActivity.this, MyProfileActivity.class));
-                        token=response.body().getKey();
-                        setTimeForRunLoder("Log In Success");
+                        setTimeForRunLoader("Log In Success", true);
                         finish();
                     }else{
                         try {
                             assert response.errorBody() != null;
                             JSONObject jObjError = new JSONObject(response.errorBody().string());
                             //DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("non_field_errors").getString(0)).show();
-                            setTimeForRunLoder(jObjError.getJSONArray("non_field_errors").getString(0));
+                            setTimeForRunLoader(jObjError.getJSONArray("non_field_errors").getString(0), false);
                         } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            snackBar(e.getMessage(),R.color.dark_red);
+                            postDialog.dismiss();
                         }
-                        inputUsername.setText("");
-                        inputPassword.setText("");
-                        requestFocus(inputUsername);
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<Token> call, @NonNull Throwable t) {
-                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-                    //postDialog.dismiss();
+                    snackBar(t.getMessage(),R.color.dark_red);
+                    postDialog.dismiss();
                 }
             });
         }
@@ -302,13 +285,12 @@ public class SignInActivity extends AppCompatActivity {
         NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mobileData = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-        return (wifi != null && wifi.isConnected()) || (mobileData != null && mobileData.isConnected());
+        return (wifi == null || !wifi.isConnected()) && (mobileData == null || !mobileData.isConnected());
     }
     private void showNoInternetPopUp(){
         postDialog.setContentView(R.layout.custom_no_internet_pop_up);
         postDialog.setCancelable(true);
         Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //setTimeForRunLoder();
         postDialog.show();
     }
 
@@ -343,5 +325,15 @@ public class SignInActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
+    }
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(SignInActivity.this);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
     }
 }

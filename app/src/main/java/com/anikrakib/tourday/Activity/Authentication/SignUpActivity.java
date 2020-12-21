@@ -32,7 +32,9 @@ import android.widget.TextView;
 import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.kishandonga.csbx.CustomSnackbar;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 
 import org.json.JSONException;
@@ -46,7 +48,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
-import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,7 +55,6 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    GifDrawable gifDrawable;
     GifImageView gifImageView;
     LinearLayout signUpBody;
     Button signUpButton;
@@ -74,14 +74,10 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         if(loadNightModeState()){
-            if (Build.VERSION.SDK_INT >= 23) {
-                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
-            }
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
         }else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
         setTitle("");
@@ -114,20 +110,12 @@ public class SignUpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-        signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
-                finish();
-            }
+        signIn.setOnClickListener(v -> {
+            startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+            finish();
         });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitForm();
-            }
-        });
+        signUpButton.setOnClickListener(v -> submitForm());
 
     }
 
@@ -162,78 +150,80 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void loder(){
-        sendData();
         postDialog.setContentView(R.layout.gif_view);
         postDialog.setCancelable(false);
         Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        sendData();
         postDialog.show();
     }
 
     private void sendData(){
         if(!isConnected(SignUpActivity.this)){
             showNoInternetPopUp();
-            return;
         }else{
-            setTimeForRunLoder();
-        }
-        Call<ResponseBody> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .createUser(inputUsername.getText().toString().trim(),inputEmail.getText().toString().trim(),inputPassword.getText().toString().trim());
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    JSONObject jsonObject = null;
-                    try {
-                        assert response.body() != null;
-                        jsonObject = new JSONObject(response.body().string());
-                        String token = jsonObject.getString("token");
-                        //make shared preference user
-                        SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = userPref.edit();
-                        editor.putString("token",token);
-                        editor.putBoolean("isLoggedIn",true);
-                        editor.putString("password",getHash(inputPassword.getText().toString()));
-                        editor.apply();
-                        DynamicToast.makeSuccess(getApplicationContext(), "Registration Success").show();
-                        startActivity(new Intent(SignUpActivity.this, MyProfileActivity.class));
-                        finish();
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-                    }
+            Call<ResponseBody> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .createUser(inputUsername.getText().toString().trim(),inputEmail.getText().toString().trim(),inputPassword.getText().toString().trim());
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if(response.isSuccessful()){
+                        JSONObject jsonObject;
+                        try {
+                            assert response.body() != null;
+                            jsonObject = new JSONObject(response.body().string());
+                            String token = jsonObject.getString("token");
+                            //make shared preference user
+                            SharedPreferences userPref =getApplicationContext().getSharedPreferences("user", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = userPref.edit();
+                            editor.putString("token",token);
+                            editor.putBoolean("isLoggedIn",true);
+                            editor.putString("password",getHash(inputPassword.getText().toString()));
+                            editor.apply();
+                            DynamicToast.makeSuccess(getApplicationContext(), "Registration Success").show();
+                            startActivity(new Intent(SignUpActivity.this, MyProfileActivity.class));
+                            finish();
+                        } catch (JSONException | IOException e) {
+                            snackBar(e.getMessage(),R.color.dark_red);
+                            postDialog.dismiss();
+                        }
 
-                }else {
-                    try {
-                        assert response.errorBody() != null;
-                        JSONObject jObjError = new JSONObject(response.errorBody().string());
-                        DynamicToast.makeError(getApplicationContext(), jObjError.getJSONArray("username").getString(0)).show();
-                        inputUsername.setText("");
-                        requestFocus(inputUsername);
-                    } catch (Exception e) {
-                        DynamicToast.makeError(getApplicationContext(),"Email Already Used!").show();
-                        requestFocus(inputEmail);
+                    }else {
+                        try {
+                            assert response.errorBody() != null;
+                            JSONObject jObjError = new JSONObject(response.errorBody().string());
+                            snackBar(jObjError.getJSONArray("username").getString(0),R.color.dark_red);
+                            inputUsername.setText("");
+                            requestFocus(inputUsername);
+                            postDialog.dismiss();
+                        } catch (Exception e) {
+                            snackBar("Email Already Used !!",R.color.dark_red);
+                            requestFocus(inputEmail);
+                            postDialog.dismiss();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                    snackBar(t.getMessage(),R.color.dark_red);
+                    postDialog.dismiss();
+                }
+            });
+        }
     }
 
 
-    public void setTimeForRunLoder(){
-        Handler handler = null;
+    public void setTimeForRunLoader(){
+        Handler handler;
         handler = new Handler();
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                postDialog.cancel();
+        handler.postDelayed((new Runnable() {
+            @Override
+            public void run() {
                 postDialog.dismiss();
             }
-        }, 2000);
+        }), 1500);
     }
 
     private boolean validateUsername() {
@@ -295,7 +285,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private class MyTextWatcher implements TextWatcher {
 
-        private View view;
+        private final View view;
 
         private MyTextWatcher(View view) {
             this.view = view;
@@ -336,7 +326,6 @@ public class SignUpActivity extends AppCompatActivity {
         postDialog.setContentView(R.layout.custom_no_internet_pop_up);
         postDialog.setCancelable(true);
         Objects.requireNonNull(postDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        setTimeForRunLoder();
         postDialog.show();
     }
 
@@ -372,5 +361,16 @@ public class SignUpActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(SignUpActivity.this);
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
     }
 }
