@@ -118,7 +118,7 @@ public class OtherUsersPost extends Fragment {
                             JSONArray jsonArray = response.getJSONArray("results");
                             String nextPage = response.getString("next");
                             SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
-                            String id = userPref.getString("id","");
+                            String id = userPref.getString("id",String.valueOf(0));
 
                             for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -131,11 +131,13 @@ public class OtherUsersPost extends Fragment {
                                 int likeCount = likeArray.length();
                                 String postId = hit.getString("id");
                                 boolean selfLike = false;
-                                for (int j = 0; j < likeArray.length(); j++)
+                                for (int j = 0; j < likeArray.length(); j++) {
+                                    assert id != null;
                                     if (likeArray.getInt(j) == Integer.parseInt(id)) {
                                         selfLike = true;
                                         break;
                                     }
+                                }
 
                                 mPostItem.add(new PostItem(imageUrl, post, location, date, likeCount, postId, selfLike));
                             }

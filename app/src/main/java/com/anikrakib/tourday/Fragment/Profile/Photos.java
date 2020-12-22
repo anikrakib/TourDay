@@ -7,8 +7,10 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
@@ -48,6 +50,7 @@ public class Photos extends Fragment {
     String token,userName;
     TextView emptyPostTextView,emptyPostTextView1,emptyPostTextView2;
     LottieAnimationView lottieAnimationView;
+    GridLayoutManager gridLayoutManager;
 
 
 
@@ -72,11 +75,13 @@ public class Photos extends Fragment {
 //        emptyPostTextView1 = view. findViewById(R.id.emptyPostTextView1);
         emptyPostTextView2 = view. findViewById(R.id.emptyPostTextView2);
 
-        checkInternet = CheckInternet.isConnected(getContext());
+        checkInternet = CheckInternet.isConnected(requireContext());
 
 
-        galleryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        galleryRecyclerView.setHasFixedSize(true);
+        galleryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         //galleryRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+
 
         SharedPreferences userPref = Objects.requireNonNull(requireContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         token = userPref.getString("token","");
