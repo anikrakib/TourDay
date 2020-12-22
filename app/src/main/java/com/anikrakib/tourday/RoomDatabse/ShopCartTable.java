@@ -7,13 +7,10 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "shop_cart", indices = @Index(value = {"cart_product_id"}, unique = true))
+@Entity(tableName = "shop_cart")
 public class ShopCartTable implements Serializable {
-    @PrimaryKey(autoGenerate = false)
-    private int id;
-
-    @ColumnInfo(name = "cart_product_id")
-    public int product_id;
+    @PrimaryKey()
+    private int product_id;
 
     @ColumnInfo(name = "cart_product_name")
     public String productName;
@@ -29,14 +26,6 @@ public class ShopCartTable implements Serializable {
 
     @ColumnInfo(name = "cart_product_type")
     public String productType;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getProduct_id() {
         return product_id;

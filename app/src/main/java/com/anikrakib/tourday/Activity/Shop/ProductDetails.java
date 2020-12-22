@@ -26,6 +26,7 @@ import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.anikrakib.tourday.RoomDatabse.ProductWishListDatabaseTable;
 import com.anikrakib.tourday.RoomDatabse.ShopCartTable;
 import com.anikrakib.tourday.Utils.ApiURL;
+import com.anikrakib.tourday.Utils.CheckInternet;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -47,9 +48,9 @@ public class ProductDetails extends AppCompatActivity {
     ImageView wishList;
     String currentUserId,productType,productImage;
     int productPrice;
-    boolean isLoggedIn;
+    boolean isLoggedIn,availableOrNot,connectToInternet;
     MyDatabase myDatabase;
-    LinearLayout addToCart;
+    LinearLayout addToCart,noInternetLayout;
 
 
     @SuppressLint("SetTextI18n")
@@ -70,6 +71,7 @@ public class ProductDetails extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         wishList = findViewById(R.id.imgFav);
         addToCart = findViewById(R.id.addToCart);
+        noInternetLayout = findViewById(R.id.noInternetLayout);
 
         if(loadNightModeState()){
             getWindow().setStatusBarColor(getResources().getColor(R.color.black));
@@ -87,7 +89,9 @@ public class ProductDetails extends AppCompatActivity {
         intent = getIntent();
         Bundle bundle = intent.getExtras();
         myDatabase = MyDatabase.getInstance(this);
+        connectToInternet = CheckInternet.isConnected(getApplicationContext());
 
+        assert bundle != null;
         productId = bundle.getInt("productId");
 
         getProductDetails(productId);
@@ -140,20 +144,23 @@ public class ProductDetails extends AppCompatActivity {
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShopCartTable shopCartTable = new ShopCartTable();
-                shopCartTable.setProduct_id(productId);
-                shopCartTable.setProductName(nameTv.getText().toString());
-                shopCartTable.setProductQuantity(Integer.parseInt(qtyTv.getText().toString()));
-                shopCartTable.setProductPrice(productPrice);
-                shopCartTable.setProductType(productType);
-                shopCartTable.setProductImage(productImage);
+                if(connectToInternet){
+                    if(!availableOrNot){
+                        ShopCartTable shopCartTable = new ShopCartTable();
+                        shopCartTable.setProduct_id(productId);
+                        shopCartTable.setProductName(nameTv.getText().toString());
+                        shopCartTable.setProductQuantity(Integer.parseInt(qtyTv.getText().toString()));
+                        shopCartTable.setProductPrice(productPrice);
+                        shopCartTable.setProductType(productType);
+                        shopCartTable.setProductImage(productImage);
 
-                if(myDatabase.favouriteEventDatabaseDao().addProductCartListByUserId(productId) != 0){
-                    myDatabase.favouriteEventDatabaseDao().insert(shopCartTable);
-                    snackBar("Product Updated",R.color.white);
+                        myDatabase.favouriteEventDatabaseDao().insert(shopCartTable);
+                        snackBar("Product Added In Cart",R.color.white);
+                    }else{
+                        snackBar("Product Not Available",R.color.white);
+                    }
                 }else{
-                    myDatabase.favouriteEventDatabaseDao().insert(shopCartTable);
-                    snackBar("Product Added In Cart",R.color.white);
+                    snackBar("Internet Not Connected !!",R.color.dark_red);
                 }
 
             }
@@ -161,54 +168,75 @@ public class ProductDetails extends AppCompatActivity {
     }
 
     public void getProductDetails(int productId){
-        Call<ProductResult> call = RetrofitClient
-                .getInstance()
-                .getApi()
-                .getProductView(productId);
-        call.enqueue(new Callback<ProductResult>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
-                ProductResult productResult = response.body();
+        if(!connectToInternet){
+            if(loadNightModeState()){
+                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
+            }else{
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+            noInternetLayout.setVisibility(View.VISIBLE);
+        }else{
+            noInternetLayout.setVisibility(View.GONE);
+            Call<ProductResult> call = RetrofitClient
+                    .getInstance()
+                    .getApi()
+                    .getProductView(productId);
+            call.enqueue(new Callback<ProductResult>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onResponse(Call<ProductResult> call, Response<ProductResult> response) {
+                    ProductResult productResult = response.body();
 
 //                // load event thumbnail
-                Glide.with(getApplicationContext())
-                        .load(ApiURL.IMAGE_BASE+productResult.getImage())
-                        .error(Glide.with(getApplicationContext())
-                                .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
-                        .transforms(new CenterCrop(),new RoundedCorners(16))
-                        .into(imageView);
+                    Glide.with(getApplicationContext())
+                            .load(ApiURL.IMAGE_BASE+productResult.getImage())
+                            .error(Glide.with(getApplicationContext())
+                                    .load("https://i.pinimg.com/originals/a7/46/df/a746dfd74e09d8c7cbcdfa7be02a6250.gif"))
+                            .transforms(new CenterCrop(),new RoundedCorners(16))
+                            .into(imageView);
 
-                nameTv.setText(productResult.getName());
-                productPrice = productResult.getPrice();
-                productType = productResult.getProductType();
-                productImage = productResult.getImage();
-                categoryTv.setText("Category : "+productResult.getProductType());
-                if(!productResult.getDigital()){
-                    stockTv.setBackgroundResource(R.drawable.in_stock_bg);
-                }else {
-                    stockTv.setText("Out of Stock");
-                    stockTv.setBackgroundResource(R.drawable.out_stock_bg);
+                    nameTv.setText(productResult.getName());
+                    productPrice = productResult.getPrice();
+                    productType = productResult.getProductType();
+                    productImage = productResult.getImage();
+                    categoryTv.setText("Category : "+productResult.getProductType());
+                    availableOrNot = productResult.getDigital();
+
+                    if(!productResult.getDigital()){
+                        stockTv.setBackgroundResource(R.drawable.in_stock_bg);
+                        stockTv.setText("In Stock");
+
+                    }else {
+                        stockTv.setText("Out of Stock");
+                        stockTv.setBackgroundResource(R.drawable.out_stock_bg);
+                    }
+
+                    detailsTv.setText(productResult.getDescription());
+                    priceTv.setText("৳ "+productResult.getPrice());
+
+                    if(myDatabase.favouriteEventDatabaseDao().getQuantityById(productId) == 0){
+                        qtyTv.setText(1+"");
+                    }else{
+                        qtyTv.setText(myDatabase.favouriteEventDatabaseDao().getQuantityById(productId)+"");
+                    }
+
+                    progressBar.setVisibility(View.GONE);
+
+                    if (myDatabase.favouriteEventDatabaseDao().addProductWishListByUserId(currentUserId,productId) == 1){
+                        wishList.setImageResource(R.drawable.ic_like);
+                    }else {
+                        wishList.setImageResource(R.drawable.ic_unlike);
+                    }
+
                 }
 
-                detailsTv.setText(productResult.getDescription());
-                priceTv.setText("৳ "+productResult.getPrice());
-                qtyTv.setText(1+"");
-                progressBar.setVisibility(View.GONE);
+                @Override
+                public void onFailure(Call<ProductResult> call, Throwable t) {
 
-                if (myDatabase.favouriteEventDatabaseDao().addProductWishListByUserId(currentUserId,productId) == 1){
-                    wishList.setImageResource(R.drawable.ic_like);
-                }else {
-                    wishList.setImageResource(R.drawable.ic_unlike);
                 }
-
-            }
-
-            @Override
-            public void onFailure(Call<ProductResult> call, Throwable t) {
-
-            }
-        });
+            });
+        }
     }
 
     public void snackBar(String text,int color){

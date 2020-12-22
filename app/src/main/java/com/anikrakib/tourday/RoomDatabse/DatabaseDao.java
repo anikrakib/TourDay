@@ -40,7 +40,7 @@ public interface DatabaseDao {
     List<FavouriteEventDatabaseTable> getAll(String userId);
 
     ////////////////////////////////////////////////TourDay Shop\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-    @Query("SELECT EXISTS (SELECT 1 FROM shop_cart WHERE cart_product_id=:productId)")
+    @Query("SELECT EXISTS (SELECT 1 FROM shop_cart WHERE product_id=:productId)")
     public int addProductCartListByUserId(int productId);
 
     @Query("SELECT EXISTS (SELECT 1 FROM wish_list_table WHERE user_id=:userId AND product_id=:productId)")
@@ -54,6 +54,9 @@ public interface DatabaseDao {
 
     @Insert(onConflict = REPLACE)
     void insert(ShopCartTable shopCartTable);
+
+    @Query("SELECT cart_product_quantity FROM shop_cart WHERE product_id=:productID")
+    public int getQuantityById(int productID);
 
     @Delete
     void deleteAllWishListProduct(List<ProductWishListDatabaseTable> productWishListDatabaseTables);

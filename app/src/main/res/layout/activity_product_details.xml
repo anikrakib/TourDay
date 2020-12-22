@@ -124,7 +124,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:text="TRAVEL BAG"
                     android:textStyle="bold" />
 
                 <RelativeLayout
@@ -145,12 +144,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="1dp"
-                            android:text="Category: Bag"
                             android:textColor="@color/black" />
 
                         <TextView
                             android:id="@+id/txtprice"
-                            android:text="&#2547; 1099.00"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -170,8 +167,6 @@
                             android:paddingTop="2dp"
                             android:layout_marginBottom="10dp"
                             android:paddingBottom="2dp"
-                            android:text="In Stock"
-                            android:background="@drawable/in_stock_bg"
                             android:textColor="@color/white"
                             android:textStyle="bold" />
 
@@ -300,7 +295,6 @@
                             android:layout_marginBottom="5dp"
                             android:layout_marginEnd="10dp"
                             android:layout_weight="1"
-                            android:text="We provide quality bags which are trendy and fashionable at a cheap rate.Bag Biter BD"
                             android:textAlignment="gravity"
                             android:textColor="@color/color_primary_text"
                             android:textSize="18sp" />
@@ -324,7 +318,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -373,5 +367,7 @@
             android:background="@color/colorPrimary"/>
 
     </LinearLayout>
+
+    <include layout="@layout/no_internet_pop_up_full_screen"/>
 
 </RelativeLayout>
