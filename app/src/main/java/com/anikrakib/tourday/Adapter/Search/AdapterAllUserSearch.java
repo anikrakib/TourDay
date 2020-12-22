@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Adapter.Search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Activity.Blog.BlogDetailsActivity;
 import com.anikrakib.tourday.Activity.Blog.YourBlogDetailsActivity;
+import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.Activity.Profile.OthersUserProfile;
 import com.anikrakib.tourday.Models.Event.AllEventResult;
 import com.anikrakib.tourday.Models.Profile.Profile;
@@ -75,6 +77,8 @@ public class AdapterAllUserSearch extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Profile profile = allProfileResults.get(position);
+        SharedPreferences userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String currentUserName = userPref.getString("userName","");
 
         final UserProfileVH userProfileVH = (UserProfileVH) holder;
 
@@ -98,10 +102,17 @@ public class AdapterAllUserSearch extends RecyclerView.Adapter<RecyclerView.View
         userProfileVH.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent;
-                intent =  new Intent(context, OthersUserProfile.class);
-                intent.putExtra("userName",profile.getUsername());
-                context.startActivity(intent);
+                if(currentUserName.equals(profile.getUsername())){
+                    final Intent intent;
+                    intent =  new Intent(context, MyProfileActivity.class);
+                    //intent.putExtra("userName",profile.getUsername());
+                    context.startActivity(intent);
+                }else{
+                    final Intent intent;
+                    intent =  new Intent(context, OthersUserProfile.class);
+                    intent.putExtra("userName",profile.getUsername());
+                    context.startActivity(intent);
+                }
             }
         });
 
