@@ -49,6 +49,9 @@ public interface DatabaseDao {
     @Query("DELETE FROM wish_list_table WHERE user_id=:userId AND product_id=:productId")
     int deleteFromProductWishList(String userId, int productId);
 
+    @Query("DELETE FROM shop_cart WHERE product_id=:productId")
+    int deleteFromProductCartList(int productId);
+
     @Insert(onConflict = REPLACE)
     void insert(ProductWishListDatabaseTable productWishListDatabaseTable);
 
@@ -64,12 +67,15 @@ public interface DatabaseDao {
     @Delete
     void deleteAllCartListProduct(List<ShopCartTable> shopCartTables);
 
+    @Update
+    void updateCartItem(ShopCartTable... shopCartTable);
+
     @Query("SELECT * FROM wish_list_table WHERE user_id=:userId")
     List<ProductWishListDatabaseTable> getAllWishProduct(String userId);
 
     @Query("SELECT * FROM shop_cart")
     List<ShopCartTable> getAllCartProduct();
 
-    @Query("select COUNT (*) from shop_cart")
+    @Query("SELECT COUNT (*) FROM shop_cart")
     int countCart();
 }

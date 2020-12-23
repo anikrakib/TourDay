@@ -34,7 +34,7 @@
             tools:ignore="HardcodedText" />
 
         <ImageView
-            android:id="@+id/removeAllWishListItem"
+            android:id="@+id/removeAllCartListItem"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -49,6 +49,8 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/list_cart_item"
         android:layout_marginTop="10dp"
+        android:clipToPadding="false"
+        android:paddingBottom="200dp"
         android:layout_below="@id/linearLayout1"/>
 
     <include layout="@layout/checkout_design"/>

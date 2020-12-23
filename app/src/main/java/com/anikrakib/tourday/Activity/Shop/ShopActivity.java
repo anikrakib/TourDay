@@ -30,6 +30,7 @@ import com.anikrakib.tourday.Fragment.Shop.ShopHomeFragment;
 import com.anikrakib.tourday.Fragment.Shop.WishListFragment;
 import com.anikrakib.tourday.Models.Shop.CategoryListItem;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -37,13 +38,14 @@ import java.util.List;
 
 public class ShopActivity extends AppCompatActivity {
     ImageView homeIcon,wishListIcon,cartIcon,orderIcon;
-    TextView homeText,wishListText,myCartText,myOrderText;
+    TextView homeText,wishListText,myCartText,myOrderText,cartTotalItemCount;
     LinearLayout homeLayout,wishLayout,cartLayout,orderLayout;
     ImageView categoryView;
     ImageButton backButton,filter;
     RecyclerView categoryRecyclerView;
     List<CategoryListItem> categoryListItems;
     CategoryItemAdapter categoryItemAdapter;
+    MyDatabase myDatabase;
 
     public static Fragment homeFragment,wishListFragment,cartFragment,active;
     public static FragmentManager fm = null;
@@ -69,6 +71,9 @@ public class ShopActivity extends AppCompatActivity {
         categoryView = findViewById(R.id.categoryImageIcon);
         backButton = findViewById(R.id.shopBackButton);
         filter = findViewById(R.id.filter);
+        cartTotalItemCount = findViewById(R.id.count);
+
+        myDatabase = MyDatabase.getInstance(getApplicationContext());
 
         homeText.setTextColor(Color.rgb(255, 115, 70));
         homeText.setTextSize(15);
@@ -86,6 +91,9 @@ public class ShopActivity extends AppCompatActivity {
         }else{
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+
+        // set Data
+        cartTotalItemCount.setText(String.valueOf(myDatabase.favouriteEventDatabaseDao().countCart()));
 
         homeIcon.setOnClickListener(new View.OnClickListener() {
             @SuppressLint({"ResourceAsColor", "ResourceType"})
@@ -252,5 +260,11 @@ public class ShopActivity extends AppCompatActivity {
     public Boolean loadNightModeState (){
         SharedPreferences userPref = getApplicationContext().getSharedPreferences("nightMode", Context.MODE_PRIVATE);
         return userPref.getBoolean("night_mode",false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cartTotalItemCount.setText(String.valueOf(myDatabase.favouriteEventDatabaseDao().countCart()));
     }
 }
