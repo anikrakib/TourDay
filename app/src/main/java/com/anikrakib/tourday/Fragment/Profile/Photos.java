@@ -79,7 +79,7 @@ public class Photos extends Fragment {
 
 
         galleryRecyclerView.setHasFixedSize(true);
-        galleryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        galleryRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
         //galleryRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
 
 

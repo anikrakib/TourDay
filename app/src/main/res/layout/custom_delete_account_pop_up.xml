@@ -61,6 +61,7 @@
                     android:hint="@string/hint_old_password"
                     android:inputType="textPassword"
                     android:padding="5dp"
+                    android:textColor="@color/color_primary_text"
                     android:singleLine="true"
                     tools:ignore="Autofill" />
 
@@ -79,7 +80,7 @@
         android:background="@drawable/button_background"
         android:text="@string/colorpicker_dialog_ok"
         android:textAllCaps="false"
-        android:textColor="@color/txtWhite"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
