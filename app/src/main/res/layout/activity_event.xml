@@ -23,7 +23,7 @@
             android:background="@color/backgroundColor"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -31,18 +31,25 @@
                 <include
                     android:id="@+id/id_toolbar_profile"
                     layout="@layout/toolbar_event_layout"
-                    app:layout_collapseMode="pin" />
+                    app:layout_collapseMode="pin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <RelativeLayout
+                    android:id="@+id/relativeLayout2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/id_toolbar_profile">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Going Event"
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="20dp"
+                        android:text="Going Event"
                         android:textColor="@color/color_primary_text"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -51,10 +58,10 @@
                         android:id="@+id/viewAllEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="View All"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="20dp"
+                        android:text="View All"
                         android:textColor="@color/color_primary_text"
                         android:textSize="16sp" />
 
@@ -64,10 +71,68 @@
                     android:id="@+id/goingEventRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:layout_marginStart="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
 
-            </LinearLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/emptyGoingCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@null"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/backgroundColor"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        tools:ignore="UseCompoundDrawables">
+
+
+                        <ImageView
+                            android:id="@+id/emptyPostImage"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/post"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/emptyPostTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="20dp"
+                            android:fontFamily="@font/gilroybold"
+                            android:gravity="center"
+                            android:text="You are not Going Any Event Yet"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

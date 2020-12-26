@@ -87,16 +87,12 @@ public class AdapterGoingEvent extends RecyclerView.Adapter<RecyclerView.ViewHol
         eventVH.eventTitle.setText(result.getTitle());
         eventVH.eventLocation.setText(result.getLocation());
         eventVH.eventDate.setText(result.getDate());
-        if(Integer.parseInt(userId) == result.getHost()){
-//            //eventVH.itemView.setVisibility(View.GONE);
-//            eventVH.goingEventLayout.setVisibility(View.GONE);
-            //remove(result);
-            int a = result.getGoing().size()-1;
-            if(a == 0){
-                eventVH.totalGoing.setText("Only You Going");
-            }else{
-                eventVH.totalGoing.setText("You and "+(result.getGoing().size()-1)+" others going");
-            }
+
+        int a = result.getGoing().size()-1;
+        if(a == 0){
+            eventVH.totalGoing.setText("Only You Going");
+        }else{
+            eventVH.totalGoing.setText("You and "+(result.getGoing().size()-1)+" others going");
         }
 
         // load event thumbnail
