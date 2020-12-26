@@ -11,20 +11,22 @@
     tools:context=".Activity.Shop.ProductDetails"
     tools:ignore="ContentDescription,HardcodedText,ObsoleteLayoutParam,NestedWeights">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="?attr/actionBarSize"
-        android:visibility="visible">
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/lytContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="?attr/actionBarSize">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -144,7 +146,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="1dp"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/color_primary_text" />
 
                         <TextView
                             android:id="@+id/txtprice"
@@ -214,7 +216,7 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center_vertical"
                         android:text="Qty"
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_primary_text"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -239,7 +241,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/black"
+                            android:textColor="@color/color_primary_text"
                             android:textStyle="bold" />
 
                         <ImageButton
@@ -268,15 +270,14 @@
                     android:layout_marginBottom="10dp"
                     android:text="Product Details"
                     android:textSize="18sp"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/color_primary_text"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:weightSum="2">
 
                     <LinearLayout
@@ -305,19 +306,62 @@
                             android:background="@color/color_primary_text"/>
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/similarProductLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Similar Product"
+                                android:layout_alignParentStart="true"
+                                android:textColor="@color/color_primary_text"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/seeAllSimilarProduct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="See All"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:textColor="@color/color_primary_text"
+                                android:textSize="16sp" />
+
+                        </RelativeLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/similarProductRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/color_primary_text"
         android:visibility="visible" />
 
     <LinearLayout

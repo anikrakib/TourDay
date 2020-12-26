@@ -65,7 +65,7 @@ public class ProductSearchAll extends Fragment {
 
         swipeRefreshLayout.setRefreshing(true);
 
-        adapterAllUserSearch = new AdapterAllProductSearch(getContext());
+        adapterAllUserSearch = new AdapterAllProductSearch(getContext(),false);
         userSearchAllRecyclerView.setHasFixedSize(true);
 //        adapterAllUserSearch.getAllProfileResults();
         gridLayoutManager = new GridLayoutManager(getContext(),2);

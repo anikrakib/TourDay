@@ -187,7 +187,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
             protected void loadMoreItems() {
                 isLoadingAllEvent = true;
                 currentOffset += 10;
-                //getAllEventNextPage();
+                getAllEventNextPage();
             }
 
             @Override

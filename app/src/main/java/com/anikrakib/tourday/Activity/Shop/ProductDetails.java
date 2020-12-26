@@ -1,6 +1,10 @@
 package com.anikrakib.tourday.Activity.Shop;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -18,8 +22,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.anikrakib.tourday.Adapter.Search.AdapterAllProductSearch;
 import com.anikrakib.tourday.Fragment.Search.ProductSearchAll;
+import com.anikrakib.tourday.Models.Shop.ProductResponse;
 import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.RoomDatabse.MyDatabase;
@@ -33,6 +40,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.snackbar.Snackbar;
 import com.kishandonga.csbx.CustomSnackbar;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,8 +59,9 @@ public class ProductDetails extends AppCompatActivity {
     int productPrice;
     boolean isLoggedIn,availableOrNot,connectToInternet;
     MyDatabase myDatabase;
-    LinearLayout addToCart,noInternetLayout;
-
+    LinearLayout addToCart,noInternetLayout,similarProductLayout;
+    RecyclerView similarProduct;
+    AdapterAllProductSearch adapterAllSimilarProduct;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -72,6 +82,8 @@ public class ProductDetails extends AppCompatActivity {
         wishList = findViewById(R.id.imgFav);
         addToCart = findViewById(R.id.addToCart);
         noInternetLayout = findViewById(R.id.noInternetLayout);
+        similarProduct = findViewById(R.id.similarProductRecyclerView);
+        similarProductLayout = findViewById(R.id.similarProductLayout);
 
         if(loadNightModeState()){
             getWindow().setStatusBarColor(getResources().getColor(R.color.black));
@@ -94,7 +106,23 @@ public class ProductDetails extends AppCompatActivity {
         assert bundle != null;
         productId = bundle.getInt("productId");
 
+        adapterAllSimilarProduct = new AdapterAllProductSearch(getApplicationContext(),true);
+        similarProduct.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        similarProduct.setItemAnimator(new DefaultItemAnimator());
+        similarProduct.setLayoutManager(linearLayoutManager);
+        similarProduct.setAdapter(adapterAllSimilarProduct);
+        //similarProduct.setNestedScrollingEnabled(false);
+
         getProductDetails(productId);
+        getAllSimilarProductFirstPage(productType);
+
+//        // check event suggested or not
+//        if (adapterAllSimilarProduct.isEmpty()){
+//            Toast.makeText(getApplicationContext(),productType+"",Toast.LENGTH_LONG).show();
+//        }else {
+//            Toast.makeText(getApplicationContext(),"Not Empty",Toast.LENGTH_LONG).show();
+//        }
 
         inc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,6 +257,8 @@ public class ProductDetails extends AppCompatActivity {
                         wishList.setImageResource(R.drawable.ic_unlike);
                     }
 
+                    getAllSimilarProductFirstPage(productType);
+
                 }
 
                 @Override
@@ -237,6 +267,43 @@ public class ProductDetails extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private List<ProductResult> fetchResultsAllUser(Response<ProductResponse> response) {
+        ProductResponse productResponse = response.body();
+        assert productResponse != null;
+        return productResponse.getProfiles();
+    }
+
+    private void getAllSimilarProductFirstPage(String productType) {
+        Call<ProductResponse> popular = RetrofitClient
+                .getInstance()
+                .getApi()
+                .getAllSearchProduct(productType,10,0);
+        popular.enqueue(new Callback<ProductResponse>() {
+            @Override
+            public void onResponse(Call<ProductResponse> call, retrofit2.Response<ProductResponse> response) {
+                if (response.isSuccessful()) {
+                    List<ProductResult> productResults = fetchResultsAllUser(response);
+                    for (int i = 0 ; i<productResults.size() ; i++) {
+                        if(!(productResults.get(i).getId() == productId)){
+                            adapterAllSimilarProduct.add(productResults.get(i));
+                        }
+                    }
+                    // check event suggested or not
+                    if (adapterAllSimilarProduct.isEmpty()){
+                        similarProductLayout.setVisibility(View.GONE);
+                    }else {
+                        similarProductLayout.setVisibility(View.VISIBLE);
+                    }
+
+                }
+            }
+            @Override
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     public void snackBar(String text,int color){

@@ -36,6 +36,7 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
 
     private List<ProductResult> productResults;
     private Context context;
+    private boolean similarProduct;
 
     private boolean isLoadingAdded = false;
     private boolean retryPageLoad = false;
@@ -44,8 +45,9 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
 
     private String errorMsg;
 
-    public AdapterAllProductSearch(Context context) {
+    public AdapterAllProductSearch(Context context,boolean similarProduct) {
         this.context = context;
+        this.similarProduct = similarProduct;
         productResults = new ArrayList<>();
     }
 
@@ -62,10 +64,13 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
-        View viewItem = inflater.inflate(R.layout.list_shop_product_search_item, parent, false);
+        View viewItem;
+        if(similarProduct){
+            viewItem = inflater.inflate(R.layout.list_similar_product_item, parent, false);
+        }else{
+            viewItem = inflater.inflate(R.layout.list_shop_product_search_item, parent, false);
+        }
         viewHolder = new ProductVH(viewItem);
-
         return viewHolder;
     }
 
@@ -101,6 +106,7 @@ public class AdapterAllProductSearch extends RecyclerView.Adapter<RecyclerView.V
                 final Intent intent;
                 intent =  new Intent(context, ProductDetails.class);
                 intent.putExtra("productId",productResult.getId());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });
