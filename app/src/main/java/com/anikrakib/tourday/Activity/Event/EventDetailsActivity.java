@@ -35,6 +35,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anikrakib.tourday.Activity.Authentication.SignInActivity;
 import com.anikrakib.tourday.Activity.FavouriteActivity;
 import com.anikrakib.tourday.Activity.MainActivity;
 import com.anikrakib.tourday.Adapter.Event.AdapterGoingEvent;
@@ -79,7 +80,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
     private LinearLayoutManager layoutManager;
     private AdapterSuggestedEvent adapterSuggestedEvent;
     AdapterGoingUserEvent adapterGoingUserEvent;
-    LinearLayout goingLinearLayout,pendingLinearLayout;
+    LinearLayout goingLinearLayout,pendingLinearLayout,suggestedEvent;
     RelativeLayout joinNow;
     Dialog myDialog;
     TextView eventDetailsTitleTextView,eventLocationTextView,eventTotalGoingTextView,eventTotalPendingTextView,eventTotalCapacityTextView,eventAvailableTextView,eventJoinTextView,hostUserName,eventPriceTextView;
@@ -139,6 +140,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         eventPriceTextView = findViewById(R.id.eventPriceTextView);
         favouriteButton = findViewById(R.id.favouriteButton);
         shareButton = findViewById(R.id.shareEventImageButton);
+        suggestedEvent = findViewById(R.id.suggestedEventLAyout);
 
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
@@ -163,6 +165,13 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         listGoing = new ArrayList<>();
         listPending = new ArrayList<>();
 
+        adapterSuggestedEvent = new AdapterSuggestedEvent(getApplicationContext(),eventId);
+        suggestedEventRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        suggestedEventRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        suggestedEventRecyclerView.setLayoutManager(layoutManager);
+        suggestedEventRecyclerView.setAdapter(adapterSuggestedEvent);
+
         //set Data
         getEventAllData();
 
@@ -172,12 +181,6 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
             favouriteButton.setImageResource(R.drawable.ic_un_bookmark);
         }
 
-        adapterSuggestedEvent = new AdapterSuggestedEvent(getApplicationContext(),eventId);
-        suggestedEventRecyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        suggestedEventRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        suggestedEventRecyclerView.setLayoutManager(layoutManager);
-        suggestedEventRecyclerView.setAdapter(adapterSuggestedEvent);
 
         suggestedEventRecyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
             @Override
@@ -220,9 +223,15 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 int orientation = getApplicationContext().getResources().getConfiguration().orientation;
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                     // code for portrait mode
-                    if(eventJoinTextView.getText().toString().equals("Join Now")) showPaymentPopUp();
-                    else snackBar("You are already "+eventJoinTextView.getText().toString(),R.color.white);
-
+                    if(eventJoinTextView.getText().toString().equals("Join Now")) {
+                        showPaymentPopUp();
+                    }
+                    else if(eventJoinTextView.getText().toString().equals("Sign In")) {
+                        startActivity(new Intent(EventDetailsActivity.this, SignInActivity.class));
+                        finish();
+                    } else {
+                        snackBar("You are already "+eventJoinTextView.getText().toString(),R.color.white);
+                    }
                 } else {
                     // code for landscape mode
                     //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -265,6 +274,13 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         // going user list
         goingUserList = new ArrayList<>();
         goingUserList(eventId);
@@ -289,10 +305,17 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                     SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
                     String userId = userPref.getString("id","");
                     List<AllEventResult> results = fetchResultsAllEvent(response);
-                    adapterSuggestedEvent.addAll(results);
-//                    eventRefreshLayout.setRefreshing(false);
-//                    showLoadingIndicator(false);
-
+                    for (int i = 0 ; i<results.size() ; i++) {
+                        if(!(results.get(i).getId() == eventId)){
+                            adapterSuggestedEvent.add(results.get(i));
+                        }
+                    }
+                    // check event suggested or not
+                    if (adapterSuggestedEvent.isEmpty()){
+                        suggestedEvent.setVisibility(View.GONE);
+                    }else {
+                        suggestedEvent.setVisibility(View.VISIBLE);
+                    }
                 }
             }
             @Override
@@ -312,12 +335,13 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
             @Override
             public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
                 if (response.isSuccessful()) {
-
                     isLoadingAllEvent = false;
-
                     List<AllEventResult> results = fetchResultsAllEvent(response);
-                    adapterSuggestedEvent.addAll(results);
-
+                    for (int i = 0 ; i<results.size() ; i++) {
+                        if(!(results.get(i).getId() == eventId)){
+                            adapterSuggestedEvent.add(results.get(i));
+                        }
+                    }
                 }
             }
             @Override
@@ -359,7 +383,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                         }
                     }
                 }else{
-                    eventJoinTextView.setText("Join Now");
+                    eventJoinTextView.setText("Sign In");
                 }
 
                 eventDetailsTextView.setLinkText(allEventResult.getDetails());

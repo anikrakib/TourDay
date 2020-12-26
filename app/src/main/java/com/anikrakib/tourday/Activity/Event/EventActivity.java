@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.util.Pair;
@@ -93,23 +94,23 @@ public class EventActivity extends AppCompatActivity {
     ImageButton profileBackButton, favouriteItemImageButton;
     FusedLocationProviderClient fusedLocationProviderClient;
     EditText editTextLocation,eventPopUpTitle,eventPopUpDescription;
-    int totalCapacity;
     String[] paymentType;
     Resources resources;
+    CardView cardView;
     TextView eventDate,viewAllEvent;
     final String[] eventTitleSave = new String[1];
     final String[] eventDescriptionSave = new String[1];
-
     private LinearLayoutManager layoutManager;
     private AdapterGoingEvent adapterGoingEvent;
 
+    int totalCapacity;
     private static final int LIMIT = 10;
     private static final int OFFSET = 0;
     private boolean isLoadingAllEvent = false;
     private boolean isLastPageAllEvent = false;
     private static int TOTAL_PAGES_ALL_EVENT;
     private int currentOffset = OFFSET;
-    String userName;
+    String userName,userId;
     boolean isLoggedIn;
     SharedPreferences userPref;
 
@@ -133,6 +134,7 @@ public class EventActivity extends AppCompatActivity {
         viewAllEvent =  findViewById(R.id.viewAllEvent);
         favouriteItemImageButton =  findViewById(R.id.favouriteItemImageButton);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goingEventRecyclerView);
+        cardView =  findViewById(R.id.emptyGoingCardView);
 
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
 
@@ -147,6 +149,8 @@ public class EventActivity extends AppCompatActivity {
         SharedPreferences userPref = Objects.requireNonNull(getApplicationContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
         userName = userPref.getString("userName","");
         isLoggedIn = userPref.getBoolean("isLoggedIn",false);
+        userId = userPref.getString("id","");
+
 
         myDialog = new Dialog(this);
         mDialog = new Dialog(this);
@@ -216,8 +220,11 @@ public class EventActivity extends AppCompatActivity {
                 if(recyclerView.getVisibility() == View.GONE){
                     recyclerView.setVisibility(View.VISIBLE);
                     viewAllEvent.setText("Hide All");
+                    if(adapterGoingEvent.isEmpty()) cardView.setVisibility(View.VISIBLE);
+                    else cardView.setVisibility(View.GONE);
                 }else{
                     recyclerView.setVisibility(View.GONE);
+                    cardView.setVisibility(View.GONE);
                     viewAllEvent.setText("View All");
                 }
             }
@@ -247,13 +254,12 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
                 if (response.isSuccessful()) {
-                    SharedPreferences userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-                    String userId = userPref.getString("id","");
                     List<AllEventResult> results = fetchResultsAllEvent(response);
-                    adapterGoingEvent.addAll(results);
-//                    eventRefreshLayout.setRefreshing(false);
-//                    showLoadingIndicator(false);
-
+                    for (int i = 0 ; i<results.size() ; i++) {
+                        if(!(results.get(i).getHost() == Integer.parseInt(userId))){
+                            adapterGoingEvent.add(results.get(i));
+                        }
+                    }
                 }
             }
             @Override
@@ -273,12 +279,13 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AllEventResponse> call, retrofit2.Response<AllEventResponse> response) {
                 if (response.isSuccessful()) {
-
                     isLoadingAllEvent = false;
-
                     List<AllEventResult> results = fetchResultsAllEvent(response);
-                    adapterGoingEvent.addAll(results);
-
+                    for (int i = 0 ; i<results.size() ; i++) {
+                        if(!(results.get(i).getHost() == Integer.parseInt(userId))){
+                            adapterGoingEvent.add(results.get(i));
+                        }
+                    }
                 }
             }
             @Override
