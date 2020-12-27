@@ -1,5 +1,6 @@
 
 # [TourdaY](https://www.tourday.team/) is Under Construction.........
+![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/anikrakib/TourdaY&title=Views)
 
 
 ## Tourism & Tourist Community
