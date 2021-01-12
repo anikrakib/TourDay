@@ -15,9 +15,9 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
         android:background="@android:color/transparent"
-        app:tint="@color/color_primary_text"
         android:src="@drawable/ic_arrow_back_black_24dp"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,UseAppTint"
+        android:tint="@color/color_primary_text" />
 
     <LinearLayout
         android:id="@+id/linearLayout15"

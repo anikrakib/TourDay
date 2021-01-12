@@ -59,17 +59,16 @@ public class SearchAllActivity extends AppCompatActivity {
 
         keyWord.setText("\""+keyWordText+"\"");
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        final UserSearchAll userSearchAll = new UserSearchAll();
-
-        Bundle bundle = new Bundle();
-        String myMessage = "Stackoverflow is cool!";
-        bundle.putString("message", myMessage );
-        UserSearchAll fragInfo = new UserSearchAll();
-        fragInfo.setArguments(bundle);
-        //fragmentTransaction.replace(R.id., fragInfo);
-        fragmentTransaction.commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        final UserSearchAll userSearchAll = new UserSearchAll();
+//
+//        Bundle bundle = new Bundle();
+//        String myMessage = "Tourday";
+//        bundle.putString("message", myMessage );
+//        UserSearchAll fragInfo = new UserSearchAll();
+//        fragInfo.setArguments(bundle);
+//        fragmentTransaction.commit();
 
 
         /////*     initialize ViewPager   */////

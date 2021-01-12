@@ -100,6 +100,7 @@ public class AdapterAllProduct extends RecyclerView.Adapter<RecyclerView.ViewHol
                 final Intent intent;
                 intent =  new Intent(context, ProductDetails.class);
                 intent.putExtra("productId",productResult.getId());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

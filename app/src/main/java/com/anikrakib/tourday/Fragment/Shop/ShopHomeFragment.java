@@ -1,6 +1,7 @@
 package com.anikrakib.tourday.Fragment.Shop;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,9 +15,14 @@ import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.anikrakib.tourday.Activity.ExploreActivity;
+import com.anikrakib.tourday.Activity.SearchAllActivity;
+import com.anikrakib.tourday.Activity.Shop.ProductCategoryOrSearchActivity;
 import com.anikrakib.tourday.Adapter.Shop.AdapterAllProduct;
 import com.anikrakib.tourday.Adapter.Shop.BannerPagerAdapter;
 import com.anikrakib.tourday.Fragment.Search.ProductSearchAll;
@@ -27,6 +33,8 @@ import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.Utils.PaginationScrollListener;
 import com.anikrakib.tourday.WebService.RetrofitClient;
+import com.google.android.material.snackbar.Snackbar;
+import com.kishandonga.csbx.CustomSnackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +53,8 @@ public class ShopHomeFragment extends Fragment {
     GridLayoutManager gridLayoutManager;
     RelativeLayout progressBar;
     TextView totalProduct;
+    EditText searchText;
+    ImageButton searchButton;
     List<Integer> bannerList;
     ViewPager viewPager;
     CircleIndicator indicator;
@@ -75,6 +85,8 @@ public class ShopHomeFragment extends Fragment {
         totalProduct = view.findViewById(R.id.totalProductCount);
         viewPager = view.findViewById(R.id.bannerViwPager);
         indicator = view.findViewById(R.id.indicator);
+        searchText = view.findViewById(R.id.editText);
+        searchButton= view.findViewById(R.id.searchButton);
 
         adapterAllProduct = new AdapterAllProduct(getContext());
         allProductRecyclerView.setHasFixedSize(true);
@@ -120,6 +132,16 @@ public class ShopHomeFragment extends Fragment {
             }
         },4000,4000);
 
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!searchText.getText().toString().isEmpty()){
+                    startActivity(new Intent(getActivity(), ProductCategoryOrSearchActivity.class).putExtra("keyword",searchText.getText().toString()));
+                }else {
+                    snackBar("Write Something For Explore",R.color.whiteColor);
+                }
+            }
+        });
 
         allProductRecyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
             @Override
@@ -215,4 +237,16 @@ public class ShopHomeFragment extends Fragment {
         });
 
     }
+
+    public void snackBar(String text,int color){
+        CustomSnackbar sb = new CustomSnackbar(getActivity());
+        sb.message(text);
+        sb.padding(15);
+        sb.textColorRes(color);
+        sb.backgroundColorRes(R.color.colorPrimaryDark);
+        sb.cornerRadius(15);
+        sb.duration(Snackbar.LENGTH_LONG);
+        sb.show();
+    }
+
 }

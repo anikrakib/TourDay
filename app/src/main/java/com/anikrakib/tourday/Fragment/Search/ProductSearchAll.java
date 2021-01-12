@@ -118,7 +118,6 @@ public class ProductSearchAll extends Fragment {
 
         getAllProductFirstPage();
 
-
         return view;
     }
 
@@ -147,7 +146,6 @@ public class ProductSearchAll extends Fragment {
                         adapterAllUserSearch.addAll(productResults);
                         swipeRefreshLayout.setRefreshing(false);
                         //showLoadingIndicator(false);
-
 
                         if (!(currentOffset <= TOTAL_PAGES_ALL_User)) isLastPageAllUser = true;
 

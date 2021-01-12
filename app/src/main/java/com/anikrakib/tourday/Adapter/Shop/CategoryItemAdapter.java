@@ -1,17 +1,21 @@
 package com.anikrakib.tourday.Adapter.Shop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anikrakib.tourday.Activity.Profile.OthersUserProfile;
+import com.anikrakib.tourday.Activity.Shop.ProductCategoryOrSearchActivity;
 import com.anikrakib.tourday.Models.Shop.CategoryListItem;
 import com.anikrakib.tourday.R;
 
@@ -45,16 +49,21 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
 
         viewHolder.imageView.setImageResource(currentItem.getImageId());
         viewHolder.textView.setText(currentItem.getCategoryName());
-//
-//        viewHolder.divisionBlogItemCardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final Intent intent;
-//                intent =  new Intent(mContext, DivisionBlogActivity.class);
-//                intent.putExtra("divisionName",currentItem.getDistrictName());
-//                mContext.startActivity(intent);
-//            }
-//        });
+
+        viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent;
+                intent =  new Intent(mContext, ProductCategoryOrSearchActivity.class);
+                if(currentItem.getCategoryName().equals("Gadget Accessories")){
+                    intent.putExtra("keyword","Headphone Turbine Cable Watch Power Bank");
+                }else {
+                    intent.putExtra("keyword",currentItem.getCategoryName());
+                }
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
