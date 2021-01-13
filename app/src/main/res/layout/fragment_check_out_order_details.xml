@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.Shop.Checkout.CheckOutOrderDetails">
+    tools:context=".Fragment.Shop.Checkout.CheckOutOrderDetailsFragment">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -14,7 +14,8 @@
         android:layout_below="@+id/view"
         android:background="@color/backgroundColor"
         android:fadeScrollbars="true"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        tools:ignore="UnknownIdInLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +41,7 @@
                         android:layout_gravity="center_vertical"
                         android:padding="2dp"
                         android:text="Order List"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/color_primary_text"
                         android:textSize="18sp" />
 
                     <LinearLayout
@@ -86,12 +87,11 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/lytOrderList"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/productOrderListRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="vertical" />
+                        android:layout_marginTop="5dp"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -123,6 +123,29 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/lyttax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:text="Tax" />
+
+                        <TextView
+                            android:id="@+id/taxToal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="৳ 0"
+                            android:textColor="@color/dividerColor"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/lytdelivery"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -140,6 +163,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
+                            android:text="৳ 0"
                             android:textColor="@color/dividerColor"/>
 
                     </LinearLayout>
@@ -157,7 +181,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

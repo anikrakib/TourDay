@@ -1,0 +1,46 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="2dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="2dp"
+    android:orientation="horizontal"
+    android:weightSum="4"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/productName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:text="Product Name"
+        android:textAlignment="viewStart"
+        android:textColor="@color/color_primary_text" />
+
+    <TextView
+        android:id="@+id/quantiity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:text="Quantity"
+        android:textAlignment="center"
+        android:textColor="@color/color_primary_text" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:text="Price"
+        android:textAlignment="center"
+        android:textColor="@color/color_primary_text" />
+
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Total Amount"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/color_primary_text" />
+
+</LinearLayout>
