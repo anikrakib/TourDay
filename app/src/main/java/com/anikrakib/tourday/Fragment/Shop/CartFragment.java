@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Fragment.Shop;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.anikrakib.tourday.Activity.Shop.CheckoutActivity;
 import com.anikrakib.tourday.Activity.Shop.ShopActivity;
 import com.anikrakib.tourday.Adapter.Shop.AdapterAllCartList;
 import com.anikrakib.tourday.Adapter.Shop.AdapterAllWishList;
@@ -34,7 +36,7 @@ public class CartFragment extends Fragment {
     LinearLayout checkOutLayout;
     List<ShopCartTable> shopCartTables;
     MyDatabase myDatabase;
-    CardView notFound;
+    CardView notFound,checkOut;
     TextView emptyPostTextView1,emptyPostTextView2,totalPrice,subTotal,deliveryCharge,cartItemAmount,totalItem;
     ImageView removeAll;
     public boolean checkInternet,isLoggedIn;
@@ -61,6 +63,7 @@ public class CartFragment extends Fragment {
         deliveryCharge = view.findViewById(R.id.deliveryChargeAmount);
         totalPrice = view.findViewById(R.id.totalAmount);
         totalItem = view.findViewById(R.id.totalItem);
+        checkOut = view.findViewById(R.id.checkout);
 
         myDatabase = MyDatabase.getInstance(getContext());
 
@@ -74,17 +77,23 @@ public class CartFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterAllCartList = new AdapterAllCartList(shopCartTables,getContext(),subTotal,deliveryCharge,totalPrice,cartItemAmount,totalItem);
+        adapterAllCartList = new AdapterAllCartList(shopCartTables,getContext(),subTotal,deliveryCharge,totalPrice,cartItemAmount,totalItem,checkOutLayout);
         recyclerView.setAdapter(adapterAllCartList);
 
         setPrice();
-
 
         if(shopCartTables.isEmpty()){
             checkOutLayout.setVisibility(View.GONE);
         }else{
             checkOutLayout.setVisibility(View.VISIBLE);
         }
+
+        checkOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), CheckoutActivity.class));
+            }
+        });
 
         return view;
     }

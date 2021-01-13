@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,8 +37,9 @@ public class AdapterAllCartList extends RecyclerView.Adapter<AdapterAllCartList.
     private List<ShopCartTable> shopCartTables;
     private Context context;
     TextView cartItemAmount,subTotal,deliveryCharge,totalPrice,totalItems;
+    LinearLayout checkOutLayout;
 
-    public AdapterAllCartList(List<ShopCartTable> shopCartTables, Context context, TextView subTotal, TextView deliveryCharge, TextView totalPrice, TextView cartItemAmount, TextView totalItems) {
+    public AdapterAllCartList(List<ShopCartTable> shopCartTables, Context context, TextView subTotal, TextView deliveryCharge, TextView totalPrice, TextView cartItemAmount, TextView totalItems, LinearLayout checkOutLayout) {
         this.shopCartTables = shopCartTables;
         this.context = context;
         this.cartItemAmount = cartItemAmount;
@@ -45,6 +47,7 @@ public class AdapterAllCartList extends RecyclerView.Adapter<AdapterAllCartList.
         this.deliveryCharge = deliveryCharge;
         this.totalPrice = totalPrice;
         this.totalItems = totalItems;
+        this.checkOutLayout = checkOutLayout;
     }
 
     @NonNull
@@ -82,7 +85,6 @@ public class AdapterAllCartList extends RecyclerView.Adapter<AdapterAllCartList.
                 notifyItemRemoved(position);
                 notifyDataSetChanged();
                 updateFragmentView();
-
             }
         });
 
@@ -130,11 +132,15 @@ public class AdapterAllCartList extends RecyclerView.Adapter<AdapterAllCartList.
 
     @SuppressLint("SetTextI18n")
     private void updateFragmentView() {
-        cartItemAmount.setText(getItemCount()+"");
-        subTotal.setText("৳ "+grandTotal());
-        deliveryCharge.setText("৳ 0");
-        totalPrice.setText("৳ "+grandTotal());
-        totalItems.setText("Total "+totalItem()+" items and ৳ "+grandTotal());
+        if(shopCartTables.isEmpty()){
+            checkOutLayout.setVisibility(View.GONE);
+        }else {
+            cartItemAmount.setText(getItemCount()+"");
+            subTotal.setText("৳ "+grandTotal());
+            deliveryCharge.setText("৳ 0");
+            totalPrice.setText("৳ "+grandTotal());
+            totalItems.setText("Total "+totalItem()+" items and ৳ "+grandTotal());
+        }
     }
 
     public int grandTotal() {
