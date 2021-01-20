@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Shop.CategoryItemAdapter;
 import com.anikrakib.tourday.Fragment.Shop.CartFragment;
+import com.anikrakib.tourday.Fragment.Shop.MyOrderFragment;
 import com.anikrakib.tourday.Fragment.Shop.ShopHomeFragment;
 import com.anikrakib.tourday.Fragment.Shop.WishListFragment;
 import com.anikrakib.tourday.Models.Shop.CategoryListItem;
@@ -47,7 +48,7 @@ public class ShopActivity extends AppCompatActivity {
     CategoryItemAdapter categoryItemAdapter;
     MyDatabase myDatabase;
 
-    public static Fragment homeFragment,wishListFragment,cartFragment,active;
+    public static Fragment homeFragment,wishListFragment,cartFragment,myOrderFragment,active;
     public static FragmentManager fm = null;
 
     @SuppressLint("ResourceAsColor")
@@ -192,6 +193,10 @@ public class ShopActivity extends AppCompatActivity {
                 myCartText.setTextColor(Color.rgb(189, 195, 210));
                 myCartText.setTextSize(12);
                 cartIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.iconColor));
+
+                myOrderFragment = new MyOrderFragment();
+                active = myOrderFragment;
+                fm.beginTransaction().replace(R.id.container, active).commit();
             }
         });
 
