@@ -7,13 +7,6 @@
     tools:context=".Fragment.Shop.CartFragment"
     tools:ignore="HardcodedText">
 
-    <include
-        layout="@layout/no_result_found"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
@@ -42,6 +35,61 @@
             android:src="@drawable/ic_baseline_delete_24"
             tools:ignore="ContentDescription" />
     </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/emptyCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:padding="10dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="15dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="220dp"
+            android:layout_height="300dp"
+            android:background="@color/backgroundColor"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:src="@drawable/no_order" />
+
+            <TextView
+                android:id="@+id/emptyPostTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/gilroybold"
+                android:gravity="center"
+                android:text="Your Cart is Empty"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/emptyPostTextView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/gilroybold"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/dark_grayColor"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRecyclerview"

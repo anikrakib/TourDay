@@ -39,8 +39,7 @@ public class CartFragment extends Fragment {
     CardView notFound,checkOut;
     TextView emptyPostTextView1,emptyPostTextView2,totalPrice,subTotal,deliveryCharge,cartItemAmount,totalItem;
     ImageView removeAll;
-    public boolean checkInternet,isLoggedIn;
-    Dialog postDialog ;
+    public boolean isLoggedIn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,8 +83,12 @@ public class CartFragment extends Fragment {
 
         if(shopCartTables.isEmpty()){
             checkOutLayout.setVisibility(View.GONE);
+            notFound.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }else{
             checkOutLayout.setVisibility(View.VISIBLE);
+            notFound.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
         checkOut.setOnClickListener(new View.OnClickListener() {
