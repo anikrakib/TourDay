@@ -2,7 +2,6 @@ package com.anikrakib.tourday.Activity.Shop;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -22,10 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Search.AdapterAllProductSearch;
-import com.anikrakib.tourday.Fragment.Search.ProductSearchAll;
 import com.anikrakib.tourday.Models.Shop.ProductResponse;
 import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
@@ -34,6 +30,7 @@ import com.anikrakib.tourday.RoomDatabse.ProductWishListDatabaseTable;
 import com.anikrakib.tourday.RoomDatabse.ShopCartTable;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.Utils.CheckInternet;
+import com.anikrakib.tourday.Utils.Share;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -59,7 +56,7 @@ public class ProductDetails extends AppCompatActivity {
     int productPrice;
     boolean isLoggedIn,availableOrNot,connectToInternet;
     MyDatabase myDatabase;
-    LinearLayout addToCart,noInternetLayout,similarProductLayout;
+    LinearLayout addToCart,noInternetLayout,similarProductLayout,shareLayout;
     RecyclerView similarProduct;
     AdapterAllProductSearch adapterAllSimilarProduct;
 
@@ -84,6 +81,7 @@ public class ProductDetails extends AppCompatActivity {
         noInternetLayout = findViewById(R.id.noInternetLayout);
         similarProduct = findViewById(R.id.similarProductRecyclerView);
         similarProductLayout = findViewById(R.id.similarProductLayout);
+        shareLayout = findViewById(R.id.lytshare);
 
         if(loadNightModeState()){
             getWindow().setStatusBarColor(getResources().getColor(R.color.black));
@@ -143,6 +141,13 @@ public class ProductDetails extends AppCompatActivity {
                 }else{
                     qtyTv.setText(quantity+"");
                 }
+            }
+        });
+
+        shareLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Share.shareLink(getApplicationContext(),"shop/#"+productId);
             }
         });
 
