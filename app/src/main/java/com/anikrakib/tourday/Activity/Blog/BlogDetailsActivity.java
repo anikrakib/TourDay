@@ -106,7 +106,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
         assert extras != null;
         int blogId = extras.getInt("blogId");
 
-        //Loader.start(BlogDetailsActivity.this);
+        Loader.start(BlogDetailsActivity.this);
 
         /* get post details from Api using blogId */
         getPostDetails(blogId);
@@ -286,7 +286,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getApplicationContext(),"Check Internet !!",Toast.LENGTH_LONG).show();
-                //Loader.off();
+                Loader.off();
             }
         });
     }
@@ -311,7 +311,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
                         authorBio.setText(profile.getString("bio"));
                         Picasso.get().load("https://www.tourday.team"+profile.getString("picture")).into(authorImage);
 
-                        //Loader.off();
+                        Loader.off();
 
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
@@ -324,7 +324,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getApplicationContext(),"Check Internet !!",Toast.LENGTH_LONG).show();
-                //Loader.off();
+                Loader.off();
             }
         });
     }

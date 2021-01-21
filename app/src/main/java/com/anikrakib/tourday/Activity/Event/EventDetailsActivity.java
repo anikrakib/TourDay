@@ -174,7 +174,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         suggestedEventRecyclerView.setLayoutManager(layoutManager);
         suggestedEventRecyclerView.setAdapter(adapterSuggestedEvent);
 
-        //Loader.start(EventDetailsActivity.this);
+        Loader.start(EventDetailsActivity.this);
         //set Data
         getEventAllData();
 
@@ -413,13 +413,13 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 eventImage = allEventResult.getImage();
                 eventDate = allEventResult.getDate();
                 getAllEvent(allEventResult.getLocation());
-                //Loader.off();
+                Loader.off();
             }
 
             @Override
             public void onFailure(@NonNull Call<AllEventResult> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
-                //Loader.off();
+                Loader.off();
             }
         });
     }
