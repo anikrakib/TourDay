@@ -51,7 +51,7 @@
                 android:layout_marginEnd="10dp"
                 android:drawablePadding="10dp"
                 android:text="Order Details"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/color_primary_text"
                 android:textStyle="bold" />
@@ -86,7 +86,7 @@
                 android:layout_marginEnd="10dp"
                 android:drawablePadding="10dp"
                 android:text="Information"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grayColor"
                 android:textStyle="bold" />
@@ -121,7 +121,7 @@
                 android:layout_marginEnd="10dp"
                 android:drawablePadding="10dp"
                 android:text="Payment"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grayColor"
                 android:textStyle="bold" />
@@ -182,8 +182,10 @@
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/tvConfirmOrder"
             android:layout_toEndOf="@+id/tvPreTotal"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/black" />
+            android:textColor="@color/dividerColor" />
 
         <TextView
             android:id="@+id/tvConfirmOrder"
@@ -198,7 +200,7 @@
             android:paddingTop="7dp"
             android:paddingEnd="10dp"
             android:paddingBottom="7dp"
-            android:text="Continue"
+            android:text="Next"
             android:textAllCaps="true"
             android:textColor="@color/white"
             app:drawableEndCompat="@drawable/ic_baseline_check_24"
