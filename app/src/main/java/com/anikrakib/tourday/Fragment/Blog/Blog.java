@@ -163,6 +163,8 @@ public class Blog extends Fragment {
             @Override
             public void onFailure(Call<AllBlogResponse> call, Throwable t) {
                 t.printStackTrace();
+                Toast.makeText(getContext(), t.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                showLoadingIndicator(false);
             }
 
         });
@@ -182,17 +184,16 @@ public class Blog extends Fragment {
 
                    isLoadingAllBlog = false;
 
-
-                    List<AllBlogResult> results = fetchResultsAllBlog(response);
-                    adapterAllBlog.addAll(results);
+                   List<AllBlogResult> results = fetchResultsAllBlog(response);
+                   adapterAllBlog.addAll(results);
                 }
 
             }
 
             @Override
             public void onFailure(Call<AllBlogResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
+                Toast.makeText(getContext(), t.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                showLoadingIndicator(false);            }
 
         });
 
