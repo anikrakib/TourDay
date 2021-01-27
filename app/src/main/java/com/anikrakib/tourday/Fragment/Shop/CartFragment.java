@@ -76,7 +76,7 @@ public class CartFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterAllCartList = new AdapterAllCartList(shopCartTables,getContext(),subTotal,deliveryCharge,totalPrice,cartItemAmount,totalItem,checkOutLayout);
+        adapterAllCartList = new AdapterAllCartList(shopCartTables,getContext(),subTotal,deliveryCharge,totalPrice,cartItemAmount,totalItem,checkOutLayout,notFound);
         recyclerView.setAdapter(adapterAllCartList);
 
         setPrice();

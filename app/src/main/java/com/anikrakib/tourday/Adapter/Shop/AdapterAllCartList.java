@@ -38,8 +38,9 @@ public class AdapterAllCartList extends RecyclerView.Adapter<AdapterAllCartList.
     private Context context;
     TextView cartItemAmount,subTotal,deliveryCharge,totalPrice,totalItems;
     LinearLayout checkOutLayout;
+    CardView cardView;
 
-    public AdapterAllCartList(List<ShopCartTable> shopCartTables, Context context, TextView subTotal, TextView deliveryCharge, TextView totalPrice, TextView cartItemAmount, TextView totalItems, LinearLayout checkOutLayout) {
+    public AdapterAllCartList(List<ShopCartTable> shopCartTables, Context context, TextView subTotal, TextView deliveryCharge, TextView totalPrice, TextView cartItemAmount, TextView totalItems, LinearLayout checkOutLayout, CardView cardView) {
         this.shopCartTables = shopCartTables;
         this.context = context;
         this.cartItemAmount = cartItemAmount;
@@ -48,6 +49,7 @@ public class AdapterAllCartList extends RecyclerView.Adapter<AdapterAllCartList.
         this.totalPrice = totalPrice;
         this.totalItems = totalItems;
         this.checkOutLayout = checkOutLayout;
+        this.cardView = cardView;
     }
 
     @NonNull
@@ -85,6 +87,11 @@ public class AdapterAllCartList extends RecyclerView.Adapter<AdapterAllCartList.
                 notifyItemRemoved(position);
                 notifyDataSetChanged();
                 updateFragmentView();
+                if(shopCartTables.isEmpty()){
+                    cardView.setVisibility(View.VISIBLE);
+                }else {
+                    
+                }
             }
         });
 
