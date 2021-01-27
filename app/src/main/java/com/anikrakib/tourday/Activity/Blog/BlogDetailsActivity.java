@@ -33,6 +33,8 @@ import android.widget.Toast;
 import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.Activity.Profile.OthersUserProfile;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.Loader;
+import com.anikrakib.tourday.Utils.Share;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
@@ -57,11 +60,11 @@ public class BlogDetailsActivity extends AppCompatActivity {
     KenBurnsView blogImageKenBurnsView;
     TextView blogDetailsTitleTextView,blogDetailsDescriptionTextView,blogDetailsDivisionTextView,blogDetailsDateTextView,authorFullName,authorBio,authorFaceBookLink,authorInstagramLink,authorBangladeshLink;
     SocialTextView blogAuthorName;
-    ImageButton blogDetailsBackButton;
+    ImageButton blogDetailsBackButton,shareBlog;
     ImageView authorFacebookProfile,authorInstagramProfile,authorBdProfile;
     public String AuthorUserName;
     CircleImageView authorImage;
-    Dialog myDialog;
+    Dialog myDialog,blogLoader;
     ConstraintLayout constraintLayout;
 
     @Override
@@ -87,6 +90,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
         authorInstagramProfile = findViewById(R.id.authorInstagramLinkImageView);
         authorBdProfile = findViewById(R.id.authorBangladeshImageView);
         constraintLayout = findViewById(R.id.constraintLayout);
+        shareBlog = findViewById(R.id.shareEventImageButton);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -102,8 +106,9 @@ public class BlogDetailsActivity extends AppCompatActivity {
         assert extras != null;
         int blogId = extras.getInt("blogId");
 
-        /* get post details from Api using blogId */
+        Loader.start(BlogDetailsActivity.this);
 
+        /* get post details from Api using blogId */
         getPostDetails(blogId);
 
 
@@ -216,6 +221,12 @@ public class BlogDetailsActivity extends AppCompatActivity {
             }
         });
 
+        shareBlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Share.shareLink(getApplicationContext(),"event/"+blogId);
+            }
+        });
     }
 
     /* This Method get specific Blog details from server using blogId
@@ -259,13 +270,9 @@ public class BlogDetailsActivity extends AppCompatActivity {
                         blogDetailsDateTextView.setText(date);
                         showAuthorData(slug);
 
+                        //blogLoader.dismiss();
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            blogDetailsDescriptionTextView.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
-                        } else {
-                            blogDetailsDescriptionTextView.setText(Html.fromHtml(description));
-                        }
-
+                        blogDetailsDescriptionTextView.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
 
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
@@ -278,8 +285,8 @@ public class BlogDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
-
+                Toast.makeText(getApplicationContext(),"Check Internet !!",Toast.LENGTH_LONG).show();
+                Loader.off();
             }
         });
     }
@@ -304,6 +311,8 @@ public class BlogDetailsActivity extends AppCompatActivity {
                         authorBio.setText(profile.getString("bio"));
                         Picasso.get().load("https://www.tourday.team"+profile.getString("picture")).into(authorImage);
 
+                        Loader.off();
+
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
@@ -314,8 +323,8 @@ public class BlogDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Fail!",Toast.LENGTH_LONG).show();
-
+                Toast.makeText(getApplicationContext(),"Check Internet !!",Toast.LENGTH_LONG).show();
+                Loader.off();
             }
         });
     }

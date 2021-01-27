@@ -50,7 +50,9 @@ import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.RoomDatabse.FavouriteEventDatabaseTable;
 import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.anikrakib.tourday.Utils.ApiURL;
+import com.anikrakib.tourday.Utils.Loader;
 import com.anikrakib.tourday.Utils.PaginationScrollListener;
+import com.anikrakib.tourday.Utils.Share;
 import com.anikrakib.tourday.Utils.TapToProgress.Circle;
 import com.anikrakib.tourday.Utils.TapToProgress.CircleAnimation;
 import com.anikrakib.tourday.WebService.RetrofitClient;
@@ -172,6 +174,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         suggestedEventRecyclerView.setLayoutManager(layoutManager);
         suggestedEventRecyclerView.setAdapter(adapterSuggestedEvent);
 
+        Loader.start(EventDetailsActivity.this);
         //set Data
         getEventAllData();
 
@@ -270,7 +273,7 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Share.shareLink(getApplicationContext(),"event/"+eventId);
             }
         });
 
@@ -410,12 +413,13 @@ public class EventDetailsActivity extends AppCompatActivity implements Animation
                 eventImage = allEventResult.getImage();
                 eventDate = allEventResult.getDate();
                 getAllEvent(allEventResult.getLocation());
-
+                Loader.off();
             }
 
             @Override
             public void onFailure(@NonNull Call<AllEventResult> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
+                Loader.off();
             }
         });
     }

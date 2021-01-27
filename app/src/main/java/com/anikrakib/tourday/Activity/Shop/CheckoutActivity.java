@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -115,9 +116,8 @@ public class CheckoutActivity extends AppCompatActivity {
 
                 }else if(confirmOrder.getText().toString().equals("Done")){
                     myDatabase.favouriteEventDatabaseDao().deleteAllCartListProduct(shopCartTables);
-                    homeFragment = new ShopHomeFragment();
-                    active = homeFragment;
-                    fm.beginTransaction().add(R.id.container, homeFragment).commit();
+                    startActivity(new Intent(CheckoutActivity.this,ShopActivity.class));
+                    finish();
                 }
             }
         });

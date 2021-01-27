@@ -20,8 +20,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +49,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anikrakib.tourday.Activity.Authentication.SignInActivity;
 import com.anikrakib.tourday.Activity.ExploreActivity;
 import com.anikrakib.tourday.Activity.LocationActivity;
 import com.anikrakib.tourday.Adapter.Profile.ViewProfilePagerAdapter;
@@ -60,6 +57,7 @@ import com.anikrakib.tourday.RoomDatabse.MyDatabase;
 import com.anikrakib.tourday.RoomDatabse.TourDayUserDatabaseTable;
 import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.Utils.CheckInternet;
+import com.anikrakib.tourday.Utils.Share;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -120,7 +118,7 @@ public class MyProfileActivity extends AppCompatActivity{
     InputStream postInputStream;
     Boolean createPostImageClick = false;
     ImageView postImageView;
-    String token,userOldPassword,userProfilePictureSharedPref,userFullNameSharedPref;
+    String token,userOldPassword,userProfilePictureSharedPref,userFullNameSharedPref,userName;
     SharedPreferences userPref;
     SharedPreferences.Editor editor;
     public static String location = "";
@@ -166,6 +164,7 @@ public class MyProfileActivity extends AppCompatActivity{
 
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         token = userPref.getString("token","");
+        userName = userPref.getString("userName","");
         userOldPassword = userPref.getString("password","");
         userProfilePictureSharedPref = userPref.getString("userProfilePicture","");
         userFullNameSharedPref = userPref.getString("userFullName","");
@@ -246,7 +245,7 @@ public class MyProfileActivity extends AppCompatActivity{
     private void showProfileEditPopUp() {
         View touch;
         Animation rightToLeft,leftToRight;
-        LinearLayout linearLayout,emailLayout,changePasswordLayout,deleteAccountLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
+        LinearLayout shareProfile,linearLayout,emailLayout,changePasswordLayout,deleteAccountLayout,manageMyAccountLayout,manageMyAccountPart,locationLayout,facebookIdLayout,instagramIdLayout;
         ImageView backButton;
 
         myDialog.setContentView(R.layout.profile_more_option_pop_up);
@@ -256,6 +255,7 @@ public class MyProfileActivity extends AppCompatActivity{
         manageMyAccountLayout = myDialog.findViewById(R.id.manageMyAccountLayout);
         emailLayout = myDialog.findViewById(R.id.editEmailLayout);
         changePasswordLayout = myDialog.findViewById(R.id.passwordChangeLayout);
+        shareProfile = myDialog.findViewById(R.id.shareProfile);
         manageMyAccountPart = myDialog.findViewById(R.id.manageMyAccountPartLayout);
         userFullNameInPopUp = myDialog.findViewById(R.id.userFullNameInPopUp);
         userNameInPopUp = myDialog.findViewById(R.id.userUserNameInPopUp);
@@ -314,6 +314,12 @@ public class MyProfileActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 deleteUserAccount();
+            }
+        });
+        shareProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Share.shareLink(getApplicationContext(),"u/"+userName);
             }
         });
         manageMyAccountLayout.setOnClickListener(new View.OnClickListener() {

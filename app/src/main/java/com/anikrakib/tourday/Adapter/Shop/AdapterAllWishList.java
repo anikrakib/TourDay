@@ -2,6 +2,7 @@ package com.anikrakib.tourday.Adapter.Shop;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Image;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anikrakib.tourday.Activity.Shop.ProductDetails;
 import com.anikrakib.tourday.Models.Shop.ProductResult;
 import com.anikrakib.tourday.R;
 import com.anikrakib.tourday.RoomDatabse.FavouriteEventDatabaseTable;
@@ -82,6 +84,17 @@ public class AdapterAllWishList extends RecyclerView.Adapter<AdapterAllWishList.
                 }
             }
         });
+
+        holder.layoutMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent;
+                intent =  new Intent(context, ProductDetails.class);
+                intent.putExtra("productId",productWishListDatabaseTable.getProductId());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -92,6 +105,7 @@ public class AdapterAllWishList extends RecyclerView.Adapter<AdapterAllWishList.
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView imageView,removeWishList;
         TextView name,price,category,stock;
+        CardView layoutMain;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -100,8 +114,8 @@ public class AdapterAllWishList extends RecyclerView.Adapter<AdapterAllWishList.
             price = itemView.findViewById(R.id.txtprice);
             stock = itemView.findViewById(R.id.tvStock);
             category = itemView.findViewById(R.id.category);
-            removeWishList = itemView.findViewById(R.id.imgFav
-            );
+            removeWishList = itemView.findViewById(R.id.imgFav);
+            layoutMain = itemView.findViewById(R.id.lytmain);
         }
     }
 
