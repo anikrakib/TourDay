@@ -37,7 +37,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RelativeLayout
-                    android:id="@+id/relativeLayout2"
+                    android:id="@+id/goingEventLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -45,6 +45,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/id_toolbar_profile">
 
                     <TextView
+                        android:id="@+id/text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -59,78 +60,71 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
                         android:layout_marginEnd="20dp"
                         android:text="View All"
                         android:textColor="@color/color_primary_text"
                         android:textSize="16sp" />
 
-                </RelativeLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/goingEventRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:layout_marginStart="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/emptyGoingCardView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@null"
-                    android:padding="10dp"
-                    android:visibility="gone"
-                    app:cardCornerRadius="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.497"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
-
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/goingEventRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/backgroundColor"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        tools:ignore="UseCompoundDrawables">
+                        android:visibility="gone"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_below="@id/text"/>
 
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/emptyGoingCardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@null"
+                        android:padding="10dp"
+                        android:visibility="gone"
+                        app:cardCornerRadius="15dp"
+                        android:layout_below="@id/text">
 
-                        <ImageView
-                            android:id="@+id/emptyPostImage"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/post"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:id="@+id/emptyPostTextView"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginBottom="20dp"
-                            android:fontFamily="@font/gilroybold"
+                            android:background="@color/backgroundColor"
                             android:gravity="center"
-                            android:text="You are not Going Any Event Yet"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                            android:orientation="vertical"
+                            tools:ignore="UseCompoundDrawables">
 
-                    </LinearLayout>
+                            <ImageView
+                                android:id="@+id/emptyPostImage"
+                                android:layout_width="120dp"
+                                android:layout_height="100dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="10dp"
+                                android:src="@drawable/ic_baseline_event_24"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:tint="#bdc3d2"
+                                tools:ignore="ContentDescription" />
 
-                </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:id="@+id/emptyPostTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="20dp"
+                                android:gravity="center"
+                                android:text="You are not Going Any Event Yet"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

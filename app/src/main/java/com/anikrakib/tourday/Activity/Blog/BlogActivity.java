@@ -65,6 +65,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.richeditor.RichEditor;
 import okhttp3.MediaType;
@@ -94,6 +96,7 @@ public class BlogActivity extends AppCompatActivity {
     private static final int INTENT_REQUEST_CODE = 100;
     ImageView blogBackButton;
     ImageButton   searchButton;
+    Boolean isLoggedIn;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -110,15 +113,14 @@ public class BlogActivity extends AppCompatActivity {
         searchButton = findViewById(R.id.search_button);
 
         if(loadNightModeState()){
-            if (Build.VERSION.SDK_INT >= 23) {
-                setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-                getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
-            }
+            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.backgroundColor));
         }else{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+
+        SharedPreferences userPref = Objects.requireNonNull(getApplicationContext()).getSharedPreferences("user", Context.MODE_PRIVATE);
+        isLoggedIn = userPref.getBoolean("isLoggedIn",false);
 
         resources= getResources();
         division = resources.getStringArray(R.array.bdDivision);
@@ -134,6 +136,9 @@ public class BlogActivity extends AppCompatActivity {
         tabLayoutBlog = (TabLayout) findViewById(R.id.slidingTabsBlog);
         tabLayoutBlog.setupWithViewPager(viewPagerBlog);
         tabLayoutBlog.setTabRippleColor(null);
+
+        // check LoggedIn or Not
+        if(!isLoggedIn) createBlog.setVisibility(View.GONE);
 
         //initialize ArrayList
         models = new ArrayList<>();

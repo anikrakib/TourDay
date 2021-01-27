@@ -1,9 +1,11 @@
 package com.anikrakib.tourday.Fragment.Event;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Event.AdapterYourEvent;
@@ -37,8 +40,12 @@ public class YourEvent extends Fragment {
     private RecyclerView yourEventRecyclerView;
     private ArrayList<YourEventModel> yourEventModels;
     private SwipeRefreshLayout eventRefreshLayout;
+    private CardView cardView;
+    private TextView textView1,textView2;
     RecyclerView.LayoutManager layoutManager;
-    private ArrayList<PendingPayment> pendingPayment;
+    Boolean isLoggedIn;
+    String userName,token;
+
 
 
     public YourEvent() {
@@ -53,6 +60,7 @@ public class YourEvent extends Fragment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,11 +69,19 @@ public class YourEvent extends Fragment {
         /////*     initialize view   */////
         yourEventRecyclerView = view. findViewById(R.id.yourEventRecyclerView);
         eventRefreshLayout = view. findViewById(R.id.yourEventRefreshLayout);
+        cardView = view. findViewById(R.id.emptyCardView);
+        textView1 = view. findViewById(R.id.emptyPostTextView);
+        textView2 = view. findViewById(R.id.emptyPostTextView2);
 
         yourEventModels = new ArrayList<>();
 
         yourEventRecyclerView.setFocusable(false);
         layoutManager = new LinearLayoutManager(getContext());
+
+        SharedPreferences userPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+        userName = userPref.getString("userName","");
+        token = userPref.getString("token","");
+        isLoggedIn = userPref.getBoolean("isLoggedIn",false);
 
         yourEventRecyclerView.setHasFixedSize(true);
         yourEventRecyclerView.setLayoutManager(layoutManager);
@@ -82,14 +98,17 @@ public class YourEvent extends Fragment {
 
         getAllYourEvent();
 
+        if(!isLoggedIn){
+            cardView.setVisibility(View.VISIBLE);
+            textView2.setText("If you have no account, then create an account");
+            textView1.setText("Sign In Required");
+        }
+
         return  view;
     }
 
 
     private void getAllYourEvent() {
-        SharedPreferences userPref = requireContext().getSharedPreferences("user", Context.MODE_PRIVATE);
-        String userName = userPref.getString("userName","");
-        String token = userPref.getString("token","");
 
         eventRefreshLayout.setRefreshing(true);
         Call<ResponseBody> call = RetrofitClient
@@ -127,6 +146,7 @@ public class YourEvent extends Fragment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void result(JSONArray jsonArray, String nextPage) {
 
         try {
@@ -161,6 +181,12 @@ public class YourEvent extends Fragment {
 
             AdapterYourEvent adapterYourEvent = new AdapterYourEvent(getContext(), yourEventModels);
             yourEventRecyclerView.setAdapter(adapterYourEvent);
+
+            if(yourEventModels.isEmpty()){
+                cardView.setVisibility(View.VISIBLE);
+            }else {
+                cardView.setVisibility(View.GONE);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

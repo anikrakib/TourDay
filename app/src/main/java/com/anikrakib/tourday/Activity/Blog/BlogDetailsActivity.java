@@ -37,6 +37,7 @@ import com.anikrakib.tourday.Utils.Loader;
 import com.anikrakib.tourday.Utils.Share;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
@@ -60,12 +61,13 @@ public class BlogDetailsActivity extends AppCompatActivity {
     KenBurnsView blogImageKenBurnsView;
     TextView blogDetailsTitleTextView,blogDetailsDescriptionTextView,blogDetailsDivisionTextView,blogDetailsDateTextView,authorFullName,authorBio,authorFaceBookLink,authorInstagramLink,authorBangladeshLink;
     SocialTextView blogAuthorName;
-    ImageButton blogDetailsBackButton,shareBlog;
+    ImageButton blogDetailsBackButton;
     ImageView authorFacebookProfile,authorInstagramProfile,authorBdProfile;
     public String AuthorUserName;
     CircleImageView authorImage;
     Dialog myDialog,blogLoader;
     ConstraintLayout constraintLayout;
+    FloatingActionButton shareEventImageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,15 +92,13 @@ public class BlogDetailsActivity extends AppCompatActivity {
         authorInstagramProfile = findViewById(R.id.authorInstagramLinkImageView);
         authorBdProfile = findViewById(R.id.authorBangladeshImageView);
         constraintLayout = findViewById(R.id.constraintLayout);
-        shareBlog = findViewById(R.id.shareEventImageButton);
+        shareEventImageButton = findViewById(R.id.shareEventImageButton);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+        setWindowFlag(this, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         myDialog = new Dialog(this);
         intent = getIntent();
@@ -221,7 +221,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
             }
         });
 
-        shareBlog.setOnClickListener(new View.OnClickListener() {
+        shareEventImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Share.shareLink(getApplicationContext(),"event/"+blogId);

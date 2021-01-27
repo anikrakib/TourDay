@@ -43,6 +43,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -97,6 +98,7 @@ public class EventActivity extends AppCompatActivity {
     String[] paymentType;
     Resources resources;
     CardView cardView;
+    RelativeLayout goingEventLayout;
     TextView eventDate,viewAllEvent;
     final String[] eventTitleSave = new String[1];
     final String[] eventDescriptionSave = new String[1];
@@ -135,6 +137,7 @@ public class EventActivity extends AppCompatActivity {
         favouriteItemImageButton =  findViewById(R.id.favouriteItemImageButton);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.goingEventRecyclerView);
         cardView =  findViewById(R.id.emptyGoingCardView);
+        goingEventLayout =  findViewById(R.id.goingEventLayout);
 
         userPref = getApplicationContext().getSharedPreferences("user", Context.MODE_PRIVATE);
 
@@ -167,7 +170,12 @@ public class EventActivity extends AppCompatActivity {
         tabLayoutEvent.setupWithViewPager(viewPagerEvent);
         tabLayoutEvent.setTabRippleColor(null);
 
-        if(!isLoggedIn) createEvent.setVisibility(View.GONE);
+        if(isLoggedIn){
+            goingEventLayout.setVisibility(View.VISIBLE);
+        } else{
+            goingEventLayout.setVisibility(View.GONE);
+            createEvent.setVisibility(View.GONE);
+        }
 
         /*     on click listener   */
         createEvent.setOnClickListener(new View.OnClickListener() {

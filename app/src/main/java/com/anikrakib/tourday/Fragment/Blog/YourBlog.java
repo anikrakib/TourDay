@@ -1,9 +1,11 @@
 package com.anikrakib.tourday.Fragment.Blog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,7 +40,11 @@ public class YourBlog extends Fragment {
     private ArrayList<YourBlogItem> yourBlogItems;
     private RequestQueue mRequestQueue;
     private SwipeRefreshLayout yourBlogRefreshLayout;
+    private CardView cardView;
+    private TextView textView1,textView2;
     String url;
+    Boolean isLoggedIn;
+
 
 
     public YourBlog() {
@@ -51,6 +58,7 @@ public class YourBlog extends Fragment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +68,9 @@ public class YourBlog extends Fragment {
         /////*     initialize view   */////
         yourBlogRecyclerView = v. findViewById(R.id.yourBlogRecyclerView);
         yourBlogRefreshLayout = v. findViewById(R.id.yourBlogRefreshLayout);
+        cardView = v. findViewById(R.id.emptyCardView);
+        textView1 = v. findViewById(R.id.emptyPostTextView);
+        textView2 = v. findViewById(R.id.emptyPostTextView2);
 
 
         layoutManager = new LinearLayoutManager(getContext());
@@ -77,6 +88,7 @@ public class YourBlog extends Fragment {
 
         SharedPreferences userPref = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
         String username = userPref.getString("userName","");
+        isLoggedIn = userPref.getBoolean("isLoggedIn",false);
 
         yourBlogRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -91,10 +103,10 @@ public class YourBlog extends Fragment {
         parseJSON(url);
 
 
-
         return v;
     }
 
+    @SuppressLint("SetTextI18n")
     private void parseJSON(String url) {
         yourBlogRefreshLayout.setRefreshing(true);
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -133,6 +145,19 @@ public class YourBlog extends Fragment {
                 error.printStackTrace();
             }
         });
+
         mRequestQueue.add(request);
+        if(isLoggedIn){
+            if(yourBlogItems.isEmpty()){
+                cardView.setVisibility(View.VISIBLE);
+            }else {
+                cardView.setVisibility(View.GONE);
+            }
+        }else {
+            cardView.setVisibility(View.VISIBLE);
+            textView2.setText("If you have no account, then create an account");
+            textView1.setText("Sign In Required");
+            yourBlogRefreshLayout.setRefreshing(false);
+        }
     }
 }

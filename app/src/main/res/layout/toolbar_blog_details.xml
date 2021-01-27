@@ -40,14 +40,15 @@
 
         <!-- Share   -->
         <ImageButton
-            android:id="@+id/shareEventImageButton"
+            android:id="@+id/favouriteBlogImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
+            android:visibility="gone"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_share_24"
+            android:src="@drawable/ic_unlike"
             app:tint="@color/white"
             tools:ignore="ContentDescription" />
 
