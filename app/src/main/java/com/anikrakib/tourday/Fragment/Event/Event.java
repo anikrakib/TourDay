@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.anikrakib.tourday.Adapter.Event.AdapterAllEvent;
 import com.anikrakib.tourday.Models.Event.AllEventResponse;
@@ -139,8 +140,9 @@ public class  Event extends Fragment {
             }
             @Override
             public void onFailure(Call<AllEventResponse> call, Throwable t) {
-                t.printStackTrace();
-                //showErrorView(t);
+                Toast.makeText(getContext(), "Unable To Load !!\n   Check Internet",Toast.LENGTH_SHORT).show();
+                showLoadingIndicator(false);
+                eventRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -164,8 +166,9 @@ public class  Event extends Fragment {
             }
             @Override
             public void onFailure(Call<AllEventResponse> call, Throwable t) {
-                t.printStackTrace();
-                //showErrorView(t);
+                Toast.makeText(getContext(), "Unable To Load !!\n   Check Internet",Toast.LENGTH_SHORT).show();
+                showLoadingIndicator(false);
+                eventRefreshLayout.setRefreshing(false);
             }
         });
     }

@@ -163,8 +163,9 @@ public class Blog extends Fragment {
             @Override
             public void onFailure(Call<AllBlogResponse> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(getContext(), t.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Unable To Load !!\n   Check Internet",Toast.LENGTH_SHORT).show();
                 showLoadingIndicator(false);
+                blogRefreshLayout.setRefreshing(false);
             }
 
         });
@@ -192,8 +193,10 @@ public class Blog extends Fragment {
 
             @Override
             public void onFailure(Call<AllBlogResponse> call, Throwable t) {
-                Toast.makeText(getContext(), t.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-                showLoadingIndicator(false);            }
+                Toast.makeText(getContext(), "Unable To Load !!\n   Check Internet",Toast.LENGTH_SHORT).show();
+                showLoadingIndicator(false);
+                blogRefreshLayout.setRefreshing(false);
+            }
 
         });
 
