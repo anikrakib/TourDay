@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Models.Profile.PostItem;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -41,7 +42,7 @@ public class AdapterGalleryImage extends RecyclerView.Adapter<AdapterGalleryImag
         int likeCount = currentItem.getLikeCount();
         postId = currentItem.getmId();
 
-        Picasso.get().load("https://www.tourday.team/"+imageUrl).into(holder.galleryImage);
+        Picasso.get().load(ApiURL.IMAGE_BASE+"/"+imageUrl).into(holder.galleryImage);
 
     }
     @Override

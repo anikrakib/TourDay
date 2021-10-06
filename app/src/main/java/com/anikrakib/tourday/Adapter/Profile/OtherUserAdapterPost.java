@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Models.Profile.PostItem;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
@@ -78,8 +79,8 @@ public class OtherUserAdapterPost extends RecyclerView.Adapter<OtherUserAdapterP
         }else{
             holder.mTextViewLikes.setText(likeCount+" Likes");
         }
-        Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
-        Picasso.get().load("https://tourday.team/"+otherUsersProfilePic).fit().centerInside().into(holder.userProfilePic);
+        Picasso.get().load(ApiURL.IMAGE_BASE+"/"+imageUrl).fit().centerInside().into(holder.postImage);
+        Picasso.get().load(ApiURL.IMAGE_BASE+"/"+otherUsersProfilePic).fit().centerInside().into(holder.userProfilePic);
 
 
         assert userName != null;

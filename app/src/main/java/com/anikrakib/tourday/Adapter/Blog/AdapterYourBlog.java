@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anikrakib.tourday.Activity.Blog.YourBlogDetailsActivity;
 import com.anikrakib.tourday.Models.Blog.YourBlogItem;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -52,7 +53,7 @@ public class AdapterYourBlog extends RecyclerView.Adapter<AdapterYourBlog.YourBl
         holder.yourBlogLocation.setText(division);
         holder.yourBlogDate.setText(date);
         holder.yourBlogTitle.setText(title);
-        Picasso.get().load("https://tourday.team/"+imageUrl).fit().centerInside().into(holder.yourBlogImage);
+        Picasso.get().load(ApiURL.IMAGE_BASE+"/"+imageUrl).fit().centerInside().into(holder.yourBlogImage);
 
         holder.cardViewYourBlog.setOnClickListener(new View.OnClickListener() {
             @Override

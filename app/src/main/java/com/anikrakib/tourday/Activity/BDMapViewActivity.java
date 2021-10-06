@@ -87,9 +87,9 @@ public class BDMapViewActivity extends AppCompatActivity {
 
     private void setMapTheme() {
         if(loadNightModeState()){
-            webView.loadUrl("https://www.tourday.team/api/map-dark/"+username);
+            webView.loadUrl("https://anikrakib.pythonanywhere.com/api/map-dark/"+username);
         }else{
-            webView.loadUrl("https://www.tourday.team/api/map/"+username);
+            webView.loadUrl("https://anikrakib.pythonanywhere.com/api/map/"+username);
         }
     }
 

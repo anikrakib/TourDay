@@ -22,12 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anikrakib.tourday.Models.Profile.PostItem;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
 import com.squareup.picasso.Picasso;
 import com.tylersuehr.socialtextview.SocialTextView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
@@ -79,11 +81,11 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         }else{
             holder.mTextViewLikes.setText(likeCount+" Likes");
         }
-        Picasso.get().load("https://www.tourday.team/"+imageUrl).fit().centerInside().into(holder.postImage);
+        Picasso.get().load(ApiURL.IMAGE_BASE+"/"+imageUrl).fit().centerInside().into(holder.postImage);
 
         String userProfilePicture = userPref.getString("userProfilePicture","");
         String userName = userPref.getString("userName","");
-        Picasso.get().load("https://www.tourday.team/"+userProfilePicture).fit().centerInside().into(holder.userProfilePic);
+        Picasso.get().load(ApiURL.IMAGE_BASE+"/"+userProfilePicture).fit().centerInside().into(holder.userProfilePic);
         holder.userName.setText(userName);
 
         // check post is self liked or not
@@ -241,7 +243,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
 
 
         postDetailDateView.setText(item.getDate());
-        Picasso.get().load("https://www.tourday.team/"+item.getImageUrl()).fit().centerInside().into(postDetailImage);
+        Picasso.get().load(ApiURL.IMAGE_BASE+"/"+item.getImageUrl()).fit().centerInside().into(postDetailImage);
         postDetailDescriptionTextView.setLinkText(item.getPost());
         postDetailsLocation.setText(item.getLocation());
         postDetailsLikeCount.setText(String.valueOf(item.getLikeCount()));
@@ -258,7 +260,7 @@ public class AdapterPost extends RecyclerView.Adapter<AdapterPost.ExampleViewHol
         });
 
         myDialog.setCancelable(false);
-        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(myDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
 
     };

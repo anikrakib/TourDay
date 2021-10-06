@@ -28,6 +28,7 @@ import com.anikrakib.tourday.Activity.Profile.MyProfileActivity;
 import com.anikrakib.tourday.Models.Blog.BlogItem;
 import com.anikrakib.tourday.Models.Blog.DeleteBlogResponse;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.anikrakib.tourday.WebService.RetrofitClient;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.pranavpandey.android.dynamic.toasts.DynamicToast;
@@ -80,7 +81,7 @@ public class AdapterDivisionBlog extends RecyclerView.Adapter<AdapterDivisionBlo
         if(currentItem.isSearch()){
             Picasso.get().load(imageUrl).fit().centerInside().into(holder.blogImage);
         }else{
-            Picasso.get().load("https://www.tourday.team/"+imageUrl).fit().centerInside().into(holder.blogImage);
+            Picasso.get().load(ApiURL.IMAGE_BASE+"/"+imageUrl).fit().centerInside().into(holder.blogImage);
         }
 
         if(currentItem.getBlogAuthorName().equals(userName)){

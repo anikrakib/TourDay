@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anikrakib.tourday.Activity.Event.YourEventDetailsActivity;
 import com.anikrakib.tourday.Models.Event.YourEventModel;
 import com.anikrakib.tourday.R;
+import com.anikrakib.tourday.Utils.ApiURL;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
@@ -51,7 +52,7 @@ public class AdapterYourEvent extends RecyclerView.Adapter<AdapterYourEvent.View
         viewHolder.date.setText(item.getDate());
         viewHolder.totalPrice.setText(String.valueOf(item.getCost()));
 
-        Picasso.get().load("https://www.tourday.team/"+item.getEventImageUrl()).fit().centerInside().into(viewHolder.eventImage);
+        Picasso.get().load(ApiURL.IMAGE_BASE+"/"+item.getEventImageUrl()).fit().centerInside().into(viewHolder.eventImage);
 
 
         viewHolder.yourEventLinearLayout.setOnClickListener(new View.OnClickListener() {
